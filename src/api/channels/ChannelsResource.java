@@ -12,7 +12,7 @@ public class ChannelsResource extends TwitchResource {
         super();
     }
 
-    public Channel channel(String name) {
+    public Channel getChannel(String name) {
         HttpClient request = new HttpClient();
         Channel channel = new Channel();
 
