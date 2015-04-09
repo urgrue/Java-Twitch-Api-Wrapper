@@ -49,6 +49,9 @@ public class HttpClient {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 String content = readStream(urlConnection.getInputStream());
                 response.setContent(content);
+            } else {
+                String content = readStream(urlConnection.getErrorStream());
+                response.setContent(content);
             }
         } finally {
             if (urlConnection != null) {
@@ -69,13 +72,19 @@ public class HttpClient {
      * @return String representing entire input stream contents
      */
     private static String readStream(InputStream inputStream) throws IOException {
-        StringBuilder text = new StringBuilder();
+        if (inputStream == null) {
+            return "";
+        }
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        StringBuilder text = new StringBuilder();
         String line = reader.readLine();
         while (line != null) {
             text.append(line);
             line = reader.readLine();
         }
+
         reader.close();
         return text.toString();
     }
