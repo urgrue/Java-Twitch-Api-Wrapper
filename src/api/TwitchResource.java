@@ -37,17 +37,17 @@ public class TwitchResource {
         headers.put("Client-ID", clientId);
     }
 
-    public TwitchResponse getRequest(String url) {
+    public HttpResponse getRequest(String url) {
         HttpClient request = new HttpClient();
-        TwitchResponse twitchResponse = null;
+        HttpResponse httpResponse = null;
 
         try {
-            twitchResponse = new TwitchResponse(request.get(url, getHeaders()));
+            httpResponse = request.get(url, getHeaders());
         } catch (IOException e) {
             e.printStackTrace(); // Should catch and rethrow connection error to user
         }
 
-        return twitchResponse;
+        return httpResponse;
     }
 
     public <T> T parseResponse(String responseContent, Class<T> expectedType) {

@@ -1,50 +1,73 @@
 package api.teams;
 
+import api.ErrorResponse;
 import api.TwitchResource;
 import api.TwitchResponse;
-import java.util.ArrayList;
+import http.HttpResponse;
 import java.util.List;
 
 public class TeamsResource extends TwitchResource {
 
     private static final int DEFAULT_LIMIT = 25;
+    private static final int MIN_LIMIT = 1;
+    private static final int MAX_LIMIT = 100;
 
     public TeamsResource() {
         super();
     }
 
-    public List<Team> getActiveTeams(int limit, int offset) {
-        String url = String.format("%s/teams/?limit=%s&offset=%s", BASE_URL, limit, offset);
-        TwitchResponse response = getRequest(url);
+    public TwitchResponse<List<Team>> getActiveTeams(int limit, int offset) {
+        // Constrain limit
+        limit = Math.max(limit, MIN_LIMIT);
+        limit = Math.min(limit, MAX_LIMIT);
 
-        List<Team> teams = new ArrayList<>();
-        if (response.getCode() == TwitchResponse.HTTP_OK) {
+        String url = String.format("%s/teams/?limit=%s&offset=%s", BASE_URL, limit, offset);
+        HttpResponse response = getRequest(url);
+
+        List<Team> teams = null;
+
+        int statusCode = response.getCode();
+        TwitchResponse<List<Team>> twitchResponse = new TwitchResponse<>(response);
+
+        if (statusCode == HttpResponse.HTTP_OK) {
             Teams teamsContainer = parseResponse(response.getContent(), Teams.class);
             teams = teamsContainer.getTeams();
+        } else {
+            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
+            twitchResponse.setErrorMessage(error.getMessage());
         }
 
-        return teams;
+        twitchResponse.setObject(teams);
+
+        return twitchResponse;
     }
 
-    public List<Team> getActiveTeams(int limit) {
+    public TwitchResponse<List<Team>> getActiveTeams(int limit) {
         return getActiveTeams(limit, 0);
     }
 
-    public List<Team> getActiveTeams() {
+    public TwitchResponse<List<Team>> getActiveTeams() {
         return getActiveTeams(DEFAULT_LIMIT, 0);
     }
 
-    public Team getTeam(String name) {
+    public TwitchResponse<Team> getTeam(String name) {
         String url = String.format("%s/teams/%s", BASE_URL, name);
-        TwitchResponse response = getRequest(url);
+        HttpResponse response = getRequest(url);
 
-        Team team = new Team();
-        if (response.getCode() == TwitchResponse.HTTP_OK) {
+        Team team = null;
+
+        int statusCode = response.getCode();
+        TwitchResponse<Team> twitchResponse = new TwitchResponse<>(response);
+
+        if (statusCode == HttpResponse.HTTP_OK) {
             team = parseResponse(response.getContent(), Team.class);
+        } else { // Not found
+            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
+            twitchResponse.setErrorMessage(error.getMessage());
         }
 
-        return team;
+        twitchResponse.setObject(team);
+
+        return twitchResponse;
     }
-
-
 }

@@ -1,7 +1,9 @@
 package api.chat;
 
+import api.ErrorResponse;
 import api.TwitchResource;
 import api.TwitchResponse;
+import http.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,28 +14,46 @@ public class ChatResource extends TwitchResource {
         super();
     }
 
-    public List<Emoticon> getEmoticons() {
+    public TwitchResponse<List<Emoticon>> getEmoticons() {
         String url = String.format("%s/chat/emoticons", BASE_URL);
-        TwitchResponse response = getRequest(url);
+        HttpResponse response = getRequest(url);
 
-        List<Emoticon> emoticons = new ArrayList<>();
-        if (response.getCode() == TwitchResponse.HTTP_OK) {
+        List<Emoticon> emoticons = null;
+
+        int statusCode = response.getCode();
+        TwitchResponse<List<Emoticon>> twitchResponse = new TwitchResponse<>(response);
+
+        if (statusCode == HttpResponse.HTTP_OK) {
             Emoticons emoticonsContainer = parseResponse(response.getContent(), Emoticons.class);
             emoticons = emoticonsContainer.getEmoticons();
+        } else { // Error
+            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
+            twitchResponse.setErrorMessage(error.getMessage());
         }
 
-        return emoticons;
+        twitchResponse.setObject(emoticons);
+
+        return twitchResponse;
     }
 
-    public ChannelBadges getChannelBadges(String channelName) {
+    public TwitchResponse<ChannelBadges> getChannelBadges(String channelName) {
         String url = String.format("%s/chat/%s/badges", BASE_URL, channelName);
-        TwitchResponse response = getRequest(url);
+        HttpResponse response = getRequest(url);
 
-        ChannelBadges badges = new ChannelBadges();
-        if (response.getCode() == TwitchResponse.HTTP_OK) {
+        ChannelBadges badges = null;
+
+        int statusCode = response.getCode();
+        TwitchResponse<ChannelBadges> twitchResponse = new TwitchResponse<>(response);
+
+        if (response.getCode() == HttpResponse.HTTP_OK) {
             badges = parseResponse(response.getContent(), ChannelBadges.class);
+        } else {
+            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
+            twitchResponse.setErrorMessage(error.getMessage());
         }
 
-        return badges;
+        twitchResponse.setObject(badges);
+
+        return twitchResponse;
     }
 }
