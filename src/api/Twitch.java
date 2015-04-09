@@ -1,3 +1,5 @@
+package api;
+
 import api.channels.ChannelsResource;
 import api.teams.TeamsResource;
 
