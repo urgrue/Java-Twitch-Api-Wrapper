@@ -30,7 +30,7 @@ public class TwitchResponse<T> {
      * @return True if error exists. False otherwise.
      */
     public boolean hasError() {
-        return errorMessage != null;
+        return errorMessage != null || object == null;
     }
 
     @Override
