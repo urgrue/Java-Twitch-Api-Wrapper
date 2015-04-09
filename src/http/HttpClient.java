@@ -21,12 +21,11 @@ public class HttpClient {
     public HttpResponse get(String requestURL, Map<String, String> headers) throws IOException {
 
         HttpResponse response = null;
-        HttpURLConnection urlConnection = null;
+
+        URL url = new URL(requestURL);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         try {
-            URL url = new URL(requestURL);
-            urlConnection = (HttpURLConnection) url.openConnection();
-
             // Settings
             urlConnection.setConnectTimeout(connectionTimeout);
             urlConnection.setReadTimeout(dataRetrievalTimeout);
@@ -36,9 +35,7 @@ public class HttpClient {
             // Headers
             if (headers != null) {
                 for (Map.Entry<String, String> header : headers.entrySet()) {
-                    String key = header.getKey();
-                    String value = header.getValue();
-                    urlConnection.addRequestProperty(key, value);
+                    urlConnection.addRequestProperty(header.getKey(), header.getValue());
                 }
             }
 
@@ -49,13 +46,14 @@ public class HttpClient {
             String responseMessage = urlConnection.getResponseMessage();
             response = new HttpResponse(responseCode, responseMessage);
 
-            if (responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 String content = readStream(urlConnection.getInputStream());
                 response.setContent(content);
             }
-
-        } catch (IOException e) {
-            throw e;
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
 
         return response;
@@ -70,26 +68,15 @@ public class HttpClient {
      * @param inputStream InputStream to read
      * @return String representing entire input stream contents
      */
-    private static String readStream(InputStream inputStream) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+    private static String readStream(InputStream inputStream) throws IOException {
         StringBuilder text = new StringBuilder();
-
-        try {
-            String line = reader.readLine();
-            while (line != null) {
-                text.append(line);
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            // Failed to read line
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = reader.readLine();
+        while (line != null) {
+            text.append(line);
+            line = reader.readLine();
         }
-
+        reader.close();
         return text.toString();
     }
 
