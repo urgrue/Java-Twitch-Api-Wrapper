@@ -1,10 +1,7 @@
 package api.channels;
 
 import api.TwitchResource;
-import http.HttpClient;
-import http.HttpResponse;
-
-import java.io.IOException;
+import api.TwitchResponse;
 
 public class ChannelsResource extends TwitchResource {
 
@@ -13,19 +10,12 @@ public class ChannelsResource extends TwitchResource {
     }
 
     public Channel getChannel(String name) {
-        HttpClient request = new HttpClient();
+        String url = String.format("%s/channels/%s", BASE_URL, name);
+        TwitchResponse response = getRequest(url);
+
         Channel channel = new Channel();
-
-        try {
-            HttpResponse response = request.get(BASE_URL + "/channels/" + name, getHeaders());
-            String content = response.getContent();
-
-            if (content != null) {
-                channel = parseResponse(content, Channel.class);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (response.getCode() == TwitchResponse.HTTP_OK) {
+            channel = parseResponse(response.getContent(), Channel.class);
         }
 
         return channel;

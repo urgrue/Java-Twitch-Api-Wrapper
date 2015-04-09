@@ -2,6 +2,8 @@ package api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import http.HttpClient;
+import http.HttpResponse;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,10 +37,23 @@ public class TwitchResource {
         headers.put("Client-ID", clientId);
     }
 
-    public <T> T parseResponse(String content, Class<T> type) {
+    public TwitchResponse getRequest(String url) {
+        HttpClient request = new HttpClient();
+        TwitchResponse twitchResponse = null;
+
+        try {
+            twitchResponse = new TwitchResponse(request.get(url, getHeaders()));
+        } catch (IOException e) {
+            e.printStackTrace(); // Should catch and rethrow connection error to user
+        }
+
+        return twitchResponse;
+    }
+
+    public <T> T parseResponse(String responseContent, Class<T> expectedType) {
         T obj = null;
         try {
-            obj = objectMapper.readValue(content, type);
+            obj = objectMapper.readValue(responseContent, expectedType);
         } catch (IOException e) {
             e.printStackTrace();
         }

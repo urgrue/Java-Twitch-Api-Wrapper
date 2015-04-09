@@ -1,10 +1,7 @@
 package api.teams;
 
 import api.TwitchResource;
-import http.HttpClient;
-import http.HttpResponse;
-
-import java.io.IOException;
+import api.TwitchResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +14,13 @@ public class TeamsResource extends TwitchResource {
     }
 
     public List<Team> getActiveTeams(int limit, int offset) {
-        HttpClient request = new HttpClient();
+        String url = String.format("%s/teams/?limit=%s&offset=%s", BASE_URL, limit, offset);
+        TwitchResponse response = getRequest(url);
+
         List<Team> teams = new ArrayList<>();
-
-        try {
-            String url = String.format("%s/teams/?limit=%s&offset=%s", BASE_URL, limit, offset);
-            HttpResponse response = request.get(url, getHeaders());
-            String content = response.getContent();
-
-            if (content != null) {
-                Teams teamsL = parseResponse(content, Teams.class);
-                teams = teamsL.getTeams();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (response.getCode() == TwitchResponse.HTTP_OK) {
+            Teams teamsContainer = parseResponse(response.getContent(), Teams.class);
+            teams = teamsContainer.getTeams();
         }
 
         return teams;
@@ -46,20 +35,12 @@ public class TeamsResource extends TwitchResource {
     }
 
     public Team getTeam(String name) {
-        HttpClient request = new HttpClient();
+        String url = String.format("%s/teams/%s", BASE_URL, name);
+        TwitchResponse response = getRequest(url);
+
         Team team = new Team();
-
-        try {
-            String url = String.format("%s/teams/%s", BASE_URL, name);
-            HttpResponse response = request.get(url, getHeaders());
-            String content = response.getContent();
-
-            if (content != null) {
-                team = parseResponse(content, Team.class);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (response.getCode() == TwitchResponse.HTTP_OK) {
+            team = parseResponse(response.getContent(), Team.class);
         }
 
         return team;
