@@ -10,6 +10,13 @@ public class Teams {
 
     private List<Team> teams = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Teams{" +
+                "teams=" + teams +
+                '}';
+    }
+
     public List<Team> getTeams() {
         return teams;
     }
@@ -18,10 +25,5 @@ public class Teams {
         this.teams = teams;
     }
 
-    @Override
-    public String toString() {
-        return "Teams{" +
-                "teams=" + teams +
-                '}';
-    }
+
 }
