@@ -1,4 +1,4 @@
-package api.teams;
+package api.teams.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

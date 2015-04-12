@@ -1,10 +1,10 @@
-package auth;
+package auth.grants.implicit;
 
 /**
  * Interface for listening to twitch.tv authentication
  * access tokens
  */
-interface AuthenticationListener {
+public interface AuthenticationListener {
     /**
      * Called when a twitch.tv authentication access token has been received.
      * @param token twitch.tv authentication access token

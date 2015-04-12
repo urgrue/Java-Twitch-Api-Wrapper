@@ -1,4 +1,4 @@
-package auth;
+package auth.grants.implicit;
 
 import java.io.*;
 import java.net.Socket;

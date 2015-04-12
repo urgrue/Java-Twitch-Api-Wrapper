@@ -3,6 +3,7 @@ package api.channels;
 import api.ErrorResponse;
 import api.TwitchResource;
 import api.TwitchResponse;
+import api.channels.models.Channel;
 import http.HttpResponse;
 
 public class ChannelsResource extends TwitchResource {

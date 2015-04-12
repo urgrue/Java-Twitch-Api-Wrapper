@@ -3,9 +3,11 @@ package api.chat;
 import api.ErrorResponse;
 import api.TwitchResource;
 import api.TwitchResponse;
+import api.chat.models.ChannelBadges;
+import api.chat.models.Emoticon;
+import api.chat.models.Emoticons;
 import http.HttpResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatResource extends TwitchResource {

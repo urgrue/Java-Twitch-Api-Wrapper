@@ -1,4 +1,4 @@
-package auth;
+package auth.grants.implicit;
 
 import java.io.IOException;
 import java.net.*;
@@ -8,17 +8,17 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
     /**
      * Default HTML page that twitch.tv will send the access_token to
      */
-    public static final String DEFAULT_AUTH_PAGE = "/auth/views/authorize.html";
+    public static final String DEFAULT_AUTH_PAGE = "/auth/grants/implicit/views/authorize.html";
 
     /**
      * Default HTML page that shows auth error's to user
      */
-    public static final String DEFAULT_FAILURE_PAGE = "/auth/views/authorize-failure.html";
+    public static final String DEFAULT_FAILURE_PAGE = "/auth/grants/implicit/views/authorize-failure.html";
 
     /**
      * Default HTML page that shows auth success to
      */
-    public static final String DEFAULT_SUCCESS_PAGE = "/auth/views/authorize-success.html";
+    public static final String DEFAULT_SUCCESS_PAGE = "/auth/grants/implicit/views/authorize-success.html";
 
     private int port;
     private ServerSocket serverSocket;
@@ -121,7 +121,7 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
 
     @Override
     public void onAuthenticationError(String error, String description) {
-        this.authenticationError = new AuthenticationError(error, description);
+        authenticationError = new AuthenticationError(error, description);
         stop(); // Stop the server
     }
 

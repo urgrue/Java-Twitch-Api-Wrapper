@@ -1,4 +1,4 @@
-package api.chat;
+package api.chat.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

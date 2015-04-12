@@ -1,4 +1,4 @@
-package api.channels;
+package api.channels.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

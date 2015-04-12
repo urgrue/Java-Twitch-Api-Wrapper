@@ -3,6 +3,8 @@ package api.teams;
 import api.ErrorResponse;
 import api.TwitchResource;
 import api.TwitchResponse;
+import api.teams.models.Team;
+import api.teams.models.Teams;
 import http.HttpResponse;
 import java.util.List;
 
