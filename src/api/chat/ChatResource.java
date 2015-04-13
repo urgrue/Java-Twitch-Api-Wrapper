@@ -1,6 +1,7 @@
 package api.chat;
 
 import api.ErrorResponse;
+import api.Twitch;
 import api.TwitchResource;
 import api.TwitchResponse;
 import api.chat.models.ChannelBadges;
@@ -12,12 +13,12 @@ import java.util.List;
 
 public class ChatResource extends TwitchResource {
 
-    public ChatResource() {
-        super();
+    public ChatResource(String baseUrl, String apiVersion) {
+        super(baseUrl, apiVersion);
     }
 
     public TwitchResponse<List<Emoticon>> getEmoticons() {
-        String url = String.format("%s/chat/emoticons", BASE_URL);
+        String url = String.format("%s/chat/emoticons", getBaseUrl());
         HttpResponse response = getRequest(url);
 
         List<Emoticon> emoticons = null;
@@ -39,7 +40,7 @@ public class ChatResource extends TwitchResource {
     }
 
     public TwitchResponse<ChannelBadges> getChannelBadges(String channelName) {
-        String url = String.format("%s/chat/%s/badges", BASE_URL, channelName);
+        String url = String.format("%s/chat/%s/badges", getBaseUrl(), channelName);
         HttpResponse response = getRequest(url);
 
         ChannelBadges badges = null;

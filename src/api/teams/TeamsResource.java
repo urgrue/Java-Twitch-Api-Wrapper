@@ -14,8 +14,8 @@ public class TeamsResource extends TwitchResource {
     private static final int MIN_LIMIT = 1;
     private static final int MAX_LIMIT = 100;
 
-    public TeamsResource() {
-        super();
+    public TeamsResource(String baseUrl, String apiVersion) {
+        super(baseUrl, apiVersion);
     }
 
     public TwitchResponse<List<Team>> getActiveTeams(int limit, int offset) {
@@ -23,7 +23,7 @@ public class TeamsResource extends TwitchResource {
         limit = Math.max(limit, MIN_LIMIT);
         limit = Math.min(limit, MAX_LIMIT);
 
-        String url = String.format("%s/teams/?limit=%s&offset=%s", BASE_URL, limit, offset);
+        String url = String.format("%s/teams/?limit=%s&offset=%s", getBaseUrl(), limit, offset);
         HttpResponse response = getRequest(url);
 
         List<Team> teams = null;
@@ -53,7 +53,7 @@ public class TeamsResource extends TwitchResource {
     }
 
     public TwitchResponse<Team> getTeam(String name) {
-        String url = String.format("%s/teams/%s", BASE_URL, name);
+        String url = String.format("%s/teams/%s", getBaseUrl(), name);
         HttpResponse response = getRequest(url);
 
         Team team = null;

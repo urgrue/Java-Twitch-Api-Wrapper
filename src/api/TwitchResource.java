@@ -11,13 +11,15 @@ import java.util.Map;
 
 public class TwitchResource {
 
-    public static final String BASE_URL = "https://api.twitch.tv/kraken";
-    public static final String API_VERSION = "v3";
+    private final String baseUrl; // Base url for twitch rest api
+    private final String apiVersion; // Api version of the twitch rest api
 
     private Map<String, String> headers = new HashMap<>(); // http headers
     private static ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
 
-    public TwitchResource() {
+    public TwitchResource(String baseUrl, String apiVersion) {
+        this.baseUrl = baseUrl;
+        this.apiVersion = apiVersion;
         configureObjectMapper();
     }
 
@@ -26,7 +28,7 @@ public class TwitchResource {
     }
 
     private void setHeaders() {
-        headers.put("ACCEPT", "application/vnd.twitchtv." + API_VERSION + "+json"); // Specify API version
+        headers.put("ACCEPT", "application/vnd.twitchtv." + apiVersion + "+json"); // Specify API version
     }
 
     protected Map<String, String> getHeaders() {
@@ -58,5 +60,13 @@ public class TwitchResource {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    protected String getBaseUrl() {
+        return baseUrl;
+    }
+
+    protected String getApiVersion() {
+        return apiVersion;
     }
 }

@@ -8,12 +8,12 @@ import http.HttpResponse;
 
 public class ChannelsResource extends TwitchResource {
 
-    public ChannelsResource() {
-        super();
+    public ChannelsResource(String baseUrl, String apiVersion) {
+        super(baseUrl, apiVersion);
     }
 
     public TwitchResponse<Channel> getChannel(String name) {
-        String url = String.format("%s/channels/%s", BASE_URL, name);
+        String url = String.format("%s/channels/%s", getBaseUrl(), name);
         HttpResponse response = getRequest(url);
 
         Channel channel = null;
