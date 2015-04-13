@@ -59,12 +59,11 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
     }
 
     /**
-     * Listen for auth callbacks from twitch.
-     * The method blocks until a connection is made.
+     * Start the server and listen for auth callbacks from twitch.
      *
      * @throws IOException if an I/O error occurs while waiting for a connection.
      */
-    public void accept() throws IOException {
+    public void start() throws IOException {
         // Establish the listen socket
         // For security reasons, the third parameter is set to not accept connections from outside the localhost
         serverSocket = new ServerSocket(port, 0, InetAddress.getByName("127.0.0.1"));

@@ -5,8 +5,8 @@ package auth.grants.implicit;
  * authentication with <a href="http://twitch.tv">http://www.twitch.tv</a>.
  */
 public class AuthenticationError {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
 
     public AuthenticationError(String name, String description) {
         this.name = name;
