@@ -1,5 +1,6 @@
 package api;
 
+import api.blocks.BlocksResource;
 import api.channels.ChannelsResource;
 import api.chat.ChatResource;
 import api.teams.TeamsResource;
@@ -13,6 +14,7 @@ public class Twitch {
     private String clientId; // User's app client Id
 
     private Authenticator authenticator;
+    private BlocksResource blocksResource;
     private ChannelsResource channelsResource;
     private TeamsResource teamsResource;
     private ChatResource chatResource;
@@ -20,6 +22,7 @@ public class Twitch {
     public Twitch() {
         // Load resource connectors
         authenticator = new Authenticator(BASE_URL);
+        blocksResource = new BlocksResource(BASE_URL, API_VERSION);
         channelsResource = new ChannelsResource(BASE_URL, API_VERSION);
         teamsResource = new TeamsResource(BASE_URL, API_VERSION);
         chatResource = new ChatResource(BASE_URL, API_VERSION);
@@ -28,6 +31,7 @@ public class Twitch {
     public void setClientId(String clientId) {
         this.clientId = clientId;
         // Update client Id in all resources
+        blocksResource.setClientId(clientId);
         channelsResource.setClientId(clientId);
         teamsResource.setClientId(clientId);
         chatResource.setClientId(clientId);
@@ -39,6 +43,11 @@ public class Twitch {
 
     public Authenticator auth() {
         return authenticator;
+    }
+
+    public BlocksResource blocks() {
+        blocksResource.setAuthAccessToken(authenticator.getAccessToken());
+        return blocksResource;
     }
 
     public ChannelsResource channels() {
