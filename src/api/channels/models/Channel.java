@@ -29,6 +29,8 @@ public class Channel {
     private String url;
     private long views;
     private int followers;
+    private String email;
+    private String streamKey;
 
     public static boolean isNullOrEmpty(Channel channel) {
         return channel == null || channel.equals(new Channel());
@@ -202,6 +204,22 @@ public class Channel {
         this.followers = followers;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getStreamKey() {
+        return streamKey;
+    }
+
+    public void setStreamKey(String streamKey) {
+        this.streamKey = streamKey;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -241,6 +259,8 @@ public class Channel {
                 ", url='" + url + '\'' +
                 ", views=" + views +
                 ", followers=" + followers +
+                ", email='" + email + '\'' +
+                ", streamKey='" + streamKey + '\'' +
                 '}';
     }
 }

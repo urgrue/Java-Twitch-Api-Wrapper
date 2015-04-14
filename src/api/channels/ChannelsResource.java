@@ -12,7 +12,7 @@ public class ChannelsResource extends TwitchResource {
         super(baseUrl, apiVersion);
     }
 
-    public TwitchResponse<Channel> getChannel(String name) {
+    public TwitchResponse<Channel> get(String name) {
         String url = String.format("%s/channels/%s", getBaseUrl(), name);
         HttpResponse response = getRequest(url);
 
@@ -24,6 +24,27 @@ public class ChannelsResource extends TwitchResource {
         if (statusCode == HttpResponse.HTTP_OK) {
             channel = parseResponse(response.getContent(), Channel.class);
         } else { // Not found
+            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
+            twitchResponse.setErrorMessage(error.getMessage());
+        }
+
+        twitchResponse.setObject(channel);
+
+        return twitchResponse;
+    }
+
+    public TwitchResponse<Channel> get() {
+        String url = String.format("%s/channel", getBaseUrl());
+        HttpResponse response = getRequest(url);
+
+        Channel channel = null;
+
+        int statusCode = response.getCode();
+        TwitchResponse<Channel> twitchResponse = new TwitchResponse<>(response);
+
+        if (statusCode == HttpResponse.HTTP_OK) {
+            channel = parseResponse(response.getContent(), Channel.class);
+        } else { // Not authenticated
             ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
             twitchResponse.setErrorMessage(error.getMessage());
         }
