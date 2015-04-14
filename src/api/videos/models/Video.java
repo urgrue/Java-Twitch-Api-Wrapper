@@ -8,7 +8,7 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Video {
 
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id") private String id;
     private String title;
     private String description;
     private long broadcastId;
@@ -28,7 +28,7 @@ public class Video {
     @Override
     public String toString() {
         return "Video{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", broadcastId=" + broadcastId +
@@ -40,6 +40,8 @@ public class Video {
                 ", preview='" + preview + '\'' +
                 ", url='" + url + '\'' +
                 ", views=" + views +
+                ", fps=" + fps +
+                ", resolutions=" + resolutions +
                 ", broadcastType='" + broadcastType + '\'' +
                 ", channel=" + channel +
                 '}';
@@ -52,20 +54,20 @@ public class Video {
 
         Video video = (Video) o;
 
-        return id == video.id;
+        return !(id != null ? !id.equals(video.id) : video.id != null);
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return id != null ? id.hashCode() : 0;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -193,9 +195,17 @@ public class Video {
         this.channel = channel;
     }
 
-    private class Channel {
+    public class Channel {
         private String name;
         private String displayName;
+
+        @Override
+        public String toString() {
+            return "Channel{" +
+                    "name='" + name + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    '}';
+        }
 
         public String getName() {
             return name;

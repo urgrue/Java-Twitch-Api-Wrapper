@@ -10,6 +10,7 @@ import api.follows.models.Follows;
 import api.teams.models.Team;
 import api.teams.models.Teams;
 import api.users.models.User;
+import api.videos.models.Videos;
 import http.HttpResponse;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -123,17 +124,32 @@ public class ChannelsResource extends TwitchResource {
     }
 
     public TwitchResponse<Follows> getFollows(String channelName, int limit, int offset, String direction){
-        String url = String.format("%s/channels/%s/follows?limit=%s&offset=%s&direction=%s",
-                getBaseUrl(), channelName, limit, offset, direction);
-
         // Constrain limit
         limit = Math.max(limit, 1);
         limit = Math.min(limit, 100);
 
+        String url = String.format("%s/channels/%s/follows?limit=%s&offset=%s&direction=%s",
+                getBaseUrl(), channelName, limit, offset, direction);
+
         return requestGet(url, HttpResponse.HTTP_OK, Follows.class);
     }
 
-    public TwitchResponse<Videos> getVideos(String channel) {
-        throw new NotImplementedException();
+    public TwitchResponse<Videos> getVideos(String channelName, int limit, int offset, boolean broadcasts, boolean hls) {
+        // Constrain limit
+        limit = Math.max(limit, 1);
+        limit = Math.min(limit, 100);
+
+        String url = String.format("%s/channels/%s/videos?limit=%s&offset=%s&broadcasts=%s&hls=%s",
+                getBaseUrl(), channelName, limit, offset, broadcasts, hls);
+
+        return requestGet(url, HttpResponse.HTTP_OK, Videos.class);
+    }
+
+    public TwitchResponse<Videos> getVideoHighlights(String channelName, int limit, int offset) {
+        return getVideos(channelName, limit, offset, false, false);
+    }
+
+    public TwitchResponse<Videos> getVideoBroadcasts(String channelName, int limit, int offset) {
+        return getVideos(channelName, limit, offset, true, false);
     }
 }
