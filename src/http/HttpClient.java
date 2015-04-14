@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class HttpClient {
 
-    private int connectionTimeout = 10000; // Connection timeout in ms
-    private int dataRetrievalTimeout = 10000; // Data retrieval timeout in ms
+    private int connectionTimeout = 20000; // Connection timeout in ms
+    private int dataRetrievalTimeout = 20000; // Data retrieval timeout in ms
 
     /**
      * Make a HTTP Request
@@ -212,10 +212,9 @@ public class HttpClient {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
         StringBuilder text = new StringBuilder();
-        String line = reader.readLine();
-        while (line != null) {
+        String line;
+        while ((line = reader.readLine()) != null) {
             text.append(line);
-            line = reader.readLine();
         }
 
         reader.close();
