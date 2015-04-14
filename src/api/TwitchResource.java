@@ -130,6 +130,10 @@ public class TwitchResource {
         return request(requestUrl, HttpRequestMethods.POST, inputData, successCode, expectedType);
     }
 
+    protected <T> TwitchResponse<T> requestPost(String requestUrl, int successCode, Class<T> expectedType) {
+        return request(requestUrl, HttpRequestMethods.POST, null, successCode, expectedType);
+    }
+
     protected String getBaseUrl() {
         return baseUrl;
     }
