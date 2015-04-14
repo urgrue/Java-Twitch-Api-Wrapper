@@ -47,6 +47,18 @@ public class User {
         return (int) (id ^ (id >>> 32));
     }
 
+    /**
+     * This will handle a caching bug when a v2 user is returned
+     * from the API rather than the expected v3 user.
+     */
+    public void setStaff(boolean staff) {
+        if (staff) {
+            this.type = "staff";
+        } else {
+            this.type = "user";
+        }
+    }
+
     public String getName() {
 
         return name;
