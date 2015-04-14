@@ -27,6 +27,10 @@ public class Twitch {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+        // Update client Id in all resources
+        channelsResource.setClientId(clientId);
+        teamsResource.setClientId(clientId);
+        chatResource.setClientId(clientId);
     }
 
     public String getClientId() {

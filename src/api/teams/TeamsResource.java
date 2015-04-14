@@ -24,24 +24,19 @@ public class TeamsResource extends TwitchResource {
         limit = Math.min(limit, MAX_LIMIT);
 
         String url = String.format("%s/teams/?limit=%s&offset=%s", getBaseUrl(), limit, offset);
-        HttpResponse response = getRequest(url);
+        TwitchResponse<Teams> container = requestGet(url, HttpResponse.HTTP_OK, Teams.class);
 
-        List<Team> teams = null;
+        // Create object with list rather than the container class
+        TwitchResponse<List<Team>> response = new TwitchResponse<List<Team>>(
+                container.getStatusCode(),
+                container.getStatusText(),
+                container.getErrorMessage());
 
-        int statusCode = response.getCode();
-        TwitchResponse<List<Team>> twitchResponse = new TwitchResponse<>(response);
-
-        if (statusCode == HttpResponse.HTTP_OK) {
-            Teams teamsContainer = parseResponse(response.getContent(), Teams.class);
-            teams = teamsContainer.getTeams();
-        } else {
-            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
-            twitchResponse.setErrorMessage(error.getMessage());
+        if (!container.hasError()) {
+            response.setObject(container.getObject().getTeams());
         }
 
-        twitchResponse.setObject(teams);
-
-        return twitchResponse;
+        return response;
     }
 
     public TwitchResponse<List<Team>> getActiveTeams(int limit) {
@@ -54,22 +49,6 @@ public class TeamsResource extends TwitchResource {
 
     public TwitchResponse<Team> getTeam(String name) {
         String url = String.format("%s/teams/%s", getBaseUrl(), name);
-        HttpResponse response = getRequest(url);
-
-        Team team = null;
-
-        int statusCode = response.getCode();
-        TwitchResponse<Team> twitchResponse = new TwitchResponse<>(response);
-
-        if (statusCode == HttpResponse.HTTP_OK) {
-            team = parseResponse(response.getContent(), Team.class);
-        } else { // Not found
-            ErrorResponse error = parseResponse(response.getContent(), ErrorResponse.class);
-            twitchResponse.setErrorMessage(error.getMessage());
-        }
-
-        twitchResponse.setObject(team);
-
-        return twitchResponse;
+        return requestGet(url, HttpResponse.HTTP_OK, Team.class);
     }
 }

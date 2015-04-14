@@ -14,6 +14,12 @@ public class TwitchResponse<T> {
         this.statusText = statusText;
     }
 
+    public TwitchResponse(int statusCode, String statusText, String errorMessage) {
+        this.statusCode = statusCode;
+        this.statusText = statusText;
+        this.errorMessage = errorMessage;
+    }
+
     public TwitchResponse(HttpResponse httpResponse) {
         this.statusCode = httpResponse.getCode();
         this.statusText = httpResponse.getMessage();
