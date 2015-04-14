@@ -1,5 +1,7 @@
 package http;
 
+import api.TwitchResource;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,16 +17,16 @@ public class HttpClient {
      * Make a HTTP Request
      * @param resourceUrl Resource URL
      * @param requestMethod Request Method: GET, POST, PUT, DELETE, etc.
-     * @param data Body data to send with HTTP request
+     * @param inputData Body data to send with HTTP request
      * @param headers Headers to include with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      */
-    private HttpResponse request(
+    public HttpResponse request(
                 String resourceUrl,
-                String requestMethod,
+                HttpRequestMethods requestMethod,
                 Map<String, String> headers,
-                Map<String, String> data)
+                Map<String, String> inputData)
                 throws IOException {
 
         HttpResponse response = null;
@@ -36,7 +38,7 @@ public class HttpClient {
             // Settings
             urlConnection.setConnectTimeout(connectionTimeout);
             urlConnection.setReadTimeout(dataRetrievalTimeout);
-            urlConnection.setRequestMethod(requestMethod);
+            urlConnection.setRequestMethod(requestMethod.toString());
             urlConnection.setUseCaches(false);
             urlConnection.setDoInput(true);
 
@@ -48,33 +50,33 @@ public class HttpClient {
             }
 
             // Input data
-            String inputData = "";
-            if (data != null) {
+            String input = "";
+            if (inputData != null) {
                 StringBuilder sb = new StringBuilder();
-                for (Map.Entry<String, String> datum : data.entrySet()) {
+                for (Map.Entry<String, String> datum : inputData.entrySet()) {
                     sb.append(datum.getKey());
                     sb.append("=");
                     sb.append(URLEncoder.encode(datum.getValue(), "UTF-8"));
                     sb.append("&");
                 }
                 sb.deleteCharAt(sb.length() - 1); // Remove final '&'
-                inputData = sb.toString();
+                input = sb.toString();
 
                 urlConnection.setDoOutput(true); // Send data in request body
-                urlConnection.setFixedLengthStreamingMode(inputData.length()); // More efficient since length known
+                urlConnection.setFixedLengthStreamingMode(input.length()); // More efficient since length known
 
                 // Set headers for input content
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 urlConnection.setRequestProperty("charset", "utf-8");
-                urlConnection.setRequestProperty("Content-Length", Integer.toString(inputData.length()));
+                urlConnection.setRequestProperty("Content-Length", Integer.toString(input.length()));
             }
 
             urlConnection.connect();
 
             // Write Input Data
-            if (data != null) {
+            if (inputData != null) {
                 OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-                writer.write(inputData);
+                writer.write(input);
                 writer.flush();
                 writer.close();
             }
@@ -102,6 +104,29 @@ public class HttpClient {
     }
 
     /**
+     * Read the input stream and convert to a string
+     * @param inputStream InputStream to read
+     * @return String representing entire input stream contents
+     * @throws IOException
+     */
+    private static String readStream(InputStream inputStream) throws IOException {
+        if (inputStream == null) {
+            return "";
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        StringBuilder text = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            text.append(line);
+        }
+
+        reader.close();
+        return text.toString();
+    }
+
+    /**
      * Make a HTTP GET Request
      * @param resourceUrl Resource URL
      * @param headers Headers to include with HTTP request
@@ -110,7 +135,7 @@ public class HttpClient {
      * @see #get(String)
      */
     public HttpResponse get(String resourceUrl, Map<String, String> headers) throws IOException {
-        return request(resourceUrl, "GET", headers, null);
+        return request(resourceUrl, HttpRequestMethods.GET, headers, null);
     }
 
     /**
@@ -135,7 +160,7 @@ public class HttpClient {
      * @see #put(String, Map)
      */
     public HttpResponse put(String resourceUrl, Map<String, String> headers, Map<String, String> data) throws IOException {
-        return request(resourceUrl, "PUT", headers, data);
+        return request(resourceUrl, HttpRequestMethods.PUT, headers, data);
     }
 
     /**
@@ -172,7 +197,7 @@ public class HttpClient {
      * @see #delete(String)
      */
     public HttpResponse delete(String resourceUrl, Map<String, String> headers) throws IOException {
-        return request(resourceUrl, "DELETE", headers, null);
+        return request(resourceUrl, HttpRequestMethods.DELETE, headers, null);
     }
 
     /**
@@ -195,30 +220,7 @@ public class HttpClient {
      * @throws IOException Error during HTTP request
      */
     public HttpResponse post(String resourceUrl, Map<String, String> headers, Map<String, String> data) throws IOException {
-        return request(resourceUrl, "POST", headers, data);
-    }
-
-    /**
-     * Read the input stream and convert to a string
-     * @param inputStream InputStream to read
-     * @return String representing entire input stream contents
-     * @throws IOException
-     */
-    private static String readStream(InputStream inputStream) throws IOException {
-        if (inputStream == null) {
-            return "";
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        StringBuilder text = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            text.append(line);
-        }
-
-        reader.close();
-        return text.toString();
+        return request(resourceUrl, HttpRequestMethods.POST, headers, data);
     }
 
     /**
