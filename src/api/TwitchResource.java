@@ -13,6 +13,7 @@ public class TwitchResource {
 
     private final String baseUrl; // Base url for twitch rest api
     private final String apiVersion; // Api version of the twitch rest api
+    private String clientId; // Client Id of your Twitch App
 
     private Map<String, String> headers = new HashMap<>(); // http headers
     private static ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
@@ -35,8 +36,16 @@ public class TwitchResource {
         return headers;
     }
 
-    private void setClientId(String clientId) {
-        headers.put("Client-ID", clientId);
+    public void setAuthAccessToken(String accessToken) {
+        if (accessToken != null && accessToken.length() > 0) {
+            headers.put("Authorization", String.format("OAuth %s", accessToken));
+        }
+    }
+
+    public void setClientId(String clientId) {
+        if (clientId != null && clientId.length() > 0) {
+            headers.put("Client-ID", clientId);
+        }
     }
 
     public HttpResponse getRequest(String url) {

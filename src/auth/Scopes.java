@@ -86,13 +86,13 @@ public enum Scopes {
      * Combine <code>Scopes</code> into a '+' separated <code>String</code>.
      * This is the required input format for twitch.tv
      * @param scopes <code>Scopes</code> to combine.
-     * @return <code>String</code> represented '+' separated <code>Scopes</code>
+     * @return <code>String</code> representing '+' separated list of <code>Scopes</code>
      */
     public static String join(Scopes... scopes) {
         if (scopes == null) return "";
         StringBuilder sb = new StringBuilder();
         for (Scopes scope : scopes) {
-            sb.append(scope).append("+");
+            sb.append(scope.getKey()).append("+");
         }
         return sb.toString();
     }

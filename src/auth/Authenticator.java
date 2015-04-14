@@ -5,6 +5,7 @@ import auth.grants.implicit.AuthenticationError;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 
 public class Authenticator {
 
@@ -16,35 +17,41 @@ public class Authenticator {
     private String accessToken;
     private AuthenticationError authenticationError;
 
-    public Authenticator(String twitchBaseUrl, String clientId, URI redirectUri) {
+    public Authenticator(String twitchBaseUrl) {
         this.twitchBaseUrl = twitchBaseUrl;
+    }
+
+    public String getAuthenticationUrl(String clientId, URI redirectURI, Scopes... scopes) {
         this.clientId = clientId;
-        this.redirectUri = redirectUri;
+        this.redirectUri = redirectURI;
 
         // Set the listening port for the callback, default to 80 if not specified
         this.listenPort = redirectUri.getPort();
         if (this.listenPort == -1) {
             this.listenPort = 80; // HTTP default
         }
-    }
 
-    public String getAuthenticationUrl(Scopes... scopes) {
         return String.format("%s/oauth2/authorize" +
                 "?response_type=token" +
                 "&client_id=%s" +
                 "&redirect_uri=%s" +
                 "&scope=%s",
-                twitchBaseUrl, clientId, redirectUri, Scopes.join(scopes));
+                twitchBaseUrl,
+                clientId,
+                redirectUri,
+                Scopes.join(scopes));
     }
 
     // TODO return an AuthenticationStatus object rather than using the auth error members and boolean return
     /**
      * Listens for callback from twitch server with the access token.
+     * <code>getAuthenticationUrl()</code> must be called prior to this function!
      * @return <code>true</code> if access token was received, <code>false</code> otherwise
      */
     public boolean awaitAccessToken() {
-        AuthenticationCallbackServer server = new AuthenticationCallbackServer(listenPort);
+        if (clientId == null || redirectUri == null) return false;
 
+        AuthenticationCallbackServer server = new AuthenticationCallbackServer(listenPort);
         try {
             server.start();
         } catch (IOException e) {
@@ -75,6 +82,10 @@ public class Authenticator {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public boolean hasAccessToken() {
+        return accessToken != null;
     }
 
     /**
