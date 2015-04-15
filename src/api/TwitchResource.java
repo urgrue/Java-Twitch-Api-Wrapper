@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TwitchResource {
+public abstract class TwitchResource {
 
     private final String baseUrl; // Base url for twitch rest api
     private final String apiVersion; // Api version of the twitch rest api
