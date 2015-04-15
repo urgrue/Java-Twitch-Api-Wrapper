@@ -96,4 +96,19 @@ public enum Scopes {
         }
         return sb.toString();
     }
+
+    /**
+     * Convert the string representation of the Scope to the Enum.
+     * @param text Text representation of Enum value
+     * @return Enum value that the text represents
+     */
+    public static Scopes fromString(String text) {
+        if (text == null) return null;
+        for (Scopes b : Scopes.values()) {
+            if (text.equalsIgnoreCase(b.key)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }
