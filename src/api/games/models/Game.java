@@ -11,6 +11,7 @@ public class Game {
     private GameBox box;
     private GameLogo logo;
     private long giantbombId;
+    private int popularity; // From search results
 
     @Override
     public String toString() {
@@ -20,6 +21,7 @@ public class Game {
                 ", box=" + box +
                 ", logo=" + logo +
                 ", giantbombId=" + giantbombId +
+                ", popularity=" + popularity +
                 '}';
     }
 
@@ -78,5 +80,13 @@ public class Game {
 
     public void setGiantbombId(long giantbombId) {
         this.giantbombId = giantbombId;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
     }
 }

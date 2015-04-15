@@ -6,6 +6,8 @@ import api.chat.ChatResource;
 import api.games.GamesResource;
 import api.ingests.IngestsResource;
 import api.root.RootResource;
+import api.search.SearchResource;
+import api.streams.StreamsResource;
 import api.teams.TeamsResource;
 import auth.Authenticator;
 
@@ -31,6 +33,8 @@ public class Twitch {
         res.put("games", new GamesResource(BASE_URL, API_VERSION));
         res.put("ingests", new IngestsResource(BASE_URL, API_VERSION));
         res.put("root", new RootResource(BASE_URL, API_VERSION));
+        res.put("search", new SearchResource(BASE_URL, API_VERSION));
+        res.put("streams", new StreamsResource(BASE_URL, API_VERSION));
         res.put("teams", new TeamsResource(BASE_URL, API_VERSION));
     }
 
@@ -78,6 +82,14 @@ public class Twitch {
 
     public RootResource root() {
         return (RootResource) getResource("root");
+    }
+
+    public SearchResource search() {
+        return (SearchResource) getResource("search");
+    }
+
+    public StreamsResource streams() {
+        return (StreamsResource) getResource("streams");
     }
 
     public TeamsResource teams() {
