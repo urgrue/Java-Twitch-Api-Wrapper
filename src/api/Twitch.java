@@ -4,6 +4,7 @@ import api.blocks.BlocksResource;
 import api.channels.ChannelsResource;
 import api.chat.ChatResource;
 import api.games.GamesResource;
+import api.ingests.IngestsResource;
 import api.teams.TeamsResource;
 import auth.Authenticator;
 
@@ -27,6 +28,7 @@ public class Twitch {
         res.put("channels", new ChannelsResource(BASE_URL, API_VERSION));
         res.put("chat", new ChatResource(BASE_URL, API_VERSION));
         res.put("games", new GamesResource(BASE_URL, API_VERSION));
+        res.put("ingests", new IngestsResource(BASE_URL, API_VERSION));
         res.put("teams", new TeamsResource(BASE_URL, API_VERSION));
     }
 
@@ -66,6 +68,10 @@ public class Twitch {
 
     public GamesResource games() {
         return (GamesResource) getResource("games");
+    }
+
+    public IngestsResource ingests() {
+        return (IngestsResource) getResource("ingests");
     }
 
     public TeamsResource teams() {
