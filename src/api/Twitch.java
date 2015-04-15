@@ -3,6 +3,7 @@ package api;
 import api.blocks.BlocksResource;
 import api.channels.ChannelsResource;
 import api.chat.ChatResource;
+import api.follows.FollowsResource;
 import api.teams.TeamsResource;
 import auth.Authenticator;
 
@@ -14,14 +15,19 @@ public class Twitch {
     private String clientId; // User's app client Id
 
     private Authenticator authenticator;
+
     private BlocksResource blocksResource;
     private ChannelsResource channelsResource;
     private TeamsResource teamsResource;
     private ChatResource chatResource;
 
     public Twitch() {
-        // Load resource connectors
         authenticator = new Authenticator(BASE_URL);
+        // Load resource connectors
+        initResources();
+    }
+
+    private void initResources() {
         blocksResource = new BlocksResource(BASE_URL, API_VERSION);
         channelsResource = new ChannelsResource(BASE_URL, API_VERSION);
         teamsResource = new TeamsResource(BASE_URL, API_VERSION);
