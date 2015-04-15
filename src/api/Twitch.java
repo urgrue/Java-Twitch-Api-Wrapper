@@ -3,9 +3,12 @@ package api;
 import api.blocks.BlocksResource;
 import api.channels.ChannelsResource;
 import api.chat.ChatResource;
-import api.follows.FollowsResource;
+import api.games.GamesResource;
 import api.teams.TeamsResource;
 import auth.Authenticator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Twitch {
 
@@ -15,36 +18,34 @@ public class Twitch {
     private String clientId; // User's app client Id
 
     private Authenticator authenticator;
-
-    private BlocksResource blocksResource;
-    private ChannelsResource channelsResource;
-    private TeamsResource teamsResource;
-    private ChatResource chatResource;
+    Map<String, TwitchResource> res = new HashMap<String, TwitchResource>();
 
     public Twitch() {
         authenticator = new Authenticator(BASE_URL);
-        // Load resource connectors
-        initResources();
-    }
-
-    private void initResources() {
-        blocksResource = new BlocksResource(BASE_URL, API_VERSION);
-        channelsResource = new ChannelsResource(BASE_URL, API_VERSION);
-        teamsResource = new TeamsResource(BASE_URL, API_VERSION);
-        chatResource = new ChatResource(BASE_URL, API_VERSION);
+        // Init resource connectors
+        res.put("blocks", new BlocksResource(BASE_URL, API_VERSION));
+        res.put("channels", new ChannelsResource(BASE_URL, API_VERSION));
+        res.put("chat", new ChatResource(BASE_URL, API_VERSION));
+        res.put("games", new GamesResource(BASE_URL, API_VERSION));
+        res.put("teams", new TeamsResource(BASE_URL, API_VERSION));
     }
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
-        // Update client Id in all resources
-        blocksResource.setClientId(clientId);
-        channelsResource.setClientId(clientId);
-        teamsResource.setClientId(clientId);
-        chatResource.setClientId(clientId);
+        // Update client id in all resources
+        for (TwitchResource r : res.values()) {
+            r.setClientId(clientId);
+        }
     }
 
     public String getClientId() {
         return clientId;
+    }
+
+    public TwitchResource getResource(String key) {
+        TwitchResource r = res.get(key);
+        r.setAuthAccessToken(authenticator.getAccessToken());
+        return r;
     }
 
     public Authenticator auth() {
@@ -52,22 +53,22 @@ public class Twitch {
     }
 
     public BlocksResource blocks() {
-        blocksResource.setAuthAccessToken(authenticator.getAccessToken());
-        return blocksResource;
+        return (BlocksResource) getResource("blocks");
     }
 
     public ChannelsResource channels() {
-        channelsResource.setAuthAccessToken(authenticator.getAccessToken());
-        return channelsResource;
-    }
-
-    public TeamsResource teams() {
-        teamsResource.setAuthAccessToken(authenticator.getAccessToken());
-        return teamsResource;
+        return (ChannelsResource) getResource("channels");
     }
 
     public ChatResource chat() {
-        chatResource.setAuthAccessToken(authenticator.getAccessToken());
-        return chatResource;
+        return (ChatResource) getResource("chat");
+    }
+
+    public GamesResource games() {
+        return (GamesResource) getResource("games");
+    }
+
+    public TeamsResource teams() {
+        return (TeamsResource) getResource("teams");
     }
 }
