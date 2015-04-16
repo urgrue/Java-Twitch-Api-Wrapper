@@ -1,5 +1,5 @@
 # A Java Twitch API Wrapper
-A java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
+A complete java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
 
 ## Basics
 
@@ -43,17 +43,13 @@ try {
 }
 ```
 
-### Dependencies
-
-[Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome)
-
 ## Authentication
 
 ### Implicit Grant Flow
 
 The wrapper provides the functionality for authenticating users of your application following the [Implicit Grant Flow](https://github.com/justintv/Twitch-API/blob/master/authentication.md#implicit-grant-flow). 
 
-To use authentication, your application must be registered with twith.tv and the callback URI should be set like the following:
+To use authentication, your application must be registered with twitch.tv and the callback URI should be set like the following:
 `http://127.0.0.1:23522/authorize.html`. You may choose a different port other than `23522` if you wish, but the rest of the URI must remain exactly as specified above.
 
 The authentication process is explained in the following code example.
@@ -66,7 +62,7 @@ twitch.setClientId("shjdkashjkfdl"); // This is your registered application's cl
 URI callbackUri = new URI("http://127.0.0.1:23522/authorize.html");
 
 /* Get the authentication URL. Note: you will set the required scopes needed here. */
-String authUrl = twitch.auth().getAuthenticationUrl(twitch.getClientID(), callbackUri, Scopes.USER_READ, SCOPES.CHANNEL_READ);
+String authUrl = twitch.auth().getAuthenticationUrl(twitch.getClientID(), callbackUri, Scopes.USER_READ, Scopes.CHANNEL_READ);
 
 /* Send the user to the webpage somehow so that they can authorize your application */
 openWebpage(authUrl);
@@ -92,3 +88,7 @@ If you are just creating an application for yourself and already have an access 
 ```java
 twitch.auth().setAccessToken("my-access-token-289489");
 ```
+
+## Dependencies
+
+[Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome)
