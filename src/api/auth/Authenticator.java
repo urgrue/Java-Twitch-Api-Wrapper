@@ -6,6 +6,11 @@ import api.auth.grants.implicit.AuthenticationError;
 import java.io.IOException;
 import java.net.URI;
 
+/**
+ * The authenticator object allows a user to authenticate with the Twitch.tv servers.
+ *
+ * @author Matthew Bell
+ */
 public class Authenticator {
 
     private String twitchBaseUrl; // Base twitch api url
@@ -20,6 +25,16 @@ public class Authenticator {
         this.twitchBaseUrl = twitchBaseUrl;
     }
 
+    /**
+     * Returns the authentication URL that you can redirect the user to in order
+     * to authorize your application to access their account and retrieve an
+     * access token.
+     *
+     * @param clientId    the Twitch application client ID
+     * @param redirectURI the redirect URI for your Twitch application
+     * @param scopes      the scopes needed for your application
+     * @return
+     */
     public String getAuthenticationUrl(String clientId, URI redirectURI, Scopes... scopes) {
         this.clientId = clientId;
         this.redirectUri = redirectURI;
@@ -30,18 +45,10 @@ public class Authenticator {
             this.listenPort = 80; // HTTP default
         }
 
-        return String.format("%s/oauth2/authorize" +
-                        "?response_type=token" +
-                        "&client_id=%s" +
-                        "&redirect_uri=%s" +
-                        "&scope=%s",
-                twitchBaseUrl,
-                clientId,
-                redirectUri,
-                Scopes.join(scopes));
+        return String.format("%s/oauth2/authorize?response_type=token" +
+                        "&client_id=%s&redirect_uri=%s&scope=%s",
+                twitchBaseUrl, clientId, redirectUri, Scopes.join(scopes));
     }
-
-    // TODO return an AuthenticationStatus object rather than using the auth error members and boolean return
 
     /**
      * Listens for callback from twitch server with the access token.
@@ -85,6 +92,11 @@ public class Authenticator {
         this.accessToken = accessToken;
     }
 
+    /**
+     * Check if an access token has been received.
+     *
+     * @return <code>true</code> if an access token has been received; <code>false</code> otherwise
+     */
     public boolean hasAccessToken() {
         return accessToken != null;
     }
@@ -99,9 +111,9 @@ public class Authenticator {
     }
 
     /**
-     * Check if there was an authentication error
+     * Check if there was an authentication error.
      *
-     * @return <code>true</code> if an error exists, <code>false</code> otherwise
+     * @return <code>true</code> if an error exists; <code>false</code> otherwise
      */
     public boolean hasAuthenticationError() {
         return authenticationError != null;
