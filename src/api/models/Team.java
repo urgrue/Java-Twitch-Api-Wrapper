@@ -8,7 +8,8 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Team {
 
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private String name;
     private String info;
     private String displayName;

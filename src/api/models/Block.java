@@ -8,7 +8,8 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Block {
 
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private Date updatedAt;
     private User user;
 

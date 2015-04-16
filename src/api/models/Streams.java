@@ -8,8 +8,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Streams {
 
-    @JsonProperty("_total") private int total;
     List<Stream> streams;
+    @JsonProperty("_total")
+    private int total;
 
     @Override
     public String toString() {

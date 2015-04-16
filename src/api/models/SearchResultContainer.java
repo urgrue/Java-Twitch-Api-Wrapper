@@ -2,14 +2,14 @@ package api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchResultContainer {
 
-    @JsonProperty("_total") private int total;
+    @JsonProperty("_total")
+    private int total;
     private List<Channel> channels;
     private List<Stream> streams;
     private List<Game> games;

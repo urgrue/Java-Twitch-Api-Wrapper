@@ -6,15 +6,16 @@ import api.models.Emoticon;
 import api.models.Emoticons;
 import http.HttpResponse;
 
+import java.io.IOException;
 import java.util.List;
 
-public class ChatResource extends TwitchResource {
+public class ChatResource extends AbstractResource {
 
     public ChatResource(String baseUrl, String apiVersion) {
         super(baseUrl, apiVersion);
     }
 
-    public TwitchResponse<List<Emoticon>> getEmoticons() {
+    public TwitchResponse<List<Emoticon>> getEmoticons() throws IOException {
         String url = String.format("%s/chat/emoticons", getBaseUrl());
         TwitchResponse<Emoticons> container = requestGet(url, HttpResponse.HTTP_OK, Emoticons.class);
 
@@ -31,7 +32,7 @@ public class ChatResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<ChannelBadges> getChannelBadges(String channelName) {
+    public TwitchResponse<ChannelBadges> getChannelBadges(String channelName) throws IOException {
         String url = String.format("%s/chat/%s/badges", getBaseUrl(), channelName);
         return requestGet(url, HttpResponse.HTTP_OK, ChannelBadges.class);
     }

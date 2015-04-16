@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Authorizing...</title>
+
+    <style>
+        .container {
+            width: 100%;
+            text-align: center;
+        }
+
+        .name {
+            color: red;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        var thisPage = location.origin + location.pathname; // Path to this file
+        var failurePage = location.origin + "/authorization-failure.html";
+
+        function process() {
+            if (document.location.search.length > 0) {
+                // GET param exists, Retrieving access token successful
+                // do nothing, server will automatically serve up the success page
+            } else {
+                // Attempt to extract access token from hash
+                getAccessTokenFromHash();
+            }
+        }
+
+        function getAccessTokenFromHash() {
+            var accessToken = extractAccessToken(document.location.hash);
+            if (accessToken.length > 0) {
+                // Send request to server for extraction of access token
+                document.location.replace(thisPage + "?access_token=" + accessToken);
+            } else {
+                // No access token found
+                document.location.replace(failurePage);
+            }
+        }
+
+        function extractAccessToken(hash) {
+            var params = hash.slice(1).split('&');
+            for (var i = 0; i < params.length; i++) {
+                var param = params[i].split('=');
+                if (param[0] === "access_token") {
+                    return param[1]; // access token found
+                }
+            }
+            return ""; // access token not found
+        }
+
+        window.onload = process;
+
+    </script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2 id="heading" class="">Authorizing...</h2>
+
+    <noscript>
+        <p class="name">Javascript must be enabled in order to authorize. Please enable Javascript and try again.</p>
+    </noscript>
+
+</div>
+
+</body>
+
+</html>

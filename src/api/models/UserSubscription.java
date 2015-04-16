@@ -8,7 +8,8 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserSubscription {
 
-    @JsonProperty("_id") private String id;
+    @JsonProperty("_id")
+    private String id;
     private Date createdAt;
     private Channel channel;
 

@@ -15,7 +15,8 @@ public class Channel {
     private String game;
     private int delay;
     private String language;
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private String name;
     private Date createdAt;
     private Date updatedAt;

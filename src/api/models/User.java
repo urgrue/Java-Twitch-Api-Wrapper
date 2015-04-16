@@ -9,7 +9,8 @@ import java.util.Date;
 public class User {
 
     private String name;
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private String displayName;
     private String logo;
     private String type;

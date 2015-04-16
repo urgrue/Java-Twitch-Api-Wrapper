@@ -33,6 +33,7 @@ public class TwitchResponse<T> {
 
     /**
      * Check to see if response is an error.
+     *
      * @return True if error exists. False otherwise.
      */
     public boolean hasError() {

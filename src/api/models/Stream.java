@@ -8,7 +8,8 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Stream {
 
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private String game;
     private int viewers;
     private Date createdAt;
@@ -20,6 +21,7 @@ public class Stream {
     /**
      * Check if a stream is online.
      * If this is an empty stream object, then the stream is offline.
+     *
      * @return <code>true</code> if the stream is online, <code>false</code> otherwise
      */
     public boolean isOnline() {

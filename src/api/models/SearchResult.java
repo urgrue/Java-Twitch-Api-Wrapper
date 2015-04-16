@@ -6,7 +6,8 @@ import java.util.List;
 
 public class SearchResult<T> {
 
-    @JsonProperty("_total") private int total;
+    @JsonProperty("_total")
+    private int total;
     private List<T> results;
 
     @Override

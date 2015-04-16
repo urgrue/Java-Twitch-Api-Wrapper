@@ -8,7 +8,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Videos {
 
-    @JsonProperty("_total") private int total;
+    @JsonProperty("_total")
+    private int total;
     private List<Video> videos;
 
     @Override

@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ingest {
 
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private String name;
-    @JsonProperty("default") private boolean _default;
+    @JsonProperty("default")
+    private boolean _default;
     private String urlTemplate;
     private String availability;
 

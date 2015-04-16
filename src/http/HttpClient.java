@@ -12,20 +12,45 @@ public class HttpClient {
     private int dataRetrievalTimeout = 20000; // Data retrieval timeout in ms
 
     /**
+     * Read the input stream and convert to a string
+     *
+     * @param inputStream InputStream to read
+     * @return String representing entire input stream contents
+     * @throws IOException
+     */
+    private static String readStream(InputStream inputStream) throws IOException {
+        if (inputStream == null) {
+            return "";
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        StringBuilder text = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            text.append(line);
+        }
+
+        reader.close();
+        return text.toString();
+    }
+
+    /**
      * Make a HTTP Request
-     * @param resourceUrl Resource URL
+     *
+     * @param resourceUrl   Resource URL
      * @param requestMethod Request Method: GET, POST, PUT, DELETE, etc.
-     * @param inputData Body data to send with HTTP request
-     * @param headers Headers to include with HTTP request
+     * @param inputData     Body data to send with HTTP request
+     * @param headers       Headers to include with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      */
     public HttpResponse request(
-                String resourceUrl,
-                HttpRequestMethods requestMethod,
-                Map<String, String> headers,
-                Map<String, String> inputData)
-                throws IOException {
+            String resourceUrl,
+            HttpRequestMethods requestMethod,
+            Map<String, String> headers,
+            Map<String, String> inputData)
+            throws IOException {
 
         HttpResponse response = null;
 
@@ -102,32 +127,10 @@ public class HttpClient {
     }
 
     /**
-     * Read the input stream and convert to a string
-     * @param inputStream InputStream to read
-     * @return String representing entire input stream contents
-     * @throws IOException
-     */
-    private static String readStream(InputStream inputStream) throws IOException {
-        if (inputStream == null) {
-            return "";
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        StringBuilder text = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            text.append(line);
-        }
-
-        reader.close();
-        return text.toString();
-    }
-
-    /**
      * Make a HTTP GET Request
+     *
      * @param resourceUrl Resource URL
-     * @param headers Headers to include with HTTP request
+     * @param headers     Headers to include with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      * @see #get(String)
@@ -138,6 +141,7 @@ public class HttpClient {
 
     /**
      * Make a HTTP GET Request
+     *
      * @param resourceUrl Resource URL
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
@@ -149,9 +153,10 @@ public class HttpClient {
 
     /**
      * Make a HTTP PUT Request
+     *
      * @param resourceUrl Resource URL
-     * @param headers Headers to include with HTTP request
-     * @param data Body data to send with HTTP request
+     * @param headers     Headers to include with HTTP request
+     * @param data        Body data to send with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      * @see #put(String)
@@ -163,6 +168,7 @@ public class HttpClient {
 
     /**
      * Make a HTTP PUT Request
+     *
      * @param resourceUrl Resource URL
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
@@ -175,8 +181,9 @@ public class HttpClient {
 
     /**
      * Make a HTTP PUT Request
+     *
      * @param resourceUrl Resource URL
-     * @param headers Headers to include with HTTP request
+     * @param headers     Headers to include with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      * @see #put(String)
@@ -188,8 +195,9 @@ public class HttpClient {
 
     /**
      * Make a HTTP DELETE Request
+     *
      * @param resourceUrl Resource URL
-     * @param headers Headers to include with HTTP request
+     * @param headers     Headers to include with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      * @see #delete(String)
@@ -200,6 +208,7 @@ public class HttpClient {
 
     /**
      * Make a HTTP DELETE Request
+     *
      * @param resourceUrl Resource URL
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
@@ -211,9 +220,10 @@ public class HttpClient {
 
     /**
      * Make a HTTP POST Request
+     *
      * @param resourceUrl Resource URL
-     * @param headers Headers to include with HTTP request
-     * @param data Body data to send with HTTP request
+     * @param headers     Headers to include with HTTP request
+     * @param data        Body data to send with HTTP request
      * @return HttpResponse Response from HTTP request
      * @throws IOException Error during HTTP request
      */
@@ -223,6 +233,7 @@ public class HttpClient {
 
     /**
      * Get connection timeout value (in milliseconds)
+     *
      * @return Connection timeout value (in milliseconds)
      */
     public int getConnectionTimeout() {
@@ -231,6 +242,7 @@ public class HttpClient {
 
     /**
      * Set connection timeout value (in milliseconds)
+     *
      * @param connectionTimeout New timeout value in milliseconds
      */
     public void setConnectionTimeout(int connectionTimeout) {
@@ -239,6 +251,7 @@ public class HttpClient {
 
     /**
      * Get Data Retrieval timeout value
+     *
      * @return Data Retrieval timeout value
      */
     public int getDataRetrievalTimeout() {
@@ -247,6 +260,7 @@ public class HttpClient {
 
     /**
      * Set Data Retrieval timeout
+     *
      * @param dataRetrievalTimeout New timeout value in milliseconds
      */
     public void setDataRetrievalTimeout(int dataRetrievalTimeout) {

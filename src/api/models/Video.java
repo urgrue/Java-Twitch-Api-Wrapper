@@ -8,7 +8,8 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Video {
 
-    @JsonProperty("_id") private String id;
+    @JsonProperty("_id")
+    private String id;
     private String title;
     private String description;
     private long broadcastId;

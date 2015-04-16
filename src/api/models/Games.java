@@ -8,7 +8,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Games {
 
-    @JsonProperty("_total") private int total;
+    @JsonProperty("_total")
+    private int total;
     private List<TopGame> top;
 
     @Override

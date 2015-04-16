@@ -4,15 +4,15 @@ import api.TwitchResponse;
 import api.models.*;
 import http.HttpResponse;
 
-import java.util.List;
+import java.io.IOException;
 
-public class SearchResource extends TwitchResource {
+public class SearchResource extends AbstractResource {
 
     public SearchResource(String baseUrl, String apiVersion) {
         super(baseUrl, apiVersion);
     }
 
-    public TwitchResponse<SearchResult<Channel>> channels(String query, int limit, int offset) {
+    public TwitchResponse<SearchResult<Channel>> channels(String query, int limit, int offset) throws IOException {
         String url = String.format("%s/search/channels?q=%s&limit=%s&offset=%s",
                 getBaseUrl(), query, limit, offset);
 
@@ -39,7 +39,7 @@ public class SearchResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<SearchResult<Stream>> streams(String query, int limit, int offset) {
+    public TwitchResponse<SearchResult<Stream>> streams(String query, int limit, int offset) throws IOException {
         String url = String.format("%s/search/streams?q=%s&limit=%s&offset=%s",
                 getBaseUrl(), query, limit, offset);
 
@@ -66,7 +66,7 @@ public class SearchResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<SearchResult<Game>> games(String query, boolean live) {
+    public TwitchResponse<SearchResult<Game>> games(String query, boolean live) throws IOException {
         String url = String.format("%s/search/games?q=%s&type=%s&live=%s",
                 getBaseUrl(), query, "suggest", live);
 
@@ -93,7 +93,7 @@ public class SearchResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<SearchResult<Game>> games(String query) {
+    public TwitchResponse<SearchResult<Game>> games(String query) throws IOException {
         return games(query, false);
     }
 }

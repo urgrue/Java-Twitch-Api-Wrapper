@@ -1,6 +1,6 @@
 package api.models;
 
-import auth.Scopes;
+import api.auth.Scopes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;

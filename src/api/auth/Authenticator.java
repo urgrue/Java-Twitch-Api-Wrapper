@@ -1,11 +1,10 @@
-package auth;
+package api.auth;
 
-import auth.grants.implicit.AuthenticationCallbackServer;
-import auth.grants.implicit.AuthenticationError;
+import api.auth.grants.implicit.AuthenticationCallbackServer;
+import api.auth.grants.implicit.AuthenticationError;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 
 public class Authenticator {
 
@@ -32,10 +31,10 @@ public class Authenticator {
         }
 
         return String.format("%s/oauth2/authorize" +
-                "?response_type=token" +
-                "&client_id=%s" +
-                "&redirect_uri=%s" +
-                "&scope=%s",
+                        "?response_type=token" +
+                        "&client_id=%s" +
+                        "&redirect_uri=%s" +
+                        "&scope=%s",
                 twitchBaseUrl,
                 clientId,
                 redirectUri,
@@ -43,9 +42,11 @@ public class Authenticator {
     }
 
     // TODO return an AuthenticationStatus object rather than using the auth error members and boolean return
+
     /**
      * Listens for callback from twitch server with the access token.
      * <code>getAuthenticationUrl()</code> must be called prior to this function!
+     *
      * @return <code>true</code> if access token was received, <code>false</code> otherwise
      */
     public boolean awaitAccessToken() {
@@ -90,6 +91,7 @@ public class Authenticator {
 
     /**
      * Get the authentication error if it failed.
+     *
      * @return <code>AuthenticationError</code> if authentication failed. <code>null</code> otherwise
      */
     public AuthenticationError getAuthenticationError() {
@@ -98,6 +100,7 @@ public class Authenticator {
 
     /**
      * Check if there was an authentication error
+     *
      * @return <code>true</code> if an error exists, <code>false</code> otherwise
      */
     public boolean hasAuthenticationError() {

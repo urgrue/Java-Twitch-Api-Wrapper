@@ -5,20 +5,21 @@ import api.models.Video;
 import api.models.Videos;
 import http.HttpResponse;
 
+import java.io.IOException;
 import java.util.List;
 
-public class VideosResource extends TwitchResource {
+public class VideosResource extends AbstractResource {
 
     public VideosResource(String baseUrl, String apiVersion) {
         super(baseUrl, apiVersion);
     }
 
-    public TwitchResponse<Video> get(String id) {
+    public TwitchResponse<Video> get(String id) throws IOException {
         String url = String.format("%s/videos/%s", getBaseUrl(), id);
         return requestGet(url, HttpResponse.HTTP_OK, Video.class);
     }
 
-    public TwitchResponse<List<Video>> getTop(int limit, int offset, String game, String period) {
+    public TwitchResponse<List<Video>> getTop(int limit, int offset, String game, String period) throws IOException {
         String url = String.format("%s/videos/top?limit=%s&offset=%s",
                 getBaseUrl(), limit, offset);
 
@@ -45,27 +46,27 @@ public class VideosResource extends TwitchResource {
         return r;
     }
 
-    public TwitchResponse<List<Video>> getTop(int limit, int offset) {
+    public TwitchResponse<List<Video>> getTop(int limit, int offset) throws IOException {
         return getTop(limit, offset, null, null);
     }
 
-    public TwitchResponse<List<Video>> getTopByGame(String game, int limit, int offset) {
+    public TwitchResponse<List<Video>> getTopByGame(String game, int limit, int offset) throws IOException {
         return getTop(limit, offset, game, null);
     }
 
-    public TwitchResponse<List<Video>> getTopByGame(String game, int limit) {
+    public TwitchResponse<List<Video>> getTopByGame(String game, int limit) throws IOException {
         return getTop(limit, 0, game, null);
     }
 
-    public TwitchResponse<List<Video>> getTopByPeriod(String period, int limit, int offset) {
+    public TwitchResponse<List<Video>> getTopByPeriod(String period, int limit, int offset) throws IOException {
         return getTop(limit, offset, null, period);
     }
 
-    public TwitchResponse<List<Video>> getTopByPeriod(String period, int limit) {
+    public TwitchResponse<List<Video>> getTopByPeriod(String period, int limit) throws IOException {
         return getTop(limit, 0, null, period);
     }
 
-    public TwitchResponse<List<Video>> getFollowed(int limit, int offset) {
+    public TwitchResponse<List<Video>> getFollowed(int limit, int offset) throws IOException {
         String url = String.format("%s/videos/followed?limit=%s&offset=%s",
                 getBaseUrl(), limit, offset);
 

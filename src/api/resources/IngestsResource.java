@@ -5,15 +5,16 @@ import api.models.Ingest;
 import api.models.Ingests;
 import http.HttpResponse;
 
+import java.io.IOException;
 import java.util.List;
 
-public class IngestsResource extends TwitchResource {
+public class IngestsResource extends AbstractResource {
 
     public IngestsResource(String baseUrl, String apiVersion) {
         super(baseUrl, apiVersion);
     }
 
-    public TwitchResponse<List<Ingest>> get() {
+    public TwitchResponse<List<Ingest>> get() throws IOException {
         String url = String.format("%s/ingests", getBaseUrl());
 
         TwitchResponse<Ingests> container = requestGet(url, HttpResponse.HTTP_OK, Ingests.class);

@@ -1,4 +1,4 @@
-package auth.grants.implicit;
+package api.auth.grants.implicit;
 
 /**
  * The <code>AuthenticationError</code> class represents an name during

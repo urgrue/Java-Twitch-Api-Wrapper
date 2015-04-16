@@ -1,17 +1,7 @@
 package api;
 
-import api.resources.ChannelsResource;
-import api.resources.ChatResource;
-import api.resources.GamesResource;
-import api.resources.IngestsResource;
-import api.resources.RootResource;
-import api.resources.SearchResource;
-import api.resources.StreamsResource;
-import api.resources.TeamsResource;
-import api.resources.UsersResource;
-import api.resources.VideosResource;
-import api.resources.TwitchResource;
-import auth.Authenticator;
+import api.auth.Authenticator;
+import api.resources.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,15 +10,13 @@ public class Twitch {
 
     public static final String BASE_URL = "https://api.twitch.tv/kraken";
     public static final String API_VERSION = "v3";
-
+    Map<String, AbstractResource> res = new HashMap<String, AbstractResource>();
     private String clientId; // User's app client Id
-
     private Authenticator authenticator;
-    Map<String, TwitchResource> res = new HashMap<String, TwitchResource>();
 
     public Twitch() {
         authenticator = new Authenticator(BASE_URL);
-        // Init resource connectors
+        // Instantiate resource connectors
         res.put("channels", new ChannelsResource(BASE_URL, API_VERSION));
         res.put("chat", new ChatResource(BASE_URL, API_VERSION));
         res.put("games", new GamesResource(BASE_URL, API_VERSION));
@@ -41,20 +29,20 @@ public class Twitch {
         res.put("videos", new VideosResource(BASE_URL, API_VERSION));
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-        // Update client id in all resources
-        for (TwitchResource r : res.values()) {
-            r.setClientId(clientId);
-        }
-    }
-
     public String getClientId() {
         return clientId;
     }
 
-    public TwitchResource getResource(String key) {
-        TwitchResource r = res.get(key);
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+        // Update client id in all resources
+        for (AbstractResource r : res.values()) {
+            r.setClientId(clientId);
+        }
+    }
+
+    public AbstractResource getResource(String key) {
+        AbstractResource r = res.get(key);
         r.setAuthAccessToken(authenticator.getAccessToken());
         return r;
     }

@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Game {
 
-    @JsonProperty("_id") private long id;
+    @JsonProperty("_id")
+    private long id;
     private String name;
     private GameBox box;
     private GameLogo logo;

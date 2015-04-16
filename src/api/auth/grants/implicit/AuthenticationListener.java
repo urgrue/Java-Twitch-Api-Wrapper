@@ -1,4 +1,4 @@
-package auth.grants.implicit;
+package api.auth.grants.implicit;
 
 /**
  * Interface for listening to twitch.tv authentication
@@ -7,6 +7,7 @@ package auth.grants.implicit;
 public interface AuthenticationListener {
     /**
      * Called when a twitch.tv authentication access token has been received.
+     *
      * @param token twitch.tv authentication access token
      */
     public void onAccessTokenReceived(String token);
@@ -14,7 +15,8 @@ public interface AuthenticationListener {
     /**
      * An authentication error occurred.
      * Usually due to user denying the request.
-     * @param error Error name
+     *
+     * @param error       Error name
      * @param description Error description
      */
     public void onAuthenticationError(String error, String description);

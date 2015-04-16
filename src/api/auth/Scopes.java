@@ -1,4 +1,4 @@
-package auth;
+package api.auth;
 
 /**
  * When requesting authorization from users, the scope parameter allows you to specify
@@ -70,21 +70,15 @@ public enum Scopes {
     CHAT_LOGIN("chat_login");
 
     private String key;
+
     Scopes(String key) {
         this.key = key;
     }
 
     /**
-     * Get the identifier that twitch will recognize.
-     * @return A <code>String</code> identifier
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
      * Combine <code>Scopes</code> into a '+' separated <code>String</code>.
      * This is the required input format for twitch.tv
+     *
      * @param scopes <code>Scopes</code> to combine.
      * @return <code>String</code> representing '+' separated list of <code>Scopes</code>
      */
@@ -99,6 +93,7 @@ public enum Scopes {
 
     /**
      * Convert the string representation of the Scope to the Enum.
+     *
      * @param text Text representation of Enum value
      * @return Enum value that the text represents
      */
@@ -110,5 +105,14 @@ public enum Scopes {
             }
         }
         return null;
+    }
+
+    /**
+     * Get the identifier that twitch will recognize.
+     *
+     * @return A <code>String</code> identifier
+     */
+    public String getKey() {
+        return key;
     }
 }

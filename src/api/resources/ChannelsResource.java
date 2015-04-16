@@ -1,39 +1,31 @@
 package api.resources;
 
-import api.models.Empty;
 import api.TwitchResponse;
-import api.models.Channel;
-import api.models.ChannelSubscription;
-import api.models.ChannelSubscriptions;
-import api.models.Editors;
-import api.models.UserFollows;
-import api.models.Team;
-import api.models.Teams;
-import api.models.User;
-import api.models.Videos;
+import api.models.*;
 import http.HttpResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChannelsResource extends TwitchResource {
+public class ChannelsResource extends AbstractResource {
 
     public ChannelsResource(String baseUrl, String apiVersion) {
         super(baseUrl, apiVersion);
     }
 
-    public TwitchResponse<Channel> get(String channelName) {
+    public TwitchResponse<Channel> get(String channelName) throws IOException {
         String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
         return requestGet(url, HttpResponse.HTTP_OK, Channel.class);
     }
 
-    public TwitchResponse<Channel> get() {
+    public TwitchResponse<Channel> get() throws IOException {
         String url = String.format("%s/channel", getBaseUrl());
         return requestGet(url, HttpResponse.HTTP_OK, Channel.class);
     }
 
-    public TwitchResponse<List<User>> getEditors(String channelName) {
+    public TwitchResponse<List<User>> getEditors(String channelName) throws IOException {
         String url = String.format("%s/channels/%s/editors", getBaseUrl(), channelName);
         TwitchResponse<Editors> container = requestGet(url, HttpResponse.HTTP_OK, Editors.class);
 
@@ -50,7 +42,7 @@ public class ChannelsResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<Channel> set(String channelName, String status, String game, int delay) {
+    public TwitchResponse<Channel> set(String channelName, String status, String game, int delay) throws IOException {
         String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
 
         Map<String, String> params = new HashMap<>();
@@ -61,34 +53,35 @@ public class ChannelsResource extends TwitchResource {
         return requestPut(url, params, HttpResponse.HTTP_OK, Channel.class);
     }
 
-    public TwitchResponse<Channel> setStatusAndGame(String channelName, String status, String game) {
+    public TwitchResponse<Channel> setStatusAndGame(String channelName, String status, String game) throws IOException {
         return set(channelName, status, game, -1);
     }
 
-    public TwitchResponse<Channel> setStatus(String channelName, String status) {
+    public TwitchResponse<Channel> setStatus(String channelName, String status) throws IOException {
         return set(channelName, status, null, -1);
     }
 
-    public TwitchResponse<Channel> setGame(String channelName, String game) {
+    public TwitchResponse<Channel> setGame(String channelName, String game) throws IOException {
         return set(channelName, null, game, -1);
     }
 
-    public TwitchResponse<Channel> setDelay(String channelName, int delay) {
+    public TwitchResponse<Channel> setDelay(String channelName, int delay) throws IOException {
         return set(channelName, null, null, delay);
     }
 
-    public TwitchResponse<Channel> resetStreamKey(String channelName) {
+    public TwitchResponse<Channel> resetStreamKey(String channelName) throws IOException {
         String url = String.format("%s/channels/%s/stream_key", getBaseUrl(), channelName);
         return requestDelete(url, HttpResponse.HTTP_OK, Channel.class);
     }
 
     /**
      * Start a commercial on channel.
+     *
      * @param channelName Name of the channel
-     * @param length Length in seconds. Valid values are 30, 60, 90, 120, 150, and 180
+     * @param length      Length in seconds. Valid values are 30, 60, 90, 120, 150, and 180
      * @return <code>Empty</code> object signifying that there was not an error
      */
-    public TwitchResponse<Empty> startCommercial(String channelName, int length) {
+    public TwitchResponse<Empty> startCommercial(String channelName, int length) throws IOException {
         String url = String.format("%s/channels/%s/commercial", getBaseUrl(), channelName);
         Map<String, String> input = new HashMap<String, String>();
         input.put("length", Integer.toString(length));
@@ -97,15 +90,16 @@ public class ChannelsResource extends TwitchResource {
 
     /**
      * Start a default length commercial on channel.
+     *
      * @param channelName Name of the channel
      * @return <code>Empty</code> object signifying that there was not an error
      */
-    public TwitchResponse<Empty> startCommercial(String channelName) {
+    public TwitchResponse<Empty> startCommercial(String channelName) throws IOException {
         String url = String.format("%s/channels/%s/commercial", getBaseUrl(), channelName);
         return requestPost(url, HttpResponse.HTTP_NO_CONTENT, Empty.class);
     }
 
-    public TwitchResponse<List<Team>> getTeams(String channelName) {
+    public TwitchResponse<List<Team>> getTeams(String channelName) throws IOException {
         String url = String.format("%s/channels/%s/teams", getBaseUrl(), channelName);
         TwitchResponse<Teams> container = requestGet(url, HttpResponse.HTTP_OK, Teams.class);
 
@@ -122,7 +116,7 @@ public class ChannelsResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<UserFollows> getFollows(String channelName, int limit, int offset, String direction){
+    public TwitchResponse<UserFollows> getFollows(String channelName, int limit, int offset, String direction) throws IOException {
         // Constrain limit
         limit = Math.max(limit, 1);
         limit = Math.min(limit, 100);
@@ -133,7 +127,7 @@ public class ChannelsResource extends TwitchResource {
         return requestGet(url, HttpResponse.HTTP_OK, UserFollows.class);
     }
 
-    public TwitchResponse<Videos> getVideos(String channelName, int limit, int offset, boolean broadcasts, boolean hls) {
+    public TwitchResponse<Videos> getVideos(String channelName, int limit, int offset, boolean broadcasts, boolean hls) throws IOException {
         // Constrain limit
         limit = Math.max(limit, 1);
         limit = Math.min(limit, 100);
@@ -144,34 +138,34 @@ public class ChannelsResource extends TwitchResource {
         return requestGet(url, HttpResponse.HTTP_OK, Videos.class);
     }
 
-    public TwitchResponse<Videos> getVideoHighlights(String channelName, int limit, int offset) {
+    public TwitchResponse<Videos> getVideoHighlights(String channelName, int limit, int offset) throws IOException {
         return getVideos(channelName, limit, offset, false, false);
     }
 
-    public TwitchResponse<Videos> getVideoBroadcasts(String channelName, int limit, int offset) {
+    public TwitchResponse<Videos> getVideoBroadcasts(String channelName, int limit, int offset) throws IOException {
         return getVideos(channelName, limit, offset, true, false);
     }
 
-    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit, int offset, String direction) {
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit, int offset, String direction) throws IOException {
         String url = String.format("%s/channels/%s/subscriptions?limit=%s&offset=%s&direction=%s",
                 getBaseUrl(), channelName, limit, offset, direction);
 
         return requestGet(url, HttpResponse.HTTP_OK, ChannelSubscriptions.class);
     }
 
-    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit, int offset) {
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit, int offset) throws IOException {
         return getSubscriptions(channelName, limit, offset, "asc");
     }
 
-    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit) {
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit) throws IOException {
         return getSubscriptions(channelName, limit, 0);
     }
 
-    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName) {
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName) throws IOException {
         return getSubscriptions(channelName, 25);
     }
 
-    public TwitchResponse<ChannelSubscription> getSubscription(String channelName, String user) {
+    public TwitchResponse<ChannelSubscription> getSubscription(String channelName, String user) throws IOException {
         String url = String.format("%s/channels/%s/subscriptions/%s",
                 getBaseUrl(), channelName, user);
 

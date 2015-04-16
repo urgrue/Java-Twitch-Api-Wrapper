@@ -1,4 +1,4 @@
-package auth.grants.implicit;
+package api.auth.grants.implicit;
 
 import java.io.IOException;
 import java.net.*;
@@ -8,25 +8,22 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
     /**
      * Default HTML page that twitch.tv will send the access_token to
      */
-    public static final String DEFAULT_AUTH_PAGE = "/auth/grants/implicit/views/authorize.html";
+    public static final String DEFAULT_AUTH_PAGE = "/api/auth/grants/implicit/views/authorize.html";
 
     /**
      * Default HTML page that shows auth error's to user
      */
-    public static final String DEFAULT_FAILURE_PAGE = "/auth/grants/implicit/views/authorize-failure.html";
+    public static final String DEFAULT_FAILURE_PAGE = "/api/auth/grants/implicit/views/authorize-failure.html";
 
     /**
      * Default HTML page that shows auth success to
      */
-    public static final String DEFAULT_SUCCESS_PAGE = "/auth/grants/implicit/views/authorize-success.html";
-
-    private int port;
-    private ServerSocket serverSocket;
-
+    public static final String DEFAULT_SUCCESS_PAGE = "/api/auth/grants/implicit/views/authorize-success.html";
     private final URL authPage;
     private final URL failurePage;
     private final URL successPage;
-
+    private int port;
+    private ServerSocket serverSocket;
     private String accessToken; // twitch.tv auth access token
     private AuthenticationError authenticationError;
 
@@ -126,6 +123,7 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
 
     /**
      * Get the access token if one exists.
+     *
      * @return Access token if it exists, <code>null</code> otherwise
      */
     public String getAccessToken() {
@@ -134,6 +132,7 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
 
     /**
      * Get the auth error if it failed.
+     *
      * @return Error string if auth failed. <code>null</code> otherwise
      */
     public AuthenticationError getAuthenticationError() {
@@ -142,6 +141,7 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
 
     /**
      * Check if there was an authentication error
+     *
      * @return <code>true</code> if an error exists, <code>false</code> otherwise
      */
     public boolean hasAuthenticationError() {
