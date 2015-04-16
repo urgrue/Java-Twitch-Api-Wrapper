@@ -4,6 +4,8 @@ import api.Empty;
 import api.TwitchResource;
 import api.TwitchResponse;
 import api.channels.models.Channel;
+import api.channels.models.ChannelSubscription;
+import api.channels.models.ChannelSubscriptions;
 import api.channels.models.Editors;
 import api.follows.models.UserFollows;
 import api.teams.models.Team;
@@ -149,5 +151,31 @@ public class ChannelsResource extends TwitchResource {
 
     public TwitchResponse<Videos> getVideoBroadcasts(String channelName, int limit, int offset) {
         return getVideos(channelName, limit, offset, true, false);
+    }
+
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit, int offset, String direction) {
+        String url = String.format("%s/channels/%s/subscriptions?limit=%s&offset=%s&direction=%s",
+                getBaseUrl(), channelName, limit, offset, direction);
+
+        return requestGet(url, HttpResponse.HTTP_OK, ChannelSubscriptions.class);
+    }
+
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit, int offset) {
+        return getSubscriptions(channelName, limit, offset, "asc");
+    }
+
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName, int limit) {
+        return getSubscriptions(channelName, limit, 0);
+    }
+
+    public TwitchResponse<ChannelSubscriptions> getSubscriptions(String channelName) {
+        return getSubscriptions(channelName, 25);
+    }
+
+    public TwitchResponse<ChannelSubscription> getSubscription(String channelName, String user) {
+        String url = String.format("%s/channels/%s/subscriptions/%s",
+                getBaseUrl(), channelName, user);
+
+        return requestGet(url, HttpResponse.HTTP_OK, ChannelSubscription.class);
     }
 }

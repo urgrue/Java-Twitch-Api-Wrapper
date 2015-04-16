@@ -1,24 +1,24 @@
-package api.users.models;
+package api.channels.models;
 
-import api.channels.models.Channel;
+import api.users.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Subscription {
+public class ChannelSubscription {
 
     @JsonProperty("_id") private String id;
     private Date createdAt;
-    private Channel channel;
+    private User user;
 
     @Override
     public String toString() {
-        return "Subscription{" +
+        return "ChannelSubscription{" +
                 "id='" + id + '\'' +
                 ", createdAt=" + createdAt +
-                ", channel=" + channel +
+                ", user=" + user +
                 '}';
     }
 
@@ -27,7 +27,7 @@ public class Subscription {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Subscription that = (Subscription) o;
+        ChannelSubscription that = (ChannelSubscription) o;
 
         return !(id != null ? !id.equals(that.id) : that.id != null);
 
@@ -39,6 +39,7 @@ public class Subscription {
     }
 
     public String getId() {
+
         return id;
     }
 
@@ -54,11 +55,11 @@ public class Subscription {
         this.createdAt = createdAt;
     }
 
-    public Channel getChannel() {
-        return channel;
+    public User getUser() {
+        return user;
     }
 
-    public void setChannel(Channel channel) {
-        this.channel = channel;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

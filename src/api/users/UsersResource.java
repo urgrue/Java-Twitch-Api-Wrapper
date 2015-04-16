@@ -7,7 +7,7 @@ import api.blocks.models.Block;
 import api.blocks.models.Blocks;
 import api.follows.models.UserFollow;
 import api.follows.models.UserFollows;
-import api.users.models.Subscription;
+import api.users.models.UserSubscription;
 import api.users.models.User;
 import http.HttpResponse;
 
@@ -28,11 +28,11 @@ public class UsersResource extends TwitchResource {
         return requestGet(url, HttpResponse.HTTP_OK, User.class);
     }
 
-    public TwitchResponse<Subscription> getSubscription(String user, String channel) {
+    public TwitchResponse<UserSubscription> getSubscription(String user, String channel) {
         String url = String.format("%s/users/%s/subscriptions/%s",
                 getBaseUrl(), user, channel);
 
-        return requestGet(url, HttpResponse.HTTP_OK, Subscription.class);
+        return requestGet(url, HttpResponse.HTTP_OK, UserSubscription.class);
     }
 
     public TwitchResponse<UserFollows> getFollows(String user, int limit, int offset, String direction, String sortby) {
