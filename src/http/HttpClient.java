@@ -36,7 +36,7 @@ public class HttpClient {
     }
 
     /**
-     * Make a HTTP Request
+     * Make a HTTP Request.
      *
      * @param resourceUrl   Resource URL
      * @param requestMethod Request Method: GET, POST, PUT, DELETE, etc.
