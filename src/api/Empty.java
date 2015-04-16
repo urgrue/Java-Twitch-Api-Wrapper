@@ -7,5 +7,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * responses from the Twitch API that contain no body data.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmptyResponse {
+public class Empty {
 }

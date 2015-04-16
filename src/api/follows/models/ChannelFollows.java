@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Follows {
+public class ChannelFollows {
 
     @JsonProperty("_total") private int total;
-    private List<Follow> follows;
+    private List<ChannelFollow> follows;
 
     @Override
     public String toString() {
-        return "Follows{" +
+        return "ChannelFollows{" +
                 "total=" + total +
                 ", follows=" + follows +
                 '}';
@@ -27,11 +27,11 @@ public class Follows {
         this.total = total;
     }
 
-    public List<Follow> getFollows() {
+    public List<ChannelFollow> getFollows() {
         return follows;
     }
 
-    public void setFollows(List<Follow> follows) {
+    public void setFollows(List<ChannelFollow> follows) {
         this.follows = follows;
     }
 }

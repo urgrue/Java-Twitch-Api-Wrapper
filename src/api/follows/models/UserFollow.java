@@ -1,23 +1,23 @@
 package api.follows.models;
 
-import api.users.models.User;
+import api.channels.models.Channel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Follow {
+public class UserFollow {
 
     private Date createdAt;
     private boolean notifications;
-    private User user;
+    private Channel channel;
 
     @Override
     public String toString() {
-        return "Follow{" +
+        return "UserFollow{" +
                 "createdAt=" + createdAt +
                 ", notifications=" + notifications +
-                ", user=" + user +
+                ", channel=" + channel +
                 '}';
     }
 
@@ -26,11 +26,11 @@ public class Follow {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Follow follow = (Follow) o;
+        UserFollow that = (UserFollow) o;
 
-        if (notifications != follow.notifications) return false;
-        if (createdAt != null ? !createdAt.equals(follow.createdAt) : follow.createdAt != null) return false;
-        return !(user != null ? !user.equals(follow.user) : follow.user != null);
+        if (notifications != that.notifications) return false;
+        if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
+        return !(channel != null ? !channel.equals(that.channel) : that.channel != null);
 
     }
 
@@ -38,7 +38,7 @@ public class Follow {
     public int hashCode() {
         int result = createdAt != null ? createdAt.hashCode() : 0;
         result = 31 * result + (notifications ? 1 : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (channel != null ? channel.hashCode() : 0);
         return result;
     }
 
@@ -51,7 +51,7 @@ public class Follow {
         this.createdAt = createdAt;
     }
 
-    public boolean isNotifications() {
+    public boolean notificationsEnabled() {
         return notifications;
     }
 
@@ -59,11 +59,11 @@ public class Follow {
         this.notifications = notifications;
     }
 
-    public User getUser() {
-        return user;
+    public Channel getChannel() {
+        return channel;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 }

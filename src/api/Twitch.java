@@ -1,6 +1,5 @@
 package api;
 
-import api.blocks.BlocksResource;
 import api.channels.ChannelsResource;
 import api.chat.ChatResource;
 import api.games.GamesResource;
@@ -9,6 +8,7 @@ import api.root.RootResource;
 import api.search.SearchResource;
 import api.streams.StreamsResource;
 import api.teams.TeamsResource;
+import api.users.UsersResource;
 import auth.Authenticator;
 
 import java.util.HashMap;
@@ -27,7 +27,6 @@ public class Twitch {
     public Twitch() {
         authenticator = new Authenticator(BASE_URL);
         // Init resource connectors
-        res.put("blocks", new BlocksResource(BASE_URL, API_VERSION));
         res.put("channels", new ChannelsResource(BASE_URL, API_VERSION));
         res.put("chat", new ChatResource(BASE_URL, API_VERSION));
         res.put("games", new GamesResource(BASE_URL, API_VERSION));
@@ -36,6 +35,7 @@ public class Twitch {
         res.put("search", new SearchResource(BASE_URL, API_VERSION));
         res.put("streams", new StreamsResource(BASE_URL, API_VERSION));
         res.put("teams", new TeamsResource(BASE_URL, API_VERSION));
+        res.put("users", new UsersResource(BASE_URL, API_VERSION));
     }
 
     public void setClientId(String clientId) {
@@ -58,10 +58,6 @@ public class Twitch {
 
     public Authenticator auth() {
         return authenticator;
-    }
-
-    public BlocksResource blocks() {
-        return (BlocksResource) getResource("blocks");
     }
 
     public ChannelsResource channels() {
@@ -94,5 +90,9 @@ public class Twitch {
 
     public TeamsResource teams() {
         return (TeamsResource) getResource("teams");
+    }
+
+    public UsersResource users() {
+        return (UsersResource) getResource("users");
     }
 }

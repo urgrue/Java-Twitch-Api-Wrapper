@@ -1,18 +1,16 @@
 package api.channels;
 
-import api.EmptyResponse;
-import api.ErrorResponse;
+import api.Empty;
 import api.TwitchResource;
 import api.TwitchResponse;
 import api.channels.models.Channel;
 import api.channels.models.Editors;
-import api.follows.models.Follows;
+import api.follows.models.UserFollows;
 import api.teams.models.Team;
 import api.teams.models.Teams;
 import api.users.models.User;
 import api.videos.models.Videos;
 import http.HttpResponse;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -87,23 +85,23 @@ public class ChannelsResource extends TwitchResource {
      * Start a commercial on channel.
      * @param channelName Name of the channel
      * @param length Length in seconds. Valid values are 30, 60, 90, 120, 150, and 180
-     * @return <code>EmptyResponse</code> object signifying that there was not an error
+     * @return <code>Empty</code> object signifying that there was not an error
      */
-    public TwitchResponse<EmptyResponse> startCommercial(String channelName, int length) {
+    public TwitchResponse<Empty> startCommercial(String channelName, int length) {
         String url = String.format("%s/channels/%s/commercial", getBaseUrl(), channelName);
         Map<String, String> input = new HashMap<String, String>();
         input.put("length", Integer.toString(length));
-        return requestPost(url, input, HttpResponse.HTTP_NO_CONTENT, EmptyResponse.class);
+        return requestPost(url, input, HttpResponse.HTTP_NO_CONTENT, Empty.class);
     }
 
     /**
      * Start a default length commercial on channel.
      * @param channelName Name of the channel
-     * @return <code>EmptyResponse</code> object signifying that there was not an error
+     * @return <code>Empty</code> object signifying that there was not an error
      */
-    public TwitchResponse<EmptyResponse> startCommercial(String channelName) {
+    public TwitchResponse<Empty> startCommercial(String channelName) {
         String url = String.format("%s/channels/%s/commercial", getBaseUrl(), channelName);
-        return requestPost(url, HttpResponse.HTTP_NO_CONTENT, EmptyResponse.class);
+        return requestPost(url, HttpResponse.HTTP_NO_CONTENT, Empty.class);
     }
 
     public TwitchResponse<List<Team>> getTeams(String channelName) {
@@ -123,7 +121,7 @@ public class ChannelsResource extends TwitchResource {
         return response;
     }
 
-    public TwitchResponse<Follows> getFollows(String channelName, int limit, int offset, String direction){
+    public TwitchResponse<UserFollows> getFollows(String channelName, int limit, int offset, String direction){
         // Constrain limit
         limit = Math.max(limit, 1);
         limit = Math.min(limit, 100);
@@ -131,7 +129,7 @@ public class ChannelsResource extends TwitchResource {
         String url = String.format("%s/channels/%s/follows?limit=%s&offset=%s&direction=%s",
                 getBaseUrl(), channelName, limit, offset, direction);
 
-        return requestGet(url, HttpResponse.HTTP_OK, Follows.class);
+        return requestGet(url, HttpResponse.HTTP_OK, UserFollows.class);
     }
 
     public TwitchResponse<Videos> getVideos(String channelName, int limit, int offset, boolean broadcasts, boolean hls) {
