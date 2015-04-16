@@ -1,15 +1,16 @@
 package api;
 
-import api.channels.ChannelsResource;
-import api.chat.ChatResource;
-import api.games.GamesResource;
-import api.ingests.IngestsResource;
-import api.root.RootResource;
-import api.search.SearchResource;
-import api.streams.StreamsResource;
-import api.teams.TeamsResource;
-import api.users.UsersResource;
-import api.videos.VideosResource;
+import api.resources.ChannelsResource;
+import api.resources.ChatResource;
+import api.resources.GamesResource;
+import api.resources.IngestsResource;
+import api.resources.RootResource;
+import api.resources.SearchResource;
+import api.resources.StreamsResource;
+import api.resources.TeamsResource;
+import api.resources.UsersResource;
+import api.resources.VideosResource;
+import api.resources.TwitchResource;
 import auth.Authenticator;
 
 import java.util.HashMap;

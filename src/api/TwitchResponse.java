@@ -25,10 +25,10 @@ public class TwitchResponse<T> {
         this.statusText = httpResponse.getMessage();
     }
 
-    public TwitchResponse(ErrorResponse errorResponse) {
-        this.statusCode = errorResponse.getStatusCode();
-        this.statusText = errorResponse.getStatusText();
-        this.errorMessage = errorResponse.getMessage();
+    public TwitchResponse(api.models.Error error) {
+        this.statusCode = error.getStatusCode();
+        this.statusText = error.getStatusText();
+        this.errorMessage = error.getMessage();
     }
 
     /**

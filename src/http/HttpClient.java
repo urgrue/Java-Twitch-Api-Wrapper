@@ -1,7 +1,5 @@
 package http;
 
-import api.TwitchResource;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
