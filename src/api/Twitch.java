@@ -9,6 +9,7 @@ import api.search.SearchResource;
 import api.streams.StreamsResource;
 import api.teams.TeamsResource;
 import api.users.UsersResource;
+import api.videos.VideosResource;
 import auth.Authenticator;
 
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class Twitch {
         res.put("streams", new StreamsResource(BASE_URL, API_VERSION));
         res.put("teams", new TeamsResource(BASE_URL, API_VERSION));
         res.put("users", new UsersResource(BASE_URL, API_VERSION));
+        res.put("videos", new VideosResource(BASE_URL, API_VERSION));
     }
 
     public void setClientId(String clientId) {
@@ -94,5 +96,9 @@ public class Twitch {
 
     public UsersResource users() {
         return (UsersResource) getResource("users");
+    }
+
+    public VideosResource videos() {
+        return (VideosResource) getResource("videos");
     }
 }
