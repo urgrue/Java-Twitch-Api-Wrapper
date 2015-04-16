@@ -17,7 +17,7 @@ If the twitch.tv API responded with an error, the response data object will be `
 
 ##### IOException
 
-Each endpoint function can throw an `IOException` if there was error access the twitch.tv API or if their was an error parsing the response
+Each endpoint function can throw an `IOException` if there was error access the twitch.tv API or if their was an error parsing the response.
 
 #### Example
 
