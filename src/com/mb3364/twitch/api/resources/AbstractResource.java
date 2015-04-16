@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public abstract class AbstractResource {
 
-    private static ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
+    private static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
     private final String baseUrl; // Base url for twitch rest api
     private Map<String, String> headers = new HashMap<>(); // http headers
 

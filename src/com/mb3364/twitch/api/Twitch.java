@@ -17,7 +17,7 @@ public class Twitch {
     public static final String API_VERSION = "v3";
     private String clientId; // User's app client Id
     private Authenticator authenticator;
-    Map<String, AbstractResource> resources;
+    private Map<String, AbstractResource> resources;
 
     /**
      * Constructs a Twitch application instance.
