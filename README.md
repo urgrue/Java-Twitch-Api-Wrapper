@@ -1,5 +1,5 @@
-# A Java Twitch API Wrapper
-A complete java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
+# Java Twitch API Wrapper
+JTAW is a complete java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
 
 This project is still being improved and major changes may occur breaking backwards compatibility.
 
