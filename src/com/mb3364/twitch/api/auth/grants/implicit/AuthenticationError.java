@@ -1,7 +1,7 @@
 package com.mb3364.twitch.api.auth.grants.implicit;
 
 /**
- * The <code>AuthenticationError</code> class represents an name during
+ * The <code>AuthenticationError</code> class represents an error during
  * authentication with <a href="http://twitch.tv">http://www.twitch.tv</a>.
  */
 public class AuthenticationError {
