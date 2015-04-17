@@ -5,8 +5,8 @@ package com.mb3364.twitch.api.auth.grants.implicit;
  * authentication with <a href="http://twitch.tv">http://www.twitch.tv</a>.
  */
 public class AuthenticationError {
-    private final String name;
-    private final String description;
+    private final String name; // the name of the error
+    private final String description; // the description of the error
 
     public AuthenticationError(String name, String description) {
         this.name = name;
@@ -40,10 +40,20 @@ public class AuthenticationError {
         return result;
     }
 
+    /**
+     * Get the name of the error.
+     *
+     * @return the name of the error
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the description of the error.
+     *
+     * @return the description of the error.
+     */
     public String getDescription() {
         return description;
     }

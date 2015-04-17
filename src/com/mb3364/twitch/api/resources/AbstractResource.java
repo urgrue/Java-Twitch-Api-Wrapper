@@ -1,9 +1,9 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
-import com.mb3364.twitch.api.models.Error;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.mb3364.twitch.api.TwitchResponse;
+import com.mb3364.twitch.api.models.Error;
 import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpRequestMethods;
 import com.mb3364.twitch.http.HttpResponse;

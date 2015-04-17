@@ -6,12 +6,33 @@ import com.mb3364.twitch.http.HttpResponse;
 
 import java.io.IOException;
 
+/**
+ * The {@link SearchResource} provides the functionality
+ * to access the <code>/search</code> endpoints of the Twitch API.
+ *
+ * @author Matthew Bell
+ */
 public class SearchResource extends AbstractResource {
 
+    /**
+     * Construct the resource using the Twitch API base URL and specified API version.
+     *
+     * @param baseUrl    the base URL of the Twitch API
+     * @param apiVersion the requested version of the Twitch API
+     */
     public SearchResource(String baseUrl, String apiVersion) {
         super(baseUrl, apiVersion);
     }
 
+    /**
+     * Returns a list of channel objects matching the search query.
+     *
+     * @param query  the search query
+     * @param limit  the maximum number of results to return
+     * @param offset the object offset for pagination
+     * @return a TwitchResponse containing a {@link SearchResult}
+     * @throws IOException if an error occurs during the request
+     */
     public TwitchResponse<SearchResult<Channel>> channels(String query, int limit, int offset) throws IOException {
         String url = String.format("%s/search/channels?q=%s&limit=%s&offset=%s",
                 getBaseUrl(), query, limit, offset);
@@ -39,6 +60,15 @@ public class SearchResource extends AbstractResource {
         return response;
     }
 
+    /**
+     * Returns a list of stream objects matching the search query.
+     *
+     * @param query  the search query
+     * @param limit  the maximum number of results to return
+     * @param offset the object offset for pagination
+     * @return a TwitchResponse containing a {@link SearchResult}
+     * @throws IOException if an error occurs during the request
+     */
     public TwitchResponse<SearchResult<Stream>> streams(String query, int limit, int offset) throws IOException {
         String url = String.format("%s/search/streams?q=%s&limit=%s&offset=%s",
                 getBaseUrl(), query, limit, offset);
@@ -66,6 +96,14 @@ public class SearchResource extends AbstractResource {
         return response;
     }
 
+    /**
+     * Returns a list of game objects matching the search query.
+     *
+     * @param query the search query
+     * @param live  set <code>true</code> to only return live channels
+     * @return a TwitchResponse containing a {@link SearchResult}
+     * @throws IOException if an error occurs during the request
+     */
     public TwitchResponse<SearchResult<Game>> games(String query, boolean live) throws IOException {
         String url = String.format("%s/search/games?q=%s&type=%s&live=%s",
                 getBaseUrl(), query, "suggest", live);
@@ -93,6 +131,13 @@ public class SearchResource extends AbstractResource {
         return response;
     }
 
+    /**
+     * Returns a list of game objects matching the search query.
+     *
+     * @param query the search query
+     * @return a TwitchResponse containing a {@link SearchResult}
+     * @throws IOException if an error occurs during the request
+     */
     public TwitchResponse<SearchResult<Game>> games(String query) throws IOException {
         return games(query, false);
     }

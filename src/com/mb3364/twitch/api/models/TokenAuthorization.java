@@ -1,7 +1,7 @@
 package com.mb3364.twitch.api.models;
 
-import com.mb3364.twitch.api.auth.Scopes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mb3364.twitch.api.auth.Scopes;
 
 import java.util.ArrayList;
 import java.util.Date;
