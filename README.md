@@ -91,7 +91,7 @@ If you are just creating an application for yourself and already have an access 
 twitch.auth().setAccessToken("my-access-token-289489");
 ```
 
-## Dependencies
+## Requirements
 
 [Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
 
@@ -99,3 +99,5 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 * Complete Javadoc documentation.
 * Allow custom authorization callback views.
+
+## Changelog
