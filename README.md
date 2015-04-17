@@ -1,7 +1,9 @@
 # A Java Twitch API Wrapper
 A complete java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
 
-This project is still being improved and major changes may occur breaking backwards compatibility. Feel free to submit issues or contribute code.
+This project is still being improved and major changes may occur breaking backwards compatibility.
+
+Not everything has been rigorously tested, please report any issues and feel free to contribute code.
 
 ## Basics
 
