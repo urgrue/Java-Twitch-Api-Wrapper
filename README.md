@@ -1,6 +1,8 @@
 # A Java Twitch API Wrapper
 A complete java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
 
+This project is still being improved and major changes may occur breaking backwards compatibility. Feel free to submit issues or contribute code.
+
 ## Basics
 
 Using the wrapper is as simple as instantiating the `Twitch` object and then calling the appropriate endpoint functions.
@@ -91,4 +93,9 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## Dependencies
 
-[Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome)
+[Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
+
+## In Progress
+
+* Complete Javadoc documentation.
+* Allow custom authorization callback views.
