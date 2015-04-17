@@ -97,7 +97,6 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## In Progress
 
-* Complete Javadoc documentation.
 * Allow custom authorization callback views.
 
 ## Changelog
