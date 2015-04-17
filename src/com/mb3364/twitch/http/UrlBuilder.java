@@ -11,7 +11,7 @@ public class UrlBuilder {
     private String host = "";
     private int port = 0;
     private String path = "";
-    private Map<String, String> queryParams = new HashMap<>();
+    private Map<String, String> queryParams = new HashMap<String, String>();
 
     public UrlBuilder scheme(String scheme) {
         this.scheme = scheme;

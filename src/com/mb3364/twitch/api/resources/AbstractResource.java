@@ -22,7 +22,7 @@ public abstract class AbstractResource {
 
     private static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
     private final String baseUrl; // Base url for twitch rest api
-    private Map<String, String> headers = new HashMap<>(); // http headers
+    private Map<String, String> headers = new HashMap<String, String>(); // http headers
 
     /**
      * Construct a resource using the Twitch API base URL and specified API version.
@@ -95,7 +95,7 @@ public abstract class AbstractResource {
         T obj = null;
 
         int statusCode = response.getCode();
-        TwitchResponse<T> twitchResponse = new TwitchResponse<>(response);
+        TwitchResponse<T> twitchResponse = new TwitchResponse<T>(response);
 
         if (statusCode == successCode) {
             // Success! We have data from Twitch

@@ -8,7 +8,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Emoticons {
 
-    private List<Emoticon> emoticons = new ArrayList<>();
+    private List<Emoticon> emoticons = new ArrayList<Emoticon>();
 
     @Override
     public String toString() {
