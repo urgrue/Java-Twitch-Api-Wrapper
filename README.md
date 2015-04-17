@@ -101,3 +101,7 @@ twitch.auth().setAccessToken("my-access-token-289489");
 * Allow custom authorization callback views.
 
 ## Changelog
+
+#### v. 0.01
+
+* Support for JDK 7 and non-diamond types.
