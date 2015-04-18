@@ -20,7 +20,7 @@ public class GamesResource extends AbstractResource {
      * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the requested version of the Twitch API
      */
-    public GamesResource(String baseUrl, String apiVersion) {
+    public GamesResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
     }
 

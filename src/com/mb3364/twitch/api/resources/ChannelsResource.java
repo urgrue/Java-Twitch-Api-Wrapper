@@ -23,7 +23,7 @@ public class ChannelsResource extends AbstractResource {
      * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the requested version of the Twitch API
      */
-    public ChannelsResource(String baseUrl, String apiVersion) {
+    public ChannelsResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
     }
 

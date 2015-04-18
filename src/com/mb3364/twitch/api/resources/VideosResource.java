@@ -22,7 +22,7 @@ public class VideosResource extends AbstractResource {
      * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the requested version of the Twitch API
      */
-    public VideosResource(String baseUrl, String apiVersion) {
+    public VideosResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
     }
 

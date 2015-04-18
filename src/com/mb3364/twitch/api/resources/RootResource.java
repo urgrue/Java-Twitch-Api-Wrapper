@@ -21,7 +21,7 @@ public class RootResource extends AbstractResource {
      * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the requested version of the Twitch API
      */
-    public RootResource(String baseUrl, String apiVersion) {
+    public RootResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
     }
 

@@ -13,29 +13,41 @@ import java.util.Map;
  */
 public class Twitch {
 
-    public static final String BASE_URL = "https://api.twitch.tv/kraken";
-    public static final String API_VERSION = "v3";
+    public static final String DEFAULT_BASE_URL = "https://api.twitch.tv/kraken";
+    public static final int DEFAULT_API_VERSION = 3;
+    private String baseUrl;
+    private int apiVersion;
     private String clientId; // User's app client Id
     private Authenticator authenticator;
     private Map<String, AbstractResource> resources;
 
     /**
+     * Constructs a Twitch application instance with a set API base URL and API version number.
+     *
+     * @param baseUrl the base URL of the Twitch API
+     * @param apiVersion the API version number to request
+     */
+    public Twitch(String baseUrl, int apiVersion) {
+        authenticator = new Authenticator(DEFAULT_BASE_URL);
+        // Instantiate resource connectors
+        resources = new HashMap<String, AbstractResource>();
+        resources.put("channels", new ChannelsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("chat", new ChatResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("games", new GamesResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("ingests", new IngestsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("root", new RootResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("search", new SearchResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("streams", new StreamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("teams", new TeamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("users", new UsersResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("videos", new VideosResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+    }
+
+    /**
      * Constructs a Twitch application instance.
      */
     public Twitch() {
-        authenticator = new Authenticator(BASE_URL);
-        // Instantiate resource connectors
-        resources = new HashMap<String, AbstractResource>();
-        resources.put("channels", new ChannelsResource(BASE_URL, API_VERSION));
-        resources.put("chat", new ChatResource(BASE_URL, API_VERSION));
-        resources.put("games", new GamesResource(BASE_URL, API_VERSION));
-        resources.put("ingests", new IngestsResource(BASE_URL, API_VERSION));
-        resources.put("root", new RootResource(BASE_URL, API_VERSION));
-        resources.put("search", new SearchResource(BASE_URL, API_VERSION));
-        resources.put("streams", new StreamsResource(BASE_URL, API_VERSION));
-        resources.put("teams", new TeamsResource(BASE_URL, API_VERSION));
-        resources.put("users", new UsersResource(BASE_URL, API_VERSION));
-        resources.put("videos", new VideosResource(BASE_URL, API_VERSION));
+        this(DEFAULT_BASE_URL, DEFAULT_API_VERSION);
     }
 
     /**

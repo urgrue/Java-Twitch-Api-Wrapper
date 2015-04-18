@@ -30,9 +30,9 @@ public abstract class AbstractResource {
      * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the requested version of the Twitch API
      */
-    protected AbstractResource(String baseUrl, String apiVersion) {
+    protected AbstractResource(String baseUrl, int apiVersion) {
         this.baseUrl = baseUrl;
-        headers.put("ACCEPT", "application/vnd.twitchtv." + apiVersion + "+json"); // Specify API version
+        headers.put("ACCEPT", "application/vnd.twitchtv.v" + Integer.toString(apiVersion) + "+json"); // Specify API version
         configureObjectMapper();
     }
 

@@ -22,7 +22,7 @@ public class TeamsResource extends AbstractResource {
      * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the requested version of the Twitch API
      */
-    public TeamsResource(String baseUrl, String apiVersion) {
+    public TeamsResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
     }
 
