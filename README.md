@@ -100,8 +100,13 @@ twitch.auth().setAccessToken("my-access-token-289489");
 ## In Progress
 
 * Allow custom authorization callback views.
+* Configurable URLBuilder for generating endpoint URLs instead of Strings.
 
 ## Changelog
+
+#### v. 0.02
+
+* Twitch(baseUrl, apiVersion) constructor added for easier testing and future proofing by allowing user to override defaults.
 
 #### v. 0.01
 
