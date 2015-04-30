@@ -34,7 +34,6 @@ public class JsonParams extends HashMap<String, String> {
     public String toQueryString() {
         StringBuilder sb = new StringBuilder();
         if (size() > 0) {
-            sb.append("?");
             for (Map.Entry<String, String> datum : entrySet()) {
                 sb.append(datum.getKey());
                 sb.append("=");

@@ -39,7 +39,7 @@ public class GamesResource extends AbstractResource {
      */
     public void getTop(JsonParams params, TopGamesResponseHandler handler) {
         if (params == null) params = new JsonParams();
-        String url = String.format("%s/games/top%s", getBaseUrl(), params.toQueryString());
+        String url = String.format("%s/games/top?%s", getBaseUrl(), params.toQueryString());
 
         try {
             HttpClient httpClient = new HttpClient();

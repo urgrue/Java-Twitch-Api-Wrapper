@@ -1,10 +1,16 @@
 package com.mb3364.twitch.api.resources;
 
 import com.mb3364.twitch.api.TwitchResponse;
+import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
+import com.mb3364.twitch.api.handlers.GamesResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.models.*;
+import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * The {@link SearchResource} provides the functionality
@@ -27,118 +33,117 @@ public class SearchResource extends AbstractResource {
     /**
      * Returns a list of channel objects matching the search query.
      *
-     * @param query  the search query
-     * @param limit  the maximum number of results to return
-     * @param offset the object offset for pagination
-     * @return a TwitchResponse containing a {@link SearchResult}
-     * @throws IOException if an error occurs during the request
+     * @param query the search query
+     * @param params the optional request parameters:
+     *               <ul>
+     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *               </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<SearchResult<Channel>> channels(String query, int limit, int offset) throws IOException {
-        String url = String.format("%s/search/channels?q=%s&limit=%s&offset=%s",
-                getBaseUrl(), query, limit, offset);
+    public void channels(String query, JsonParams params, ChannelsResponseHandler handler) {
+        try {
+            query = URLEncoder.encode(query, "UTF-8");
+            if (params == null) params = new JsonParams();
+            String url = String.format("%s/search/channels?q=%s&%s", getBaseUrl(), query, params.toQueryString());
 
-        TwitchResponse<SearchResultContainer> c =
-                requestGet(url, HttpResponse.HTTP_OK, SearchResultContainer.class);
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        // Extract relevant results
-        SearchResult<Channel> r = new SearchResult<Channel>();
-        if (c.getObject() != null) {
-            r.setTotal(c.getObject().getTotal());
-            r.setResults(c.getObject().getChannels());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                SearchResultContainer value =
+                        objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                handler.onSuccess(value.getTotal(), value.getChannels());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
+    }
 
-        // Create object with search result rather than the container class
-        TwitchResponse<SearchResult<Channel>> response = new TwitchResponse<SearchResult<Channel>>(
-                c.getStatusCode(),
-                c.getStatusText(),
-                c.getErrorMessage());
-
-        if (!c.hasError()) {
-            response.setObject(r);
-        }
-
-        return response;
+    public void channels(String query, ChannelsResponseHandler handler) {
+        channels(query, null, handler);
     }
 
     /**
      * Returns a list of stream objects matching the search query.
      *
-     * @param query  the search query
-     * @param limit  the maximum number of results to return
-     * @param offset the object offset for pagination
-     * @return a TwitchResponse containing a {@link SearchResult}
-     * @throws IOException if an error occurs during the request
+     * @param query the search query
+     * @param params the optional request parameters:
+     *               <ul>
+     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *               <li><code>hls</code>:  If set to true, only returns streams using HLS.
+     *                                      If set to false, only returns streams that are non-HLS.</li>
+     *               </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<SearchResult<Stream>> streams(String query, int limit, int offset) throws IOException {
-        String url = String.format("%s/search/streams?q=%s&limit=%s&offset=%s",
-                getBaseUrl(), query, limit, offset);
+    public void streams(String query, JsonParams params, StreamsResponseHandler handler) {
+        try {
+            query = URLEncoder.encode(query, "UTF-8");
+            if (params == null) params = new JsonParams();
+            String url = String.format("%s/search/streams?q=%s&%s",
+                    getBaseUrl(), query, params.toQueryString());
 
-        TwitchResponse<SearchResultContainer> c =
-                requestGet(url, HttpResponse.HTTP_OK, SearchResultContainer.class);
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        // Extract relevant results
-        SearchResult<Stream> r = new SearchResult<Stream>();
-        if (c.getObject() != null) {
-            r.setTotal(c.getObject().getTotal());
-            r.setResults(c.getObject().getStreams());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                SearchResultContainer value =
+                        objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                handler.onSuccess(value.getTotal(), value.getStreams());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
+    }
 
-        // Create object with search result rather than the container class
-        TwitchResponse<SearchResult<Stream>> response = new TwitchResponse<SearchResult<Stream>>(
-                c.getStatusCode(),
-                c.getStatusText(),
-                c.getErrorMessage());
-
-        if (!c.hasError()) {
-            response.setObject(r);
-        }
-
-        return response;
+    public void streams(String query, StreamsResponseHandler handler) {
+        streams(query, null, handler);
     }
 
     /**
      * Returns a list of game objects matching the search query.
      *
      * @param query the search query
-     * @param live  set <code>true</code> to only return live channels
-     * @return a TwitchResponse containing a {@link SearchResult}
-     * @throws IOException if an error occurs during the request
+     * @param params the optional request parameters:
+     *               <ul>
+     *               <li><code>live</code>:  If true, only returns games that are live on at least one channel.</li>
+     *               </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<SearchResult<Game>> games(String query, boolean live) throws IOException {
-        String url = String.format("%s/search/games?q=%s&type=%s&live=%s",
-                getBaseUrl(), query, "suggest", live);
+    public void games(String query, JsonParams params, GamesResponseHandler handler) {
+        try {
+            query = URLEncoder.encode(query, "UTF-8");
+            if (params == null) params = new JsonParams();
+            String url = String.format("%s/search/games?q=%s&type=suggest&%s",
+                    getBaseUrl(), query, params.toQueryString());
 
-        TwitchResponse<SearchResultContainer> c =
-                requestGet(url, HttpResponse.HTTP_OK, SearchResultContainer.class);
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        // Extract relevant results
-        SearchResult<Game> r = new SearchResult<Game>();
-        if (c.getObject() != null) {
-            r.setTotal(c.getObject().getTotal());
-            r.setResults(c.getObject().getGames());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                SearchResultContainer value =
+                        objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                handler.onSuccess(value.getGames().size(), value.getGames());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
-
-        // Create object with search result rather than the container class
-        TwitchResponse<SearchResult<Game>> response = new TwitchResponse<SearchResult<Game>>(
-                c.getStatusCode(),
-                c.getStatusText(),
-                c.getErrorMessage());
-
-        if (!c.hasError()) {
-            response.setObject(r);
-        }
-
-        return response;
     }
 
-    /**
-     * Returns a list of game objects matching the search query.
-     *
-     * @param query the search query
-     * @return a TwitchResponse containing a {@link SearchResult}
-     * @throws IOException if an error occurs during the request
-     */
-    public TwitchResponse<SearchResult<Game>> games(String query) throws IOException {
-        return games(query, false);
+    public void games(String query, GamesResponseHandler handler) {
+        games(query, null, handler);
     }
 }
