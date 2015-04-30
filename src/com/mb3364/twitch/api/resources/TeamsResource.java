@@ -1,11 +1,16 @@
 package com.mb3364.twitch.api.resources;
 
 import com.mb3364.twitch.api.TwitchResponse;
+import com.mb3364.twitch.api.handlers.TeamResponseHandler;
+import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
 import com.mb3364.twitch.api.models.Team;
 import com.mb3364.twitch.api.models.Teams;
+import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -29,62 +34,64 @@ public class TeamsResource extends AbstractResource {
     /**
      * Returns a list of active teams.
      *
-     * @param limit  the maximum number of {@link Team}'s to return
-     * @param offset the object offset for pagination
-     * @return a TwitchResponse containing a list of {@link Team} object
-     * @throws IOException if an error occurs during the request
+     * @param params the optional request parameters:
+     *               <ul>
+     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *               </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<List<Team>> get(int limit, int offset) throws IOException {
-        // Constrain limit
-        limit = Math.max(limit, 1);
-        limit = Math.min(limit, 100);
+    public void get(JsonParams params, TeamsResponseHandler handler) {
+        if (params == null) params = new JsonParams();
+        String url = String.format("%s/teams?%s", getBaseUrl(), params.toQueryString());
 
-        String url = String.format("%s/teams/?limit=%s&offset=%s", getBaseUrl(), limit, offset);
-        TwitchResponse<Teams> container = requestGet(url, HttpResponse.HTTP_OK, Teams.class);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        // Create object with list rather than the container class
-        TwitchResponse<List<Team>> response = new TwitchResponse<List<Team>>(
-                container.getStatusCode(),
-                container.getStatusText(),
-                container.getErrorMessage());
-
-        if (!container.hasError()) {
-            response.setObject(container.getObject().getTeams());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Teams value = objectMapper.readValue(response.getContent(), Teams.class);
+                handler.onSuccess(value.getTeams());
+            } else {
+                com.mb3364.twitch.api.models.Error error =
+                        objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
-
-        return response;
     }
 
-    /**
-     * Returns a list of active teams.
-     *
-     * @param limit the maximum number of {@link Team}'s to return
-     * @return a TwitchResponse containing a list of {@link Team} object
-     * @throws IOException if an error occurs during the request
-     */
-    public TwitchResponse<List<Team>> get(int limit) throws IOException {
-        return get(limit, 0);
-    }
-
-    /**
-     * Returns a list of active teams.
-     *
-     * @return a TwitchResponse containing a list of {@link Team} object
-     * @throws IOException if an error occurs during the request
-     */
-    public TwitchResponse<List<Team>> get() throws IOException {
-        return get(25, 0);
+    public void get(TeamsResponseHandler handler) {
+        get(null, handler);
     }
 
     /**
      * Returns a specified {@link Team} object.
      *
-     * @param teamName the name of the {@link Team}
-     * @return a TwitchResponse containing a {@link Team}
-     * @throws IOException if an error occurs during the request
+     * @param team the name of the {@link Team}
+     * @param handler the response handler
      */
-    public TwitchResponse<Team> get(String teamName) throws IOException {
-        String url = String.format("%s/teams/%s", getBaseUrl(), teamName);
-        return requestGet(url, HttpResponse.HTTP_OK, Team.class);
+    public void get(String team, TeamResponseHandler handler) {
+        try {
+            team = URLEncoder.encode(team, "UTF-8");
+            String url = String.format("%s/teams/%s", getBaseUrl(), team);
+
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Team value = objectMapper.readValue(response.getContent(), Team.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error =
+                        objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 }
