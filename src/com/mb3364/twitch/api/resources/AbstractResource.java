@@ -20,9 +20,9 @@ import java.util.Map;
  */
 public abstract class AbstractResource {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
+    protected static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
     private final String baseUrl; // Base url for twitch rest api
-    private Map<String, String> headers = new HashMap<String, String>(); // http headers
+    protected Map<String, String> headers = new HashMap<String, String>(); // http headers
 
     /**
      * Construct a resource using the Twitch API base URL and specified API version.

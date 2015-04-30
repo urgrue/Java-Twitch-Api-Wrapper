@@ -1,8 +1,8 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
+import com.mb3364.twitch.api.handlers.TokenResponseHandler;
 import com.mb3364.twitch.api.models.Root;
-import com.mb3364.twitch.api.models.Token;
+import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
 
 import java.io.IOException;
@@ -29,24 +29,25 @@ public class RootResource extends AbstractResource {
      * Authentication status. If you are authenticated, the response includes
      * the status of your token and links to other related resources.
      *
-     * @return a TwitchResponse containing the {@link Token} object
-     * @throws IOException if an error occurs during the request
+     * @param handler the response handler
      */
-    public TwitchResponse<Token> get() throws IOException {
+    public void get(TokenResponseHandler handler) {
         String url = String.format("%s/", getBaseUrl());
 
-        TwitchResponse<Root> container = requestGet(url, HttpResponse.HTTP_OK, Root.class);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        // Create object with list rather than the container class
-        TwitchResponse<Token> response = new TwitchResponse<Token>(
-                container.getStatusCode(),
-                container.getStatusText(),
-                container.getErrorMessage());
-
-        if (!container.hasError()) {
-            response.setObject(container.getObject().getToken());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Root value = objectMapper.readValue(response.getContent(), Root.class);
+                handler.onSuccess(value.getToken());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
-
-        return response;
     }
 }

@@ -1,8 +1,11 @@
 package com.mb3364.twitch.api.resources;
 
 import com.mb3364.twitch.api.TwitchResponse;
-import com.mb3364.twitch.api.models.Games;
+import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
+import com.mb3364.twitch.api.models.*;
+import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 
@@ -27,40 +30,35 @@ public class GamesResource extends AbstractResource {
     /**
      * Returns a list of games objects sorted by number of current viewers on Twitch, most popular first.
      *
-     * @param limit  the maximum number of objects in array. Maximum is 100.
-     * @param offset the object offset for pagination. Default is 0.
-     * @return a TwitchResponse containing a {@link Games} object
-     * @throws IOException if an error occurs making the request
+     * @param params the optional request parameters:
+     *               <ul>
+     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *               </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<Games> get(int limit, int offset) throws IOException {
-        // Constrain limit
-        limit = Math.max(limit, 1);
-        limit = Math.min(limit, 100);
+    public void getTop(JsonParams params, TopGamesResponseHandler handler) {
+        if (params == null) params = new JsonParams();
+        String url = String.format("%s/games/top%s", getBaseUrl(), params.toQueryString());
 
-        String url = String.format("%s/games/top?limit=%s&offset=%s",
-                getBaseUrl(), limit, offset);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        return requestGet(url, HttpResponse.HTTP_OK, Games.class);
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Games value = objectMapper.readValue(response.getContent(), Games.class);
+                handler.onSuccess(value.getTotal(), value.getTop());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
-    /**
-     * Returns a list of games objects sorted by number of current viewers on Twitch, most popular first.
-     *
-     * @param limit the maximum number of objects in array. Maximum is 100.
-     * @return a TwitchResponse containing a {@link Games} object
-     * @throws IOException if an error occurs making the request
-     */
-    public TwitchResponse<Games> get(int limit) throws IOException {
-        return get(limit, 0);
-    }
-
-    /**
-     * Returns a list of games objects sorted by number of current viewers on Twitch, most popular first.
-     *
-     * @return a TwitchResponse containing a {@link Games} object
-     * @throws IOException if an error occurs making the request
-     */
-    public TwitchResponse<Games> get() throws IOException {
-        return get(10, 0);
+    public void getTop(TopGamesResponseHandler handler) {
+        getTop(null, handler);
     }
 }

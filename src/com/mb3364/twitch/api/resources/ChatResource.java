@@ -1,13 +1,14 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
+import com.mb3364.twitch.api.handlers.BadgesResponseHandler;
+import com.mb3364.twitch.api.handlers.EmoticonsResponseHandler;
 import com.mb3364.twitch.api.models.ChannelBadges;
-import com.mb3364.twitch.api.models.Emoticon;
 import com.mb3364.twitch.api.models.Emoticons;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * The {@link ChatResource} provides the functionality
@@ -28,37 +29,51 @@ public class ChatResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of all emoticon objects for Twitch.
+     * Returns a list of all emoticon objects.
      *
-     * @return a TwitchResponse containing a list of {@link Emoticon}'s
-     * @throws IOException if an error occurs during the request
+     * @param handler the Response Handler
      */
-    public TwitchResponse<List<Emoticon>> getEmoticons() throws IOException {
-        String url = String.format("%s/chat/emoticons", getBaseUrl());
-        TwitchResponse<Emoticons> container = requestGet(url, HttpResponse.HTTP_OK, Emoticons.class);
+    public void getEmoticons(final EmoticonsResponseHandler handler) {
+        try {
+            String url = String.format("%s/chat/emoticons", getBaseUrl());
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        // Create object with list rather than the container class
-        TwitchResponse<List<Emoticon>> response = new TwitchResponse<List<Emoticon>>(
-                container.getStatusCode(),
-                container.getStatusText(),
-                container.getErrorMessage());
-
-        if (!container.hasError()) {
-            response.setObject(container.getObject().getEmoticons());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Emoticons value = objectMapper.readValue(response.getContent(), Emoticons.class);
+                handler.onSuccess(value.getEmoticons());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
-
-        return response;
     }
 
     /**
      * Returns a list of chat badges that can be used in the specified channel's chat.
      *
-     * @param channelName the name of the channel
-     * @return a TwitchResponse containing a {@link ChannelBadges} object
-     * @throws IOException if an error occurs during the request
+     * @param channel the name of the channel
+     * @param handler the Response Handler
      */
-    public TwitchResponse<ChannelBadges> getChannelBadges(String channelName) throws IOException {
-        String url = String.format("%s/chat/%s/badges", getBaseUrl(), channelName);
-        return requestGet(url, HttpResponse.HTTP_OK, ChannelBadges.class);
+    public void getBadges(final String channel, final BadgesResponseHandler handler) {
+        try {
+            String url = String.format("%s/chat/%s/badges", getBaseUrl(), channel);
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                ChannelBadges value = objectMapper.readValue(response.getContent(), ChannelBadges.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 }
