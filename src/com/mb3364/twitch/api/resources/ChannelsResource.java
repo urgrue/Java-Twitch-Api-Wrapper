@@ -341,7 +341,7 @@ public class ChannelsResource extends AbstractResource {
      *                    </ul>
      * @param handler     the response handler
      */
-    public void getSubscriptions(String channelName, JsonParams params, SubscriptionsResponseHandler handler) {
+    public void getSubscriptions(String channelName, JsonParams params, ChannelSubscriptionsResponseHandler handler) {
         if (params == null) params = new JsonParams();
         String url = String.format("%s/channels/%s/subscriptions?%s",
                 getBaseUrl(), channelName, params.toQueryString());
@@ -370,7 +370,7 @@ public class ChannelsResource extends AbstractResource {
      * @param user        the user to check
      * @param handler     the response handler
      */
-    public void getSubscription(String channelName, String user, SubscriptionResponseHandler handler) {
+    public void getSubscription(String channelName, String user, ChannelSubscriptionResponseHandler handler) {
         String url = String.format("%s/channels/%s/subscriptions/%s",
                 getBaseUrl(), channelName, user);
 

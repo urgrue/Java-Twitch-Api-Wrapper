@@ -1,11 +1,12 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
+import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
+import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * The {@link UsersResource} provides the functionality
@@ -28,60 +29,131 @@ public class UsersResource extends AbstractResource {
     /**
      * Returns a {@link User} object.
      *
-     * @param user the user to request
-     * @return a TwitchResponse containing a {@link User} object
-     * @throws IOException if an error occurs during the request
+     * @param user    the user to request
+     * @param handler the response handler
      */
-    public TwitchResponse<User> get(String user) throws IOException {
+    public void get(String user, UserResponseHandler handler) {
         String url = String.format("%s/users/%s", getBaseUrl(), user);
-        return requestGet(url, HttpResponse.HTTP_OK, User.class);
+        try {
+
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                User value = objectMapper.readValue(response.getContent(), User.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
     /**
      * Returns the authenticated {@link User} object.
      * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_READ}
      *
-     * @return a TwitchResponse containing a {@link User} object
-     * @throws IOException if an error occurs during the request
+     * @param handler the response handler
      */
-    public TwitchResponse<User> get() throws IOException {
+    public void get(UserResponseHandler handler) {
         String url = String.format("%s/user", getBaseUrl());
-        return requestGet(url, HttpResponse.HTTP_OK, User.class);
+        try {
+
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                User value = objectMapper.readValue(response.getContent(), User.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
     /**
-     * Returns a channel object that the authenticated user subscribes to.
+     * Returns the channel subscription that the user subscribes to.
      * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_SUBSCRIPTIONS}
      *
      * @param user    the authenticated user's name
      * @param channel the channel name of the subscription
-     * @return a TwitchResponse containing a {@link UserSubscription} object
-     * @throws IOException if an error occurs during the request
+     * @param handler the response handler
      */
-    public TwitchResponse<UserSubscription> getSubscription(String user, String channel) throws IOException {
+    public void getSubscription(String user, String channel, UserSubscriptionResponseHandler handler) {
         String url = String.format("%s/users/%s/subscriptions/%s",
                 getBaseUrl(), user, channel);
+        try {
 
-        return requestGet(url, HttpResponse.HTTP_OK, UserSubscription.class);
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                UserSubscription value = objectMapper.readValue(response.getContent(), UserSubscription.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
     /**
      * Returns a {@link UserFollows} object that contains a list of {@link UserFollow}
      * objects representing channels the user is following.
      *
-     * @param user      the user
-     * @param limit     the maximum number of objects in array. Maximum is 100
-     * @param offset    the object offset for pagination
-     * @param direction the sorting direction. Valid values are <code>asc</code> and <code>desc</code>
-     * @param sortby    the sort key. Valid values are <code>created_at</code> and <code>last_broadcast</code>
-     * @return a TwitchResponse containing a {@link UserFollows} object
-     * @throws IOException if an error occurs during the request
+     * @param user    the user's name
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>:  Maximum number of objects in array. Default is 25. Maximum is 100.</li>
+     *                <li><code>offset</code>: Object offset for pagination. Default is 0.</li>
+     *                <li><code>direction</code>: Sorting direction. Default is <code>desc</code>.
+     *                Valid values are <code>asc</code> and <code>desc</code>.</li>
+     *                <li><code>sortby</code>: Sort key. Default is <code>created_at</code>.
+     *                Valid values are <code>created_at</code> and <code>last_broadcast</code>.</li>
+     *                </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<UserFollows> getFollows(String user, int limit, int offset, String direction, String sortby) throws IOException {
-        String url = String.format("%s/users/%s/follows/channels?limit=%s&offset=%s&direction=%s&sortby=%s",
-                getBaseUrl(), user, limit, offset, direction, sortby);
+    public void getFollows(String user, JsonParams params, UserFollowsResponseHandler handler) {
+        if (params == null) params = new JsonParams();
+        String url = String.format("%s/users/%s/follows/channels?%s",
+                getBaseUrl(), user, params.toQueryString());
 
-        return requestGet(url, HttpResponse.HTTP_OK, UserFollows.class);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                UserFollows value = objectMapper.readValue(response.getContent(), UserFollows.class);
+                handler.onSuccess(value.getTotal(), value.getFollows());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
+    }
+
+    /**
+     * Returns a {@link UserFollows} object that contains a list of {@link UserFollow}
+     * objects representing channels the user is following.
+     *
+     * @param user    the user's name
+     * @param handler the response handler
+     */
+    public void getFollows(String user, UserFollowsResponseHandler handler) {
+        getFollows(user, null, handler);
     }
 
     /**
@@ -89,14 +161,26 @@ public class UsersResource extends AbstractResource {
      *
      * @param user    the user
      * @param channel the channel
-     * @return a TwitchResponse containing a {@link UserFollow} object
-     * @throws IOException if an error occurs during the request
+     * @param handler the response handler
      */
-    public TwitchResponse<UserFollow> getFollow(String user, String channel) throws IOException {
+    public void getFollow(String user, String channel, UserFollowResponseHandler handler) {
         String url = String.format("%s/users/%s/follows/channels/%s",
                 getBaseUrl(), user, channel);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
 
-        return requestGet(url, HttpResponse.HTTP_OK, UserFollow.class);
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                UserFollow value = objectMapper.readValue(response.getContent(), UserFollow.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
     /**
@@ -105,15 +189,31 @@ public class UsersResource extends AbstractResource {
      *
      * @param user                the authenticated user
      * @param channel             the channel to follow
-     * @param enableNotifications receive email/push notifications when channel goes live. Default is false.
-     * @return a TwitchResponse containing the {@link UserFollow} object
-     * @throws IOException if an error occurs during the request
+     * @param enableNotifications receive email/push notifications when channel goes live. Default is <code>false</code>.
+     * @param handler             the response handler
      */
-    public TwitchResponse<UserFollow> follow(String user, String channel, boolean enableNotifications) throws IOException {
+    public void follow(String user, String channel, boolean enableNotifications, UserFollowResponseHandler handler) {
         String url = String.format("%s/users/%s/follows/channels/%s?notifications=%s",
                 getBaseUrl(), user, channel, enableNotifications);
 
-        return requestPut(url, HttpResponse.HTTP_OK, UserFollow.class);
+        System.out.println(url);
+
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.put(url, headers);
+
+            int statusCode = response.getCode();
+
+            if (statusCode == HttpResponse.HTTP_OK) {
+                UserFollow value = objectMapper.readValue(response.getContent(), UserFollow.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
     /**
@@ -122,11 +222,10 @@ public class UsersResource extends AbstractResource {
      *
      * @param user    the authenticated user
      * @param channel the channel to follow
-     * @return a TwitchResponse containing the {@link UserFollow} object
-     * @throws IOException if an error occurs during the request
+     * @param handler the response handler
      */
-    public TwitchResponse<UserFollow> follow(String user, String channel) throws IOException {
-        return follow(user, channel, false);
+    public void follow(String user, String channel, UserFollowResponseHandler handler) {
+        follow(user, channel, false, handler);
     }
 
     /**
@@ -135,48 +234,26 @@ public class UsersResource extends AbstractResource {
      *
      * @param user    the authenticated user
      * @param channel the channel to unfollow
-     * @return a TwitchResponse containing a {@link Empty} object as no data is returned
-     * @throws IOException if an error occurs during the request
+     * @param handler the response handler
      */
-    public TwitchResponse<Empty> unfollow(String user, String channel) throws IOException {
+    public void unfollow(String user, String channel, UserUnfollowResponseHandler handler) {
         String url = String.format("%s/users/%s/follows/channels/%s",
                 getBaseUrl(), user, channel);
 
-        return requestPut(url, HttpResponse.HTTP_OK, Empty.class);
-    }
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.delete(url, headers);
 
-    /**
-     * Returns a list of {@link Block} objects on <code>User</code>'s block list.
-     * List sorted by recency, newest first.
-     * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_BLOCKS_READ}
-     *
-     * @param user   the authenticated user
-     * @param limit  the maximum number of block's to return
-     * @param offset the object offset for pagination
-     * @return a TwitchResponse containing a list of {@link Block}'s
-     * @throws IOException if an error occurs during the request
-     */
-    public TwitchResponse<List<Block>> getBlocks(String user, int limit, int offset) throws IOException {
-        // Constrain limit
-        limit = Math.max(limit, 1);
-        limit = Math.min(limit, 100);
-
-        String url = String.format("%s/users/%s/blocks?limit=%s&offset=%s",
-                getBaseUrl(), user, limit, offset);
-
-        TwitchResponse<Blocks> container = requestGet(url, HttpResponse.HTTP_OK, Blocks.class);
-
-        // Create object with list rather than the container class
-        TwitchResponse<List<Block>> response = new TwitchResponse<List<Block>>(
-                container.getStatusCode(),
-                container.getStatusText(),
-                container.getErrorMessage());
-
-        if (!container.hasError()) {
-            response.setObject(container.getObject().getBlocks());
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_NO_CONTENT) {
+                handler.onSuccess();
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
-
-        return response;
     }
 
     /**
@@ -184,44 +261,97 @@ public class UsersResource extends AbstractResource {
      * List sorted by recency, newest first.
      * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_BLOCKS_READ}
      *
-     * @param user the authenticated user
-     * @return a TwitchResponse containing a list of {@link Block}'s
-     * @throws IOException if an error occurs during the request
+     * @param user    the authenticated user
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>:  Maximum number of objects in array. Default is 25. Maximum is 100.</li>
+     *                <li><code>offset</code>: Object offset for pagination. Default is 0.</li>
+     *                </ul>
+     * @param handler the response handler
      */
-    public TwitchResponse<List<Block>> getBlocks(String user) throws IOException {
-        return getBlocks(user, 25, 0);
+    public void getBlocks(String user, JsonParams params, BlocksResponseHandler handler) {
+        if (params == null) params = new JsonParams();
+        String url = String.format("%s/users/%s/blocks?%s", getBaseUrl(), user, params.toQueryString());
+
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.get(url, headers);
+
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Blocks value = objectMapper.readValue(response.getContent(), Blocks.class);
+                handler.onSuccess(value.getBlocks());
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
+    }
+
+    /**
+     * Returns a list of {@link Block} objects on <code>User</code>'s block list.
+     * List sorted by recency, newest first.
+     * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_BLOCKS_READ}
+     *
+     * @param user    the authenticated user
+     * @param handler the response handler
+     */
+    public void getBlocks(String user, BlocksResponseHandler handler) {
+        getBlocks(user, null, handler);
     }
 
     /**
      * Blocks a <code>target</code> for the authenticated <code>user</code>.
      * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_FOLLOWS_EDIT}
      *
-     * @param user   the authenticated user
-     * @param target the user to block
-     * @return a TwitchResponse containing the {@link Block} object
-     * @throws IOException if an error occurs during the request
+     * @param user    the authenticated user
+     * @param target  the user to block
+     * @param handler the response handler
      */
-    public TwitchResponse<Block> addBlock(String user, String target) throws IOException {
-        String url = String.format("%s/users/%s/blocks/%s",
-                getBaseUrl(), user, target);
+    public void putBlock(String user, String target, BlockResponseHandler handler) {
+        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), user, target);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.put(url, headers);
 
-        return requestGet(url, HttpResponse.HTTP_OK, Block.class);
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_OK) {
+                Block value = objectMapper.readValue(response.getContent(), Block.class);
+                handler.onSuccess(value);
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
 
     /**
      * Removes the {@link Block} of <code>target</code> for the authenticated <code>user</code>.
      * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_FOLLOWS_EDIT}
      *
-     * @param user   the authenticated user
-     * @param target the user to unblock
-     * @return a TwitchResponse containing an {@link Empty} object since the block was removed
-     * @throws IOException if an error occurs during the request
+     * @param user    the authenticated user
+     * @param target  the user to unblock
+     * @param handler the response handler
      */
-    public TwitchResponse<Empty> deleteBlock(String user, String target) throws IOException {
-        String url = String.format("%s/users/%s/blocks/%s",
-                getBaseUrl(), user, target);
+    public void deleteBlock(String user, String target, UnblockResponseHandler handler) {
+        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), user, target);
+        try {
+            HttpClient httpClient = new HttpClient();
+            HttpResponse response = httpClient.delete(url, headers);
 
-        return requestPut(url, HttpResponse.HTTP_NO_CONTENT, Empty.class);
+            int statusCode = response.getCode();
+            if (statusCode == HttpResponse.HTTP_NO_CONTENT) {
+                handler.onSuccess();
+            } else {
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+            }
+        } catch (IOException e) {
+            handler.onFailure(e);
+        }
     }
-
 }
