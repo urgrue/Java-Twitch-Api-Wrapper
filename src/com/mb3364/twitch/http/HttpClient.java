@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
@@ -82,7 +83,7 @@ public class HttpClient {
                     sb.append(URLEncoder.encode(datum.getValue(), "UTF-8"));
                     sb.append("&");
                 }
-                sb.deleteCharAt(sb.length() - 1); // Remove final '&'
+                if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1); // Remove final '&'
                 input = sb.toString();
 
                 urlConnection.setDoOutput(true); // Send data in request body
@@ -176,7 +177,7 @@ public class HttpClient {
      * @see #put(String, Map, Map)
      */
     public HttpResponse put(String resourceUrl) throws IOException {
-        return put(resourceUrl, null, null);
+        return put(resourceUrl, null, new HashMap<String,String>());
     }
 
     /**
@@ -190,7 +191,7 @@ public class HttpClient {
      * @see #put(String, Map, Map)
      */
     public HttpResponse put(String resourceUrl, Map<String, String> headers) throws IOException {
-        return put(resourceUrl, null, headers);
+        return put(resourceUrl, headers, new HashMap<String,String>());
     }
 
     /**
