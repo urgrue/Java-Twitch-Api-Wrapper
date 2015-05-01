@@ -1,8 +1,7 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
-import com.mb3364.twitch.api.models.*;
+import com.mb3364.twitch.api.models.Games;
 import com.mb3364.twitch.http.HttpClient;
 import com.mb3364.twitch.http.HttpResponse;
 import com.mb3364.twitch.http.JsonParams;
@@ -30,11 +29,11 @@ public class GamesResource extends AbstractResource {
     /**
      * Returns a list of games objects sorted by number of current viewers on Twitch, most popular first.
      *
-     * @param params the optional request parameters:
-     *               <ul>
-     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
-     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
-     *               </ul>
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *                </ul>
      * @param handler the response handler
      */
     public void getTop(JsonParams params, TopGamesResponseHandler handler) {

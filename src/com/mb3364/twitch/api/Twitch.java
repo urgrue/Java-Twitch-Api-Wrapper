@@ -24,7 +24,7 @@ public class Twitch {
     /**
      * Constructs a Twitch application instance with a set API base URL and API version number.
      *
-     * @param baseUrl the base URL of the Twitch API
+     * @param baseUrl    the base URL of the Twitch API
      * @param apiVersion the API version number to request
      */
     public Twitch(String baseUrl, int apiVersion) {

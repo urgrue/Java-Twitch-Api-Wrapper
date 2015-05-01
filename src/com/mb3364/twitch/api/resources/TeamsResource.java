@@ -1,6 +1,5 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
 import com.mb3364.twitch.api.handlers.TeamResponseHandler;
 import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
 import com.mb3364.twitch.api.models.Team;
@@ -11,7 +10,6 @@ import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.List;
 
 /**
  * The {@link TeamsResource} provides the functionality
@@ -34,11 +32,11 @@ public class TeamsResource extends AbstractResource {
     /**
      * Returns a list of active teams.
      *
-     * @param params the optional request parameters:
-     *               <ul>
-     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
-     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
-     *               </ul>
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *                </ul>
      * @param handler the response handler
      */
     public void get(JsonParams params, TeamsResponseHandler handler) {
@@ -70,7 +68,7 @@ public class TeamsResource extends AbstractResource {
     /**
      * Returns a specified {@link Team} object.
      *
-     * @param team the name of the {@link Team}
+     * @param team    the name of the {@link Team}
      * @param handler the response handler
      */
     public void get(String team, TeamResponseHandler handler) {

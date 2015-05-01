@@ -1,6 +1,5 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.twitch.api.TwitchResponse;
 import com.mb3364.twitch.api.handlers.VideoResponseHandler;
 import com.mb3364.twitch.api.handlers.VideosResponseHandler;
 import com.mb3364.twitch.api.models.Video;
@@ -10,7 +9,6 @@ import com.mb3364.twitch.http.HttpResponse;
 import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * The {@link VideosResource} provides the functionality
@@ -33,7 +31,7 @@ public class VideosResource extends AbstractResource {
     /**
      * Returns a {@link Video} object.
      *
-     * @param id the ID of the Video
+     * @param id      the ID of the Video
      * @param handler the response handler
      */
     public void get(String id, VideoResponseHandler handler) {
@@ -59,17 +57,16 @@ public class VideosResource extends AbstractResource {
     /**
      * Returns a list of {@link Video}'s created in a given time period sorted by number of views, most popular first.
      *
-     * @param params the optional request parameters:
-     *               <ul>
-     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
-     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
-     *               <li><code>game</code>: Returns only videos from game.</li>
-     *               <li><code>period</code>: Returns only videos created in time period.
-     *                                        Valid values are <code>week</code>, <code>month</code>,
-     *                                        or <code>all</code>. Default is <code>week</code>.
-     *               </li>
-     *               </ul>
-     *
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *                <li><code>game</code>: Returns only videos from game.</li>
+     *                <li><code>period</code>: Returns only videos created in time period.
+     *                Valid values are <code>week</code>, <code>month</code>,
+     *                or <code>all</code>. Default is <code>week</code>.
+     *                </li>
+     *                </ul>
      * @param handler the response handler
      */
     public void getTop(JsonParams params, VideosResponseHandler handler) {
@@ -101,11 +98,11 @@ public class VideosResource extends AbstractResource {
      * Returns a list of {@link Video}'s from channels that the authenticated user is following.
      * Authenticated, required scope: {@link com.mb3364.twitch.api.auth.Scopes#USER_READ}
      *
-     * @param params the optional request parameters:
-     *               <ul>
-     *               <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
-     *               <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
-     *               </ul>
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
+     *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *                </ul>
      * @param handler the response handler
      */
     public void getFollowed(JsonParams params, VideosResponseHandler handler) {
