@@ -1,19 +1,15 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.auth.Scopes;
-import main.java.com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamsSummaryResponseHandler;
-import main.java.com.mb3364.twitch.api.models.FeaturedStreamContainer;
-import main.java.com.mb3364.twitch.api.models.StreamContainer;
-import main.java.com.mb3364.twitch.api.models.Streams;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
-import main.java.com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.auth.Scopes;
+import com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsSummaryResponseHandler;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.models.*;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -56,7 +52,7 @@ public class StreamsResource extends AbstractResource {
                 StreamContainer value = objectMapper.readValue(response.getContent(), StreamContainer.class);
                 handler.onSuccess(value.getStream());
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
         } catch (IOException e) {

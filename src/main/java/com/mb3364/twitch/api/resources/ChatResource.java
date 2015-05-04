@@ -1,16 +1,12 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.handlers.BadgesResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.EmoticonsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.ChannelBadges;
-import main.java.com.mb3364.twitch.api.models.Emoticons;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.api.handlers.BadgesResponseHandler;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.api.handlers.BadgesResponseHandler;
+import com.mb3364.twitch.api.handlers.EmoticonsResponseHandler;
+import com.mb3364.twitch.api.models.ChannelBadges;
+import com.mb3364.twitch.api.models.Emoticons;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -48,7 +44,7 @@ public class ChatResource extends AbstractResource {
                 Emoticons value = objectMapper.readValue(response.getContent(), Emoticons.class);
                 handler.onSuccess(value.getEmoticons());
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
         } catch (IOException e) {

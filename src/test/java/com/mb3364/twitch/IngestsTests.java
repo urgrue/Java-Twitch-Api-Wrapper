@@ -1,8 +1,8 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.Twitch;
-import main.java.com.mb3364.twitch.api.handlers.IngestsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.Ingest;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.IngestsResponseHandler;
+import com.mb3364.twitch.api.models.Ingest;
 import org.junit.Before;
 import org.junit.Test;
 

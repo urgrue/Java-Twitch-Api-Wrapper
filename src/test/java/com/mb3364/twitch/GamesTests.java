@@ -1,9 +1,9 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.Twitch;
-import main.java.com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
-import main.java.com.mb3364.twitch.api.models.TopGame;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
+import com.mb3364.twitch.api.models.TopGame;
+import com.mb3364.twitch.http.JsonParams;
 import org.junit.Before;
 import org.junit.Test;
 

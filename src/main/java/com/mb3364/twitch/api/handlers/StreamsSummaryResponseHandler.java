@@ -1,7 +1,6 @@
-package main.java.com.mb3364.twitch.api.handlers;
+package com.mb3364.twitch.api.handlers;
 
-import main.java.com.mb3364.twitch.api.models.StreamsSummary;
-import main.java.com.mb3364.twitch.api.models.StreamsSummary;
+import com.mb3364.twitch.api.models.StreamsSummary;
 
 import java.io.IOException;
 

@@ -1,13 +1,10 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.Twitch;
-import main.java.com.mb3364.twitch.api.TwitchResponse;
-import main.java.com.mb3364.twitch.api.models.Channel;
-import main.java.com.mb3364.twitch.api.auth.Scopes;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.auth.Scopes;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;

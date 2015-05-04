@@ -1,15 +1,14 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.Twitch;
-import main.java.com.mb3364.twitch.api.TwitchResponse;
-import main.java.com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamsSummaryResponseHandler;
-import main.java.com.mb3364.twitch.api.models.FeaturedStream;
-import main.java.com.mb3364.twitch.api.models.Stream;
-import main.java.com.mb3364.twitch.api.models.StreamsSummary;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsSummaryResponseHandler;
+import com.mb3364.twitch.api.models.FeaturedStream;
+import com.mb3364.twitch.api.models.Stream;
+import com.mb3364.twitch.api.models.StreamsSummary;
+import com.mb3364.twitch.http.JsonParams;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;

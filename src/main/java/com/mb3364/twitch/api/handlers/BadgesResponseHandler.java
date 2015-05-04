@@ -1,6 +1,6 @@
-package main.java.com.mb3364.twitch.api.handlers;
+package com.mb3364.twitch.api.handlers;
 
-import main.java.com.mb3364.twitch.api.models.ChannelBadges;
+import com.mb3364.twitch.api.models.ChannelBadges;
 
 import java.io.IOException;
 

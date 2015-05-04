@@ -1,11 +1,10 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.handlers.TokenResponseHandler;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.api.handlers.TokenResponseHandler;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.models.Root;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -45,7 +44,7 @@ public class RootResource extends AbstractResource {
                 Root value = objectMapper.readValue(response.getContent(), Root.class);
                 handler.onSuccess(value.getToken());
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
         } catch (IOException e) {

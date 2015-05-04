@@ -1,12 +1,12 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.Twitch;
-import main.java.com.mb3364.twitch.api.handlers.*;
-import main.java.com.mb3364.twitch.api.models.Block;
-import main.java.com.mb3364.twitch.api.models.User;
-import main.java.com.mb3364.twitch.api.models.UserFollow;
-import main.java.com.mb3364.twitch.api.models.UserSubscription;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.*;
+import com.mb3364.twitch.api.models.Block;
+import com.mb3364.twitch.api.models.User;
+import com.mb3364.twitch.api.models.UserFollow;
+import com.mb3364.twitch.api.models.UserSubscription;
+import com.mb3364.twitch.http.JsonParams;
 import org.junit.Before;
 import org.junit.Test;
 

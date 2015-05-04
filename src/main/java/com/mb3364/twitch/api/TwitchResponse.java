@@ -1,9 +1,7 @@
-package main.java.com.mb3364.twitch.api;
+package com.mb3364.twitch.api;
 
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.http.HttpResponse;
 
 /**
  * TwitchResponse represents a response to a request from the Twitch API.
@@ -53,7 +51,7 @@ public class TwitchResponse<T> {
     }
 
     /**
-     * Construct a TwitchResponse from a Twitch {@link main.java.com.mb3364.twitch.api.models.Error} response.
+     * Construct a TwitchResponse from a Twitch {@link com.mb3364.twitch.api.models.Error} response.
      *
      * @param error the {@link Error} response from the Twitch API
      */

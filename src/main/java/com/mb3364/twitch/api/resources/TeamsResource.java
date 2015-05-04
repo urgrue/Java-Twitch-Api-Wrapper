@@ -1,15 +1,13 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.handlers.TeamResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.TeamsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.Team;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.handlers.TeamResponseHandler;
+import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.models.Team;
+import com.mb3364.twitch.api.models.Teams;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -55,7 +53,7 @@ public class TeamsResource extends AbstractResource {
                 Teams value = objectMapper.readValue(response.getContent(), Teams.class);
                 handler.onSuccess(value.getTeams());
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error =
+                com.mb3364.twitch.api.models.Error error =
                         objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }

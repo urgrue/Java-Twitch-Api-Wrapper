@@ -1,7 +1,6 @@
-package main.java.com.mb3364.twitch.api.handlers;
+package com.mb3364.twitch.api.handlers;
 
-import main.java.com.mb3364.twitch.api.models.TopGame;
-import main.java.com.mb3364.twitch.api.models.TopGame;
+import com.mb3364.twitch.api.models.TopGame;
 
 import java.io.IOException;
 import java.util.List;

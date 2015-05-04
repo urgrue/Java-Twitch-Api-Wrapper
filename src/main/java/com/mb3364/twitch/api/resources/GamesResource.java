@@ -1,14 +1,11 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
-import main.java.com.mb3364.twitch.api.models.Games;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.models.Games;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 
@@ -53,7 +50,7 @@ public class GamesResource extends AbstractResource {
                 Games value = objectMapper.readValue(response.getContent(), Games.class);
                 handler.onSuccess(value.getTotal(), value.getTop());
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
         } catch (IOException e) {

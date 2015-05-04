@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.api.auth.grants.implicit;
+package com.mb3364.twitch.api.auth.grants.implicit;
 
 import java.io.*;
 import java.net.Socket;

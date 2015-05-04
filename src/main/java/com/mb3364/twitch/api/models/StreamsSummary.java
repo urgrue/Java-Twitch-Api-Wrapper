@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.api.models;
+package com.mb3364.twitch.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

@@ -1,10 +1,10 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.Twitch;
-import main.java.com.mb3364.twitch.api.handlers.TeamResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.TeamsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.Team;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.Twitch;
+import com.mb3364.twitch.api.handlers.TeamResponseHandler;
+import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
+import com.mb3364.twitch.api.models.Team;
+import com.mb3364.twitch.http.JsonParams;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
-package test.java.com.mb3364.twitch;
+package com.mb3364.twitch;
 
-import main.java.com.mb3364.twitch.api.auth.grants.implicit.AuthenticationCallbackServer;
-import main.java.com.mb3364.twitch.api.auth.grants.implicit.AuthenticationError;
+import com.mb3364.twitch.api.auth.grants.implicit.AuthenticationCallbackServer;
+import com.mb3364.twitch.api.auth.grants.implicit.AuthenticationError;
 import org.junit.Test;
 
 import java.io.IOException;

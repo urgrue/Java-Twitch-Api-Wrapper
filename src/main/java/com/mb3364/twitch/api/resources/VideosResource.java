@@ -1,19 +1,14 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.handlers.VideoResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.VideosResponseHandler;
-import main.java.com.mb3364.twitch.api.models.Video;
-import main.java.com.mb3364.twitch.api.models.Videos;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
-import main.java.com.mb3364.twitch.api.auth.Scopes;
-import main.java.com.mb3364.twitch.api.handlers.VideoResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.VideosResponseHandler;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.auth.Scopes;
+import com.mb3364.twitch.api.handlers.VideoResponseHandler;
+import com.mb3364.twitch.api.handlers.VideosResponseHandler;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.models.Video;
+import com.mb3364.twitch.api.models.Videos;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 
@@ -53,7 +48,7 @@ public class VideosResource extends AbstractResource {
                 Video value = objectMapper.readValue(response.getContent(), Video.class);
                 handler.onSuccess(value);
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
         } catch (IOException e) {

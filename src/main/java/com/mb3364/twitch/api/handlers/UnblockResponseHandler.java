@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.api.handlers;
+package com.mb3364.twitch.api.handlers;
 
 import java.io.IOException;
 

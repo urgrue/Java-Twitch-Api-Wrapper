@@ -1,18 +1,13 @@
-package main.java.com.mb3364.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import main.java.com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.GamesResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.*;
-import main.java.com.mb3364.twitch.http.HttpClient;
-import main.java.com.mb3364.twitch.api.models.Error;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
-import main.java.com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
-import main.java.com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import main.java.com.mb3364.twitch.api.models.SearchResultContainer;
-import main.java.com.mb3364.twitch.http.HttpResponse;
-import main.java.com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
+import com.mb3364.twitch.api.handlers.GamesResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
+import com.mb3364.twitch.api.models.Error;
+import com.mb3364.twitch.api.models.SearchResultContainer;
+import com.mb3364.twitch.http.HttpClient;
+import com.mb3364.twitch.http.HttpResponse;
+import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -61,7 +56,7 @@ public class SearchResource extends AbstractResource {
                         objectMapper.readValue(response.getContent(), SearchResultContainer.class);
                 handler.onSuccess(value.getTotal(), value.getChannels());
             } else {
-                main.java.com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
+                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
                 handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
         } catch (IOException e) {

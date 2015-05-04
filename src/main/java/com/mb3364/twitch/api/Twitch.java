@@ -1,7 +1,7 @@
-package main.java.com.mb3364.twitch.api;
+package com.mb3364.twitch.api;
 
-import main.java.com.mb3364.twitch.api.auth.Authenticator;
-import main.java.com.mb3364.twitch.api.resources.*;
+import com.mb3364.twitch.api.auth.Authenticator;
+import com.mb3364.twitch.api.resources.*;
 
 import java.util.HashMap;
 import java.util.Map;

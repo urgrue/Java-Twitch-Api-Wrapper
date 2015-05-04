@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.http;
+package com.mb3364.twitch.http;
 
 import java.io.IOException;
 import java.net.URLEncoder;

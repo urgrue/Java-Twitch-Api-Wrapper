@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.api.auth.grants.implicit;
+package com.mb3364.twitch.api.auth.grants.implicit;
 
 /**
  * The <code>AuthenticationError</code> class represents an error during

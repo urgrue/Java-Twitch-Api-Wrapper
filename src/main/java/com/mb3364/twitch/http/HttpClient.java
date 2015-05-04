@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.http;
+package com.mb3364.twitch.http;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -177,7 +177,7 @@ public class HttpClient {
      * @see #put(String, Map, Map)
      */
     public HttpResponse put(String resourceUrl) throws IOException {
-        return put(resourceUrl, null, new HashMap<String,String>());
+        return put(resourceUrl, null, new HashMap<String, String>());
     }
 
     /**
@@ -191,7 +191,7 @@ public class HttpClient {
      * @see #put(String, Map, Map)
      */
     public HttpResponse put(String resourceUrl, Map<String, String> headers) throws IOException {
-        return put(resourceUrl, headers, new HashMap<String,String>());
+        return put(resourceUrl, headers, new HashMap<String, String>());
     }
 
     /**

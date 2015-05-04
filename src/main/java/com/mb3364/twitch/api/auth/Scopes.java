@@ -1,4 +1,4 @@
-package main.java.com.mb3364.twitch.api.auth;
+package com.mb3364.twitch.api.auth;
 
 /**
  * When requesting authorization from users, the scope parameter allows you to specify
