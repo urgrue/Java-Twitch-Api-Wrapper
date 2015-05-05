@@ -110,6 +110,10 @@ If you are just creating an application for yourself and already have an access 
 twitch.auth().setAccessToken("my-access-token-289489");
 ```
 
+### Documentation
+* [Javadocs](https://mb3364.github.io/Java-Twitch-Api-Wrapper/)
+* The [Twitch API](https://github.com/justintv/Twitch-API) documentation will best explain the functionality of each endpoint. 
+
 ## Dependencies
 
 * [Java Async HTTP Client](https://github.com/mb3364/java-async-http/releases/tag/v1.0.0) v1.0.0
@@ -122,14 +126,14 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## Changelog
 
-#### v. 0.10
+##### v. 0.10
 
 * Full asynchronous support.
 
-#### v. 0.02
+##### v. 0.02
 
 * Twitch(baseUrl, apiVersion) constructor added for easier testing and future proofing by allowing user to override defaults.
 
-#### v. 0.01
+##### v. 0.01
 
 * Support for JDK 7 and non-diamond types.
