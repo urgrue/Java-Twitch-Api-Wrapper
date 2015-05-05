@@ -1,0 +1,6 @@
+com.mb3364.twitch.api
+com.mb3364.twitch.api.auth
+com.mb3364.twitch.api.auth.grants.implicit
+com.mb3364.twitch.api.handlers
+com.mb3364.twitch.api.models
+com.mb3364.twitch.api.resources
