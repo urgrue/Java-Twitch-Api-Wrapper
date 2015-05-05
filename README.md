@@ -1,11 +1,7 @@
-# Java Twitch API Wrapper
-JTAW is a complete java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
+# Async Twitch API Wrapper
+JTAW is a complete asynchronous java wrapper for interaction with v3 of the [Twitch API](https://github.com/justintv/Twitch-API).
 
-**NOTE:** This project is currently being being converted into being fully asynchronous out of the box. Check out the [use-handlers](https://github.com/mb3364/Java-Twitch-Api-Wrapper/tree/use_handlers) branch to see the progress.
-
-This project is still being improved and major changes may occur breaking backwards compatibility.
-
-Please report any issues and feel free to contribute code.
+Please feel free to report any issues or contribute code.
 
 ## Basics
 
@@ -13,40 +9,59 @@ Using the wrapper is as simple as instantiating the `Twitch` object and then cal
 
 For example, a `GET /streams/featured` request would map to the `twitch.streams().getFeatured()` function; and `GET /channels/lirik` would map to `twitch.channels().get("lirik")`.
 
-#### Return Type
+Responses are handled via callbacks passed via a handler with each function call. This process is outlined in the following examples.
 
-Each request will return a `TwitchResponse<T>` object, where `T` is the object type of the expected response data (eg: `Channel` or `Stream`).
-
-The `TwitchResponse` object contains the HTTP status code, HTTP status text, the response data object, and an error message if the twitch.tv API responded with an error. For example, if trying to start a commercial on the stream the error message may be _"Commercials breaks are allowed every 8 min and only when you are online."_
-
-If the twitch.tv API responded with an error, the response data object will be `null` and an error message will be set. You can easily check for an error using the `twitchResponse.hasError()` function.
-
-##### IOException
-
-Each endpoint function can throw an `IOException` if there was error access the twitch.tv API or if their was an error parsing the response.
-
-#### Example
+#### Basic Example
 
 ```java
 Twitch twitch = new Twitch();
 twitch.setClientId("shjdkashjkfdl"); // This is your registered application's client ID
 
-try {
-    TwitchResponse<Channel> response = twitch.channels().get();
-    if (!response.hasError()) {
-        // Successful!
-        Channel channel = response.getObject();
-    } else {
-        // Error; Twitch responded with an error, let's see what it is.
-        System.out.println(response.getErrorMessage());
+twitch.channels().get("lirik", new ChannelResponseHandler() {
+    @Override
+    public void onSuccess(Channel channel) {
+        /* Successful response from the Twitch API */
+        System.out.println(channel);
     }
-} catch (IOException e) {
-    /*
-        An error occurred while making the request to the Twitch API.
-        Display a message to the user.
-     */
-    System.out.println("Error retrieving data from twitch.tv");
-}
+
+    @Override
+    public void onFailure(int statusCode, String statusMessage, String errorMessage) {
+        /* Twitch API responded with an error message */
+    }
+
+    @Override
+    public void onFailure(Throwable e) {
+        /* Unable to access Twitch, or error parsing the response */
+    }
+});
+```
+
+#### Basic Example with Parameters
+
+Some endpoints accept optional parameters as specified in the [Twitch API](https://github.com/justintv/Twitch-API). These parameters can be passed with a `RequestParams` object and passed to the request method.
+
+```java
+/* Update my stream */
+RequestParams params = new RequestParams();
+params.put("status", "Let's kill some zombies!");
+params.put("game", "DayZ");
+
+client.channels().put("my-user-name", params, new ChannelResponseHandler() {
+    @Override
+    public void onSuccess(Channel channel) {
+        /* Success, we got the updated Channel object */
+    }
+
+    @Override
+    public void onFailure(int statusCode, String statusMessage, String errorMessage) {
+        /* Twitch denied the request */
+    }
+
+    @Override
+    public void onFailure(Throwable e) {
+        /* Unable to access Twitch, or error parsing the response */
+    }
+});
 ```
 
 ## Authentication
@@ -89,27 +104,36 @@ if (authSuccess) {
 
 ### Explicitly Setting Access Token
 
-If you are just creating an application for yourself and already have an access token for your account, you can explictly set it. This _**should not**_ be done if the application is being distributed as the access token is directly linked to your twitch.tv account.
+If you are just creating an application for yourself and already have an access token for your account, you can explicitly set it. This _**should not**_ be done if the application is being distributed as the access token is directly linked to your Twitch account.
 
 ```java
 twitch.auth().setAccessToken("my-access-token-289489");
 ```
 
-## Requirements
+### Documentation
+* [Javadocs](https://mb3364.github.io/Java-Twitch-Api-Wrapper/)
+* The [Twitch API](https://github.com/justintv/Twitch-API) documentation will best explain the functionality of each endpoint. 
 
-[Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
+## Dependencies
 
-## In Progress
+* [Java Async HTTP Client](https://github.com/mb3364/java-async-http/releases/tag/v1.0.0) v1.0.0
+* [Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
+
+## Roadmap
 
 * Allow custom authorization callback views.
-* Configurable URLBuilder for generating endpoint URLs instead of Strings.
+* Android and Gradle support.
 
 ## Changelog
 
-#### v. 0.02
+##### v. 0.10
+
+* Full asynchronous support.
+
+##### v. 0.02
 
 * Twitch(baseUrl, apiVersion) constructor added for easier testing and future proofing by allowing user to override defaults.
 
-#### v. 0.01
+##### v. 0.01
 
 * Support for JDK 7 and non-diamond types.
