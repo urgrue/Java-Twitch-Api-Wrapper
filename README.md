@@ -41,6 +41,7 @@ twitch.channels().get("lirik", new ChannelResponseHandler() {
 Some endpoints accept optional parameters as specified in the [Twitch API](https://github.com/justintv/Twitch-API). These parameters can be passed with a `RequestParams` object and passed to the request method.
 
 ```java
+/* Update my stream */
 RequestParams params = new RequestParams();
 params.put("status", "Let's kill some zombies!");
 params.put("game", "DayZ");
@@ -111,8 +112,8 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## Dependencies
 
-*[Java Async HTTP Client](https://github.com/mb3364/java-async-http)
-*[Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
+* [Java Async HTTP Client](https://github.com/mb3364/java-async-http)
+* [Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
 
 ## Roadmap
 
