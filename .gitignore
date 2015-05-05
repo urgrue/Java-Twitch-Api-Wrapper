@@ -48,4 +48,3 @@ crashlytics-build.properties
 ## Project-specific
 src/test/
 target/
-javadocs/
