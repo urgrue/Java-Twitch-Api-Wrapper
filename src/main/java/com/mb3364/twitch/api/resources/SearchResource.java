@@ -1,16 +1,13 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
 import com.mb3364.twitch.api.handlers.GamesResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import com.mb3364.twitch.api.models.Error;
 import com.mb3364.twitch.api.models.SearchResultContainer;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
-import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 /**
  * The {@link SearchResource} provides the functionality
@@ -41,31 +38,31 @@ public class SearchResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void channels(String query, JsonParams params, ChannelsResponseHandler handler) {
-        try {
-            query = URLEncoder.encode(query, "UTF-8");
-            if (params == null) params = new JsonParams();
-            String url = String.format("%s/search/channels?q=%s&%s", getBaseUrl(), query, params.toQueryString());
+    public void channels(final String query, final RequestParams params, final ChannelsResponseHandler handler) {
+        String url = String.format("%s/search/channels", getBaseUrl());
+        params.put("q", query);
 
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                SearchResultContainer value =
-                        objectMapper.readValue(response.getContent(), SearchResultContainer.class);
-                handler.onSuccess(value.getTotal(), value.getChannels());
-            } else {
-                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    SearchResultContainer value = objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                    handler.onSuccess(value.getTotal(), value.getChannels());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
+    /**
+     * Returns a list of channel objects matching the search query.
+     *
+     * @param query   the search query
+     * @param handler the response handler
+     */
     public void channels(String query, ChannelsResponseHandler handler) {
-        channels(query, null, handler);
+        channels(query, new RequestParams(), handler);
     }
 
     /**
@@ -81,32 +78,31 @@ public class SearchResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void streams(String query, JsonParams params, StreamsResponseHandler handler) {
-        try {
-            query = URLEncoder.encode(query, "UTF-8");
-            if (params == null) params = new JsonParams();
-            String url = String.format("%s/search/streams?q=%s&%s",
-                    getBaseUrl(), query, params.toQueryString());
+    public void streams(final String query, final RequestParams params, final StreamsResponseHandler handler) {
+        String url = String.format("%s/search/streams", getBaseUrl());
+        params.put("q", query);
 
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                SearchResultContainer value =
-                        objectMapper.readValue(response.getContent(), SearchResultContainer.class);
-                handler.onSuccess(value.getTotal(), value.getStreams());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    SearchResultContainer value = objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                    handler.onSuccess(value.getTotal(), value.getStreams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void streams(String query, StreamsResponseHandler handler) {
-        streams(query, null, handler);
+    /**
+     * Returns a list of stream objects matching the search query.
+     *
+     * @param query   the search query
+     * @param handler the response handler
+     */
+    public void streams(final String query, final StreamsResponseHandler handler) {
+        streams(query, new RequestParams(), handler);
     }
 
     /**
@@ -119,31 +115,31 @@ public class SearchResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void games(String query, JsonParams params, GamesResponseHandler handler) {
-        try {
-            query = URLEncoder.encode(query, "UTF-8");
-            if (params == null) params = new JsonParams();
-            String url = String.format("%s/search/games?q=%s&type=suggest&%s",
-                    getBaseUrl(), query, params.toQueryString());
+    public void games(final String query, final RequestParams params, final GamesResponseHandler handler) {
+        String url = String.format("%s/search/games", getBaseUrl());
+        params.put("q", query);
+        params.put("type", "suggest");
 
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                SearchResultContainer value =
-                        objectMapper.readValue(response.getContent(), SearchResultContainer.class);
-                handler.onSuccess(value.getGames().size(), value.getGames());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    SearchResultContainer value = objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                    handler.onSuccess(value.getGames().size(), value.getGames());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void games(String query, GamesResponseHandler handler) {
-        games(query, null, handler);
+    /**
+     * Returns a list of game objects matching the search query.
+     *
+     * @param query   the search query
+     * @param handler the response handler
+     */
+    public void games(final String query, final GamesResponseHandler handler) {
+        games(query, new RequestParams(), handler);
     }
 }

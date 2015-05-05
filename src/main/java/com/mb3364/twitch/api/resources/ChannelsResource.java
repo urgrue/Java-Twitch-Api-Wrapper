@@ -1,16 +1,12 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
-import com.mb3364.twitch.api.models.Error;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
-import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The {@link ChannelsResource} provides the functionality
@@ -36,24 +32,20 @@ public class ChannelsResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void get(ChannelResponseHandler handler) {
+    public void get(final ChannelResponseHandler handler) {
         String url = String.format("%s/channel", getBaseUrl());
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Channel value = objectMapper.readValue(response.getContent(), Channel.class);
-                handler.onSuccess(value);
-            } else {
-                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Channel value = objectMapper.readValue(response.getContent(), Channel.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -62,24 +54,20 @@ public class ChannelsResource extends AbstractResource {
      * @param channelName the name of the Channel
      * @param handler     the response handler
      */
-    public void get(String channelName, ChannelResponseHandler handler) {
+    public void get(final String channelName, final ChannelResponseHandler handler) {
         String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Channel value = objectMapper.readValue(response.getContent(), Channel.class);
-                handler.onSuccess(value);
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Channel value = objectMapper.readValue(response.getContent(), Channel.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -89,24 +77,20 @@ public class ChannelsResource extends AbstractResource {
      * @param channelName the name of the Channel
      * @param handler     the response handler
      */
-    public void getEditors(String channelName, UsersResponseHandler handler) {
+    public void getEditors(final String channelName, final UsersResponseHandler handler) {
         String url = String.format("%s/channels/%s/editors", getBaseUrl(), channelName);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Editors value = objectMapper.readValue(response.getContent(), Editors.class);
-                handler.onSuccess(value.getUsers());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Editors value = objectMapper.readValue(response.getContent(), Editors.class);
+                    handler.onSuccess(value.getUsers());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -122,11 +106,8 @@ public class ChannelsResource extends AbstractResource {
      *                    </ul>
      * @param handler     the response handler
      */
-    public void put(String channelName, JsonParams params, ChannelResponseHandler handler) {
+    public void put(final String channelName, final RequestParams params, final ChannelResponseHandler handler) {
         String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
-
-        // Convert to an object string
-        if (params == null) params = new JsonParams();
 
         if (params.containsKey("status")) {
             params.put("channel[status]", params.get("status"));
@@ -143,21 +124,17 @@ public class ChannelsResource extends AbstractResource {
             params.remove("delay");
         }
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.put(url, headers, params);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Channel value = objectMapper.readValue(response.getContent(), Channel.class);
-                handler.onSuccess(value);
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.put(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Channel value = objectMapper.readValue(response.getContent(), Channel.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -167,24 +144,20 @@ public class ChannelsResource extends AbstractResource {
      * @param channelName the name of the Channel
      * @param handler     the response handler
      */
-    public void resetStreamKey(String channelName, ChannelResponseHandler handler) {
+    public void resetStreamKey(final String channelName, final ChannelResponseHandler handler) {
         String url = String.format("%s/channels/%s/stream_key", getBaseUrl(), channelName);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.delete(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Channel value = objectMapper.readValue(response.getContent(), Channel.class);
-                handler.onSuccess(value);
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.delete(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Channel value = objectMapper.readValue(response.getContent(), Channel.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -197,25 +170,18 @@ public class ChannelsResource extends AbstractResource {
      *                    <code>120</code>, <code>150</code>, and <code>180</code>
      * @param handler     the response handler
      */
-    public void startCommercial(String channelName, int length, CommercialResponseHandler handler) {
+    public void startCommercial(final String channelName, final int length, final CommercialResponseHandler handler) {
         String url = String.format("%s/channels/%s/commercial", getBaseUrl(), channelName);
-        Map<String, String> input = new HashMap<String, String>();
-        input.put("length", Integer.toString(length));
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.post(url, headers, input);
+        RequestParams params = new RequestParams();
+        params.put("length", Integer.toString(length));
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_NO_CONTENT) {
+        http.post(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
                 handler.onSuccess();
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -224,27 +190,25 @@ public class ChannelsResource extends AbstractResource {
      * @param channelName the name of the Channel
      * @param handler     the response handler
      */
-    public void getTeams(String channelName, TeamsResponseHandler handler) {
+    public void getTeams(final String channelName, final TeamsResponseHandler handler) {
         String url = String.format("%s/channels/%s/teams", getBaseUrl(), channelName);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Teams value = objectMapper.readValue(response.getContent(), Teams.class);
-                handler.onSuccess(value.getTeams());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Teams value = objectMapper.readValue(response.getContent(), Teams.class);
+                    handler.onSuccess(value.getTeams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
+     * Returns a list of follow objects representing the followers of a channel.
+     *
      * @param channelName the name of the Channel
      * @param params      the optional request parameters:
      *                    <ul>
@@ -256,30 +220,30 @@ public class ChannelsResource extends AbstractResource {
      *                    </ul>
      * @param handler     the response handler
      */
-    public void getFollows(String channelName, JsonParams params, ChannelFollowsResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/channels/%s/follows?%s",
-                getBaseUrl(), channelName, params.toQueryString());
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+    public void getFollows(final String channelName, final RequestParams params, final ChannelFollowsResponseHandler handler) {
+        String url = String.format("%s/channels/%s/follows", getBaseUrl(), channelName);
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                ChannelFollows value =
-                        objectMapper.readValue(response.getContent(), ChannelFollows.class);
-                handler.onSuccess(value.getTotal(), value.getFollows());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    ChannelFollows value = objectMapper.readValue(response.getContent(), ChannelFollows.class);
+                    handler.onSuccess(value.getTotal(), value.getFollows());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void getFollows(String channelName, ChannelFollowsResponseHandler handler) {
-        getFollows(channelName, null, handler);
+    /**
+     * Returns a list of follow objects representing the followers of a channel.
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getFollows(final String channelName, final ChannelFollowsResponseHandler handler) {
+        getFollows(channelName, new RequestParams(), handler);
     }
 
     /**
@@ -302,29 +266,31 @@ public class ChannelsResource extends AbstractResource {
      *                    </ul>
      * @param handler     the response handler
      */
-    public void getVideos(String channelName, JsonParams params, VideosResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/channels/%s/videos?%s",
-                getBaseUrl(), channelName, params.toQueryString());
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+    public void getVideos(final String channelName, final RequestParams params, final VideosResponseHandler handler) {
+        String url = String.format("%s/channels/%s/videos", getBaseUrl(), channelName);
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Videos value = objectMapper.readValue(response.getContent(), Videos.class);
-                handler.onSuccess(value.getTotal(), value.getVideos());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Videos value = objectMapper.readValue(response.getContent(), Videos.class);
+                    handler.onSuccess(value.getTotal(), value.getVideos());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void getVideos(String channelName, VideosResponseHandler handler) {
-        getVideos(channelName, null, handler);
+    /**
+     * Returns a list of videos ordered by time of creation, starting with
+     * the most recent from specified channel.
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getVideos(final String channelName, final VideosResponseHandler handler) {
+        getVideos(channelName, new RequestParams(), handler);
     }
 
     /**
@@ -343,25 +309,32 @@ public class ChannelsResource extends AbstractResource {
      *                    </ul>
      * @param handler     the response handler
      */
-    public void getSubscriptions(String channelName, JsonParams params, ChannelSubscriptionsResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/channels/%s/subscriptions?%s",
-                getBaseUrl(), channelName, params.toQueryString());
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+    public void getSubscriptions(final String channelName, final RequestParams params, final ChannelSubscriptionsResponseHandler handler) {
+        String url = String.format("%s/channels/%s/subscriptions", getBaseUrl(), channelName);
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                ChannelSubscriptions value = objectMapper.readValue(response.getContent(), ChannelSubscriptions.class);
-                handler.onSuccess(value.getTotal(), value.getSubscriptions());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    ChannelSubscriptions value = objectMapper.readValue(response.getContent(), ChannelSubscriptions.class);
+                    handler.onSuccess(value.getTotal(), value.getSubscriptions());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
+    }
+
+    /**
+     * Returns a list of subscription objects sorted by subscription relationship creation date
+     * which contain users subscribed to the specified channel.
+     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_SUBSCRIPTIONS}</p>
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getSubscriptions(final String channelName, final ChannelSubscriptionsResponseHandler handler) {
+        getSubscriptions(channelName, new RequestParams(), handler);
     }
 
     /**
@@ -372,24 +345,19 @@ public class ChannelsResource extends AbstractResource {
      * @param user        the user to check
      * @param handler     the response handler
      */
-    public void getSubscription(String channelName, String user, ChannelSubscriptionResponseHandler handler) {
-        String url = String.format("%s/channels/%s/subscriptions/%s",
-                getBaseUrl(), channelName, user);
+    public void getSubscription(final String channelName, final String user, final ChannelSubscriptionResponseHandler handler) {
+        String url = String.format("%s/channels/%s/subscriptions/%s", getBaseUrl(), channelName, user);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                ChannelSubscription value = objectMapper.readValue(response.getContent(), ChannelSubscription.class);
-                handler.onSuccess(value);
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    ChannelSubscription value = objectMapper.readValue(response.getContent(), ChannelSubscription.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 }

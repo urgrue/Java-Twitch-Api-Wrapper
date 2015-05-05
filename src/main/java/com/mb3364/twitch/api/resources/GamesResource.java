@@ -1,11 +1,9 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
-import com.mb3364.twitch.api.models.Error;
 import com.mb3364.twitch.api.models.Games;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
-import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
 
@@ -37,28 +35,28 @@ public class GamesResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void getTop(JsonParams params, TopGamesResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/games/top?%s", getBaseUrl(), params.toQueryString());
+    public void getTop(final RequestParams params, final TopGamesResponseHandler handler) {
+        String url = String.format("%s/games/top", getBaseUrl());
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Games value = objectMapper.readValue(response.getContent(), Games.class);
-                handler.onSuccess(value.getTotal(), value.getTop());
-            } else {
-                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Games value = objectMapper.readValue(response.getContent(), Games.class);
+                    handler.onSuccess(value.getTotal(), value.getTop());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
+    /**
+     * Returns a list of games objects sorted by number of current viewers on Twitch, most popular first.
+     *
+     * @param handler the response handler
+     */
     public void getTop(TopGamesResponseHandler handler) {
-        getTop(null, handler);
+        getTop(new RequestParams(), handler);
     }
 }

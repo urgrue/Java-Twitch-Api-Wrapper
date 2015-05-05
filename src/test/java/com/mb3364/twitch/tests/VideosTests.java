@@ -1,14 +1,14 @@
 package com.mb3364.twitch.tests;
 
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.VideoResponseHandler;
 import com.mb3364.twitch.api.handlers.VideosResponseHandler;
 import com.mb3364.twitch.api.models.Video;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class VideosTests {
@@ -23,6 +23,11 @@ public class VideosTests {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
         client.auth().setAccessToken(AUTH_TOKEN);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(5000);
     }
 
     @Test
@@ -42,7 +47,7 @@ public class VideosTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -50,8 +55,8 @@ public class VideosTests {
 
     @Test
     public void getTopTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 2);
+        RequestParams params = new RequestParams();
+        params.put("limit", "2");
 
         client.videos().getTop(params, new VideosResponseHandler() {
             @Override
@@ -68,7 +73,7 @@ public class VideosTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -76,8 +81,8 @@ public class VideosTests {
 
     @Test
     public void getFollowedTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 2);
+        RequestParams params = new RequestParams();
+        params.put("limit", "2");
 
         client.videos().getFollowed(params, new VideosResponseHandler() {
             @Override
@@ -94,7 +99,7 @@ public class VideosTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

@@ -1,16 +1,16 @@
 package com.mb3364.twitch.tests;
 
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.Block;
 import com.mb3364.twitch.api.models.User;
 import com.mb3364.twitch.api.models.UserFollow;
 import com.mb3364.twitch.api.models.UserSubscription;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class UserTests {
@@ -26,6 +26,11 @@ public class UserTests {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
         client.auth().setAccessToken(AUTH_TOKEN);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2000);
     }
 
     @Test
@@ -45,7 +50,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -68,7 +73,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -91,7 +96,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -99,8 +104,8 @@ public class UserTests {
 
     @Test
     public void getFollowsTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 2);
+        RequestParams params = new RequestParams();
+        params.put("limit", "2");
         params.put("sortby", "asc");
 
         client.users().getFollows(AUTH_USER, params, new UserFollowsResponseHandler() {
@@ -119,7 +124,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -142,7 +147,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -165,7 +170,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -187,7 +192,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -195,9 +200,9 @@ public class UserTests {
 
     @Test
     public void getBlocksTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 10);
-        params.put("offset", 0);
+        RequestParams params = new RequestParams();
+        params.put("limit", "10");
+        params.put("offset", "0");
 
         client.users().getBlocks(AUTH_USER, params, new BlocksResponseHandler() {
             @Override
@@ -215,7 +220,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -239,7 +244,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -261,7 +266,7 @@ public class UserTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

@@ -1,18 +1,18 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamsSummaryResponseHandler;
-import com.mb3364.twitch.api.models.Error;
-import com.mb3364.twitch.api.models.*;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
-import com.mb3364.twitch.http.JsonParams;
+import com.mb3364.twitch.api.models.FeaturedStreamContainer;
+import com.mb3364.twitch.api.models.StreamContainer;
+import com.mb3364.twitch.api.models.Streams;
+import com.mb3364.twitch.api.models.StreamsSummary;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 /**
  * The {@link StreamsResource} provides the functionality
@@ -40,24 +40,20 @@ public class StreamsResource extends AbstractResource {
      * @param channelName the name of the Channel
      * @param handler     the response handler
      */
-    public void get(String channelName, StreamResponseHandler handler) {
+    public void get(final String channelName, final StreamResponseHandler handler) {
         String url = String.format("%s/streams/%s", getBaseUrl(), channelName);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                StreamContainer value = objectMapper.readValue(response.getContent(), StreamContainer.class);
-                handler.onSuccess(value.getStream());
-            } else {
-                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    StreamContainer value = objectMapper.readValue(response.getContent(), StreamContainer.class);
+                    handler.onSuccess(value.getStream());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -74,24 +70,20 @@ public class StreamsResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void get(JsonParams params, StreamsResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/streams?%s", getBaseUrl(), params.toQueryString());
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+    public void get(final RequestParams params, final StreamsResponseHandler handler) {
+        String url = String.format("%s/streams", getBaseUrl());
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Streams value = objectMapper.readValue(response.getContent(), Streams.class);
-                handler.onSuccess(value.getTotal(), value.getStreams());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Streams value = objectMapper.readValue(response.getContent(), Streams.class);
+                    handler.onSuccess(value.getTotal(), value.getStreams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -100,8 +92,8 @@ public class StreamsResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void get(StreamsResponseHandler handler) {
-        get(null, handler);
+    public void get(final StreamsResponseHandler handler) {
+        get(new RequestParams(), handler);
     }
 
     /**
@@ -114,24 +106,20 @@ public class StreamsResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void getFeatured(JsonParams params, FeaturedStreamResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/streams/featured?%s", getBaseUrl(), params.toQueryString());
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+    public void getFeatured(final RequestParams params, final FeaturedStreamResponseHandler handler) {
+        String url = String.format("%s/streams/featured", getBaseUrl());
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                FeaturedStreamContainer value = objectMapper.readValue(response.getContent(), FeaturedStreamContainer.class);
-                handler.onSuccess(value.getFeatured());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    FeaturedStreamContainer value = objectMapper.readValue(response.getContent(), FeaturedStreamContainer.class);
+                    handler.onSuccess(value.getFeatured());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -139,8 +127,8 @@ public class StreamsResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void getFeatured(FeaturedStreamResponseHandler handler) {
-        getFeatured(null, handler);
+    public void getFeatured(final FeaturedStreamResponseHandler handler) {
+        getFeatured(new RequestParams(), handler);
     }
 
     /**
@@ -149,32 +137,22 @@ public class StreamsResource extends AbstractResource {
      * @param game    Only show stats for the set game
      * @param handler the response handler
      */
-    public void getSummary(String game, StreamsSummaryResponseHandler handler) {
-        // Encode game in case their is a space, etc.
-        try {
-            game = URLEncoder.encode(game, "UTF-8");
-        } catch (IOException e) {
-            game = "";
-        }
-
+    public void getSummary(final String game, final StreamsSummaryResponseHandler handler) {
         String url = String.format("%s/streams/summary", getBaseUrl());
-        if (game.length() > 0) url += "?game=" + game;
+        RequestParams params = new RequestParams();
+        params.put("game", game);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                StreamsSummary value = objectMapper.readValue(response.getContent(), StreamsSummary.class);
-                handler.onSuccess(value);
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    StreamsSummary value = objectMapper.readValue(response.getContent(), StreamsSummary.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -182,8 +160,20 @@ public class StreamsResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void getSummary(StreamsSummaryResponseHandler handler) {
-        getSummary("", handler);
+    public void getSummary(final StreamsSummaryResponseHandler handler) {
+        String url = String.format("%s/streams/summary", getBaseUrl());
+
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    StreamsSummary value = objectMapper.readValue(response.getContent(), StreamsSummary.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
     }
 
     /**
@@ -197,24 +187,20 @@ public class StreamsResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void getFollowed(JsonParams params, StreamsResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/streams/followed?%s", getBaseUrl(), params.toQueryString());
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+    public void getFollowed(final RequestParams params, final StreamsResponseHandler handler) {
+        String url = String.format("%s/streams/followed", getBaseUrl());
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Streams value = objectMapper.readValue(response.getContent(), Streams.class);
-                handler.onSuccess(value.getTotal(), value.getStreams());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Streams value = objectMapper.readValue(response.getContent(), Streams.class);
+                    handler.onSuccess(value.getTotal(), value.getStreams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -223,7 +209,7 @@ public class StreamsResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void getFollowed(StreamsResponseHandler handler) {
-        getFollowed(handler);
+    public void getFollowed(final StreamsResponseHandler handler) {
+        getFollowed(new RequestParams(), handler);
     }
 }

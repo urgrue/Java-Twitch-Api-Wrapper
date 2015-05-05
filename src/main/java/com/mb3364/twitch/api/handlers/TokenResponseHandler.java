@@ -2,12 +2,12 @@ package com.mb3364.twitch.api.handlers;
 
 import com.mb3364.twitch.api.models.Token;
 
-import java.io.IOException;
-
-public interface TokenResponseHandler {
+public interface TokenResponseHandler extends BaseFailureHandler {
     void onSuccess(Token token);
 
+    @Override
     void onFailure(int statusCode, String statusMessage, String errorMessage);
 
-    void onFailure(IOException e);
+    @Override
+    void onFailure(Throwable throwable);
 }

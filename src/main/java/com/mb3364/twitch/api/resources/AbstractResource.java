@@ -2,9 +2,13 @@ package com.mb3364.twitch.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.mb3364.http.AsyncHttpClient;
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.HttpResponseHandler;
+import com.mb3364.twitch.api.handlers.BaseFailureHandler;
+import com.mb3364.twitch.api.models.Error;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 /**
  * AbstractResource is the abstract base class of a Twitch resource.
@@ -14,9 +18,9 @@ import java.util.Map;
  */
 public abstract class AbstractResource {
 
-    protected static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse, share globally
+    protected static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse
+    protected static final AsyncHttpClient http = new AsyncHttpClient(); // can reuse
     private final String baseUrl; // Base url for twitch rest api
-    protected Map<String, String> headers = new HashMap<String, String>(); // http headers
 
     /**
      * Construct a resource using the Twitch API base URL and specified API version.
@@ -26,7 +30,7 @@ public abstract class AbstractResource {
      */
     protected AbstractResource(String baseUrl, int apiVersion) {
         this.baseUrl = baseUrl;
-        headers.put("ACCEPT", "application/vnd.twitchtv.v" + Integer.toString(apiVersion) + "+json"); // Specify API version
+        http.setHeader("ACCEPT", "application/vnd.twitchtv.v" + Integer.toString(apiVersion) + "+json"); // Specify API version
         configureObjectMapper();
     }
 
@@ -45,9 +49,9 @@ public abstract class AbstractResource {
      */
     public void setAuthAccessToken(String accessToken) {
         if (accessToken != null && accessToken.length() > 0) {
-            headers.put("Authorization", String.format("OAuth %s", accessToken));
+            http.setHeader("Authorization", String.format("OAuth %s", accessToken));
         } else {
-            headers.remove("Authorization");
+            http.removeHeader("Authorization");
         }
     }
 
@@ -58,9 +62,25 @@ public abstract class AbstractResource {
      */
     public void setClientId(String clientId) {
         if (clientId != null && clientId.length() > 0) {
-            headers.put("Client-ID", clientId);
+            http.setHeader("Client-ID", clientId);
         } else {
-            headers.remove("Client-ID");
+            http.removeHeader("Client-ID");
+        }
+    }
+
+    /**
+     * Handles an error response from the Twitch API by parsing it and sending a callback to the
+     * specified handler.
+     *
+     * @param response HttpResponse, the response from the Http request
+     * @param handler the handler for the callback
+     */
+    public static void handleTwitchErrorResponse(HttpResponse response, BaseFailureHandler handler) {
+        try {
+            com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
+            handler.onFailure(response.getStatusCode(), response.getStatusMessage(), error.getMessage());
+        } catch (IOException e) {
+            handler.onFailure(e);
         }
     }
 
@@ -72,5 +92,36 @@ public abstract class AbstractResource {
      */
     protected String getBaseUrl() {
         return baseUrl;
+    }
+
+    /**
+     * Handles HTTP response's from the Twitch API.
+     * <p>Since all Http failure logic is the same, we handle it all in one place: here.</p>
+     */
+    protected static abstract class TwitchHttpResponseHandler extends HttpResponseHandler {
+
+        private BaseFailureHandler apiHandler;
+
+        public TwitchHttpResponseHandler(BaseFailureHandler apiHandler) {
+            this.apiHandler = apiHandler;
+        }
+
+        @Override
+        public abstract void onSuccess(HttpResponse response);
+
+        @Override
+        public void onFailure(HttpResponse response) {
+            try {
+                Error error = objectMapper.readValue(response.getContent(), Error.class);
+                apiHandler.onFailure(response.getStatusCode(), response.getStatusMessage(), error.getMessage());
+            } catch (IOException e) {
+                apiHandler.onFailure(e);
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable throwable) {
+            apiHandler.onFailure(throwable);
+        }
     }
 }

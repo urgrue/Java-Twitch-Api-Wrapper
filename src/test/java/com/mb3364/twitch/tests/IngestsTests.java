@@ -3,6 +3,7 @@ package com.mb3364.twitch.tests;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.IngestsResponseHandler;
 import com.mb3364.twitch.api.models.Ingest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +19,11 @@ public class IngestsTests {
     public void before() {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2000);
     }
 
     @Test
@@ -37,7 +43,7 @@ public class IngestsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

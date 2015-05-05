@@ -1,16 +1,13 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.TeamResponseHandler;
 import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
-import com.mb3364.twitch.api.models.Error;
 import com.mb3364.twitch.api.models.Team;
 import com.mb3364.twitch.api.models.Teams;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
-import com.mb3364.twitch.http.JsonParams;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 /**
  * The {@link TeamsResource} provides the functionality
@@ -40,30 +37,29 @@ public class TeamsResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void get(JsonParams params, TeamsResponseHandler handler) {
-        if (params == null) params = new JsonParams();
-        String url = String.format("%s/teams?%s", getBaseUrl(), params.toQueryString());
+    public void get(final RequestParams params, final TeamsResponseHandler handler) {
+        String url = String.format("%s/teams", getBaseUrl());
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Teams value = objectMapper.readValue(response.getContent(), Teams.class);
-                handler.onSuccess(value.getTeams());
-            } else {
-                com.mb3364.twitch.api.models.Error error =
-                        objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Teams value = objectMapper.readValue(response.getContent(), Teams.class);
+                    handler.onSuccess(value.getTeams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void get(TeamsResponseHandler handler) {
-        get(null, handler);
+    /**
+     * Returns a list of active teams.
+     *
+     * @param handler the response handler
+     */
+    public void get(final TeamsResponseHandler handler) {
+        get(new RequestParams(), handler);
     }
 
     /**
@@ -72,25 +68,19 @@ public class TeamsResource extends AbstractResource {
      * @param team    the name of the {@link Team}
      * @param handler the response handler
      */
-    public void get(String team, TeamResponseHandler handler) {
-        try {
-            team = URLEncoder.encode(team, "UTF-8");
-            String url = String.format("%s/teams/%s", getBaseUrl(), team);
+    public void get(final String team, final TeamResponseHandler handler) {
+        String url = String.format("%s/teams/%s", getBaseUrl(), team);
 
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Team value = objectMapper.readValue(response.getContent(), Team.class);
-                handler.onSuccess(value);
-            } else {
-                Error error =
-                        objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Team value = objectMapper.readValue(response.getContent(), Team.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 }

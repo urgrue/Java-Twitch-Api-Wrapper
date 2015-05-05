@@ -1,9 +1,10 @@
 package com.mb3364.twitch.tests;
 
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
 import com.mb3364.twitch.api.models.TopGame;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,11 +23,16 @@ public class GamesTests {
         client.setClientId(CLIENT_ID);
     }
 
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2500);
+    }
+
     @Test
     public void getTopWithParamsTest() throws IOException {
-        JsonParams params = new JsonParams();
-        params.put("limit", 1);
-        params.put("offset", 1);
+        RequestParams params = new RequestParams();
+        params.put("limit", "1");
+        params.put("offset", "1");
 
         client.games().getTop(params, new TopGamesResponseHandler() {
             @Override
@@ -43,7 +49,7 @@ public class GamesTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -66,7 +72,7 @@ public class GamesTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

@@ -1,5 +1,6 @@
 package com.mb3364.twitch.tests;
 
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamResponseHandler;
@@ -8,11 +9,10 @@ import com.mb3364.twitch.api.handlers.StreamsSummaryResponseHandler;
 import com.mb3364.twitch.api.models.FeaturedStream;
 import com.mb3364.twitch.api.models.Stream;
 import com.mb3364.twitch.api.models.StreamsSummary;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class StreamsTests {
@@ -28,6 +28,11 @@ public class StreamsTests {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
         client.auth().setAccessToken(AUTH_TOKEN);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2000);
     }
 
     @Test
@@ -51,7 +56,7 @@ public class StreamsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -59,7 +64,7 @@ public class StreamsTests {
 
     @Test
     public void getListTest() {
-        JsonParams params = new JsonParams();
+        RequestParams params = new RequestParams();
         params.put("channel", "lirik,summit1g");
         params.put("limit", "2");
 
@@ -79,7 +84,7 @@ public class StreamsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -87,7 +92,7 @@ public class StreamsTests {
 
     @Test
     public void getFeaturedTest() {
-        JsonParams params = new JsonParams();
+        RequestParams params = new RequestParams();
         params.put("offset", "10");
         params.put("limit", "2");
 
@@ -107,7 +112,7 @@ public class StreamsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -131,7 +136,7 @@ public class StreamsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -139,7 +144,7 @@ public class StreamsTests {
 
     @Test
     public void getFollowedTest() {
-        JsonParams params = new JsonParams();
+        RequestParams params = new RequestParams();
         params.put("offset", "0");
         params.put("limit", "100");
 
@@ -159,7 +164,7 @@ public class StreamsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

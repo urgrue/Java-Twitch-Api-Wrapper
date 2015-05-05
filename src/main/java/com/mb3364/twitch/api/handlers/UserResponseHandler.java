@@ -2,12 +2,12 @@ package com.mb3364.twitch.api.handlers;
 
 import com.mb3364.twitch.api.models.User;
 
-import java.io.IOException;
-
-public interface UserResponseHandler {
+public interface UserResponseHandler extends BaseFailureHandler {
     void onSuccess(User user);
 
+    @Override
     void onFailure(int statusCode, String statusMessage, String errorMessage);
 
-    void onFailure(IOException e);
+    @Override
+    void onFailure(Throwable throwable);
 }

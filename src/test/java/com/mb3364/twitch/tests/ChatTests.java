@@ -5,10 +5,10 @@ import com.mb3364.twitch.api.handlers.BadgesResponseHandler;
 import com.mb3364.twitch.api.handlers.EmoticonsResponseHandler;
 import com.mb3364.twitch.api.models.ChannelBadges;
 import com.mb3364.twitch.api.models.Emoticon;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ChatTests {
@@ -21,6 +21,11 @@ public class ChatTests {
     public void before() {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(5000);
     }
 
     @Test
@@ -38,7 +43,7 @@ public class ChatTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -59,7 +64,7 @@ public class ChatTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

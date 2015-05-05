@@ -1,14 +1,14 @@
 package com.mb3364.twitch.tests;
 
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.TeamResponseHandler;
 import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
 import com.mb3364.twitch.api.models.Team;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class TeamTests {
@@ -23,10 +23,15 @@ public class TeamTests {
         client.setClientId(CLIENT_ID);
     }
 
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2000);
+    }
+
     @Test
     public void getTeamsTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 10);
+        RequestParams params = new RequestParams();
+        params.put("limit", "10");
 
         client.teams().get(params, new TeamsResponseHandler() {
             @Override
@@ -44,7 +49,7 @@ public class TeamTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -67,7 +72,7 @@ public class TeamTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

@@ -1,15 +1,12 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.VideoResponseHandler;
 import com.mb3364.twitch.api.handlers.VideosResponseHandler;
-import com.mb3364.twitch.api.models.Error;
 import com.mb3364.twitch.api.models.Video;
 import com.mb3364.twitch.api.models.Videos;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
-import com.mb3364.twitch.http.JsonParams;
-
 import java.io.IOException;
 
 /**
@@ -36,24 +33,20 @@ public class VideosResource extends AbstractResource {
      * @param id      the ID of the Video
      * @param handler the response handler
      */
-    public void get(String id, VideoResponseHandler handler) {
+    public void get(final String id, final VideoResponseHandler handler) {
         String url = String.format("%s/videos/%s", getBaseUrl(), id);
 
-        try {
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Video value = objectMapper.readValue(response.getContent(), Video.class);
-                handler.onSuccess(value);
-            } else {
-                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Video value = objectMapper.readValue(response.getContent(), Video.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -71,28 +64,28 @@ public class VideosResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void getTop(JsonParams params, VideosResponseHandler handler) {
-        try {
-            if (params == null) params = new JsonParams();
-            String url = String.format("%s/videos/top?%s", getBaseUrl(), params.toQueryString());
+    public void getTop(final RequestParams params, final VideosResponseHandler handler) {
+        String url = String.format("%s/videos/top", getBaseUrl());
 
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Videos value = objectMapper.readValue(response.getContent(), Videos.class);
-                handler.onSuccess(value.getVideos().size(), value.getVideos());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Videos value = objectMapper.readValue(response.getContent(), Videos.class);
+                    handler.onSuccess(value.getVideos().size(), value.getVideos());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void getTop(VideosResponseHandler handler) {
+    /**
+     * Returns a list of {@link Video}'s created in a given time period sorted by number of views, most popular first.
+     *
+     * @param handler the response handler
+     */
+    public void getTop(final VideosResponseHandler handler) {
         getTop(null, handler);
     }
 
@@ -107,28 +100,29 @@ public class VideosResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void getFollowed(JsonParams params, VideosResponseHandler handler) {
-        try {
-            if (params == null) params = new JsonParams();
-            String url = String.format("%s/videos/followed?%s", getBaseUrl(), params.toQueryString());
+    public void getFollowed(final RequestParams params, final VideosResponseHandler handler) {
+        String url = String.format("%s/videos/followed", getBaseUrl());
 
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
-
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Videos value = objectMapper.readValue(response.getContent(), Videos.class);
-                handler.onSuccess(value.getVideos().size(), value.getVideos());
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Videos value = objectMapper.readValue(response.getContent(), Videos.class);
+                    handler.onSuccess(value.getVideos().size(), value.getVideos());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
-    public void getFollowed(VideosResponseHandler handler) {
-        getFollowed(null, handler);
+    /**
+     * Returns a list of {@link Video}'s from channels that the authenticated user is following.
+     * Authenticated, required scope: {@link Scopes#USER_READ}
+     *
+     * @param handler the response handler
+     */
+    public void getFollowed(final VideosResponseHandler handler) {
+        getFollowed(new RequestParams(), handler);
     }
 }

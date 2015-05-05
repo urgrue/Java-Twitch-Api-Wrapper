@@ -3,10 +3,9 @@ package com.mb3364.twitch.tests;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.TokenResponseHandler;
 import com.mb3364.twitch.api.models.Token;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class RootTests {
 
@@ -20,6 +19,11 @@ public class RootTests {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
         client.auth().setAccessToken(AUTH_TOKEN);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2000);
     }
 
     @Test
@@ -39,7 +43,7 @@ public class RootTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

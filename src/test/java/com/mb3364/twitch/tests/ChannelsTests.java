@@ -1,14 +1,13 @@
 package com.mb3364.twitch.tests;
 
-
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ChannelsTests {
@@ -24,6 +23,11 @@ public class ChannelsTests {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
         client.auth().setAccessToken(AUTH_TOKEN);
+    }
+
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2500);
     }
 
     @Test
@@ -43,7 +47,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -66,7 +70,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -89,7 +93,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -97,7 +101,7 @@ public class ChannelsTests {
 
     @Test
     public void putTest() {
-        JsonParams params = new JsonParams();
+        RequestParams params = new RequestParams();
         params.put("status", "new status");
         params.put("game", "Mortal Kombat");
 
@@ -116,7 +120,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -139,7 +143,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -161,7 +165,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -184,7 +188,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -208,7 +212,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -216,9 +220,9 @@ public class ChannelsTests {
 
     @Test
     public void getVideos() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 10);
-        params.put("broadcasts", true);
+        RequestParams params = new RequestParams();
+        params.put("limit", "10");
+        params.put("broadcasts", "true");
 
         client.channels().getVideos("lirik", params, new VideosResponseHandler() {
             @Override
@@ -237,7 +241,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -245,8 +249,8 @@ public class ChannelsTests {
 
     @Test
     public void getSubscriptionsTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 2);
+        RequestParams params = new RequestParams();
+        params.put("limit", "2");
 
         client.channels().getSubscriptions(AUTH_USER, params, new ChannelSubscriptionsResponseHandler() {
             @Override
@@ -265,7 +269,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -288,7 +292,7 @@ public class ChannelsTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });

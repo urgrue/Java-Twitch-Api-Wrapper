@@ -1,11 +1,11 @@
 package com.mb3364.twitch.api.handlers;
 
-import java.io.IOException;
-
-public interface CommercialResponseHandler {
+public interface CommercialResponseHandler extends BaseFailureHandler {
     void onSuccess();
 
+    @Override
     void onFailure(int statusCode, String statusMessage, String errorMessage);
 
-    void onFailure(IOException e);
+    @Override
+    void onFailure(Throwable throwable);
 }

@@ -2,9 +2,7 @@ package com.mb3364.twitch.api.handlers;
 
 import com.mb3364.twitch.api.models.Stream;
 
-import java.io.IOException;
-
-public interface StreamResponseHandler {
+public interface StreamResponseHandler extends BaseFailureHandler {
     /**
      * API callback was successful.
      *
@@ -12,7 +10,9 @@ public interface StreamResponseHandler {
      */
     void onSuccess(Stream stream);
 
+    @Override
     void onFailure(int statusCode, String statusMessage, String errorMessage);
 
-    void onFailure(IOException e);
+    @Override
+    void onFailure(Throwable throwable);
 }

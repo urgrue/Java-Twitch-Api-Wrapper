@@ -1,12 +1,10 @@
 package com.mb3364.twitch.api.resources;
 
+import com.mb3364.http.HttpResponse;
 import com.mb3364.twitch.api.handlers.BadgesResponseHandler;
 import com.mb3364.twitch.api.handlers.EmoticonsResponseHandler;
 import com.mb3364.twitch.api.models.ChannelBadges;
 import com.mb3364.twitch.api.models.Emoticons;
-import com.mb3364.twitch.api.models.Error;
-import com.mb3364.twitch.http.HttpClient;
-import com.mb3364.twitch.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -34,22 +32,19 @@ public class ChatResource extends AbstractResource {
      * @param handler the Response Handler
      */
     public void getEmoticons(final EmoticonsResponseHandler handler) {
-        try {
-            String url = String.format("%s/chat/emoticons", getBaseUrl());
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+        String url = String.format("%s/chat/emoticons", getBaseUrl());
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                Emoticons value = objectMapper.readValue(response.getContent(), Emoticons.class);
-                handler.onSuccess(value.getEmoticons());
-            } else {
-                com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    Emoticons value = objectMapper.readValue(response.getContent(), Emoticons.class);
+                    handler.onSuccess(value.getEmoticons());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 
     /**
@@ -59,21 +54,18 @@ public class ChatResource extends AbstractResource {
      * @param handler the Response Handler
      */
     public void getBadges(final String channel, final BadgesResponseHandler handler) {
-        try {
-            String url = String.format("%s/chat/%s/badges", getBaseUrl(), channel);
-            HttpClient httpClient = new HttpClient();
-            HttpResponse response = httpClient.get(url, headers);
+        String url = String.format("%s/chat/%s/badges", getBaseUrl(), channel);
 
-            int statusCode = response.getCode();
-            if (statusCode == HttpResponse.HTTP_OK) {
-                ChannelBadges value = objectMapper.readValue(response.getContent(), ChannelBadges.class);
-                handler.onSuccess(value);
-            } else {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                handler.onFailure(error.getStatusCode(), error.getStatusText(), error.getMessage());
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                try {
+                    ChannelBadges value = objectMapper.readValue(response.getContent(), ChannelBadges.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
             }
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
+        });
     }
 }

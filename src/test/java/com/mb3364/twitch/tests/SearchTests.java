@@ -1,5 +1,6 @@
 package com.mb3364.twitch.tests;
 
+import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
 import com.mb3364.twitch.api.handlers.GamesResponseHandler;
@@ -7,11 +8,10 @@ import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.models.Channel;
 import com.mb3364.twitch.api.models.Game;
 import com.mb3364.twitch.api.models.Stream;
-import com.mb3364.twitch.http.JsonParams;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class SearchTests {
@@ -28,10 +28,15 @@ public class SearchTests {
         client.auth().setAccessToken(AUTH_TOKEN);
     }
 
+    @After
+    public void after() throws InterruptedException {
+        Thread.sleep(2000);
+    }
+
     @Test
     public void channelsTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 1);
+        RequestParams params = new RequestParams();
+        params.put("limit", "1");
 
         client.search().channels("lirik", params, new ChannelsResponseHandler() {
             @Override
@@ -49,7 +54,7 @@ public class SearchTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -57,8 +62,8 @@ public class SearchTests {
 
     @Test
     public void streamsTest() {
-        JsonParams params = new JsonParams();
-        params.put("limit", 1);
+        RequestParams params = new RequestParams();
+        params.put("limit", "1");
 
         client.search().streams("starcraft", params, new StreamsResponseHandler() {
             @Override
@@ -76,7 +81,7 @@ public class SearchTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -84,8 +89,8 @@ public class SearchTests {
 
     @Test
     public void gamesTest() {
-        JsonParams params = new JsonParams();
-        params.put("live", true);
+        RequestParams params = new RequestParams();
+        params.put("live", "true");
 
         client.search().games("starcraft", params, new GamesResponseHandler() {
             @Override
@@ -103,7 +108,7 @@ public class SearchTests {
             }
 
             @Override
-            public void onFailure(IOException e) {
+            public void onFailure(Throwable e) {
                 e.printStackTrace();
             }
         });
