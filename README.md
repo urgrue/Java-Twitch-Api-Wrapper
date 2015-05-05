@@ -27,16 +27,11 @@ twitch.channels().get("lirik", new ChannelResponseHandler() {
     @Override
     public void onFailure(int statusCode, String statusMessage, String errorMessage) {
         /* Twitch API responded with an error message */
-        System.out.println(statusCode);
-        System.out.println(statusMessage);
-        System.out.println(errorMessage);
     }
 
     @Override
     public void onFailure(Throwable e) {
-        /* Network or parsing error, notify the user */
-        e.printStackTrace();
-        System.out.println("Error retrieving data from Twitch");
+        /* Unable to access Twitch, or error parsing the response */
     }
 });
 ```
