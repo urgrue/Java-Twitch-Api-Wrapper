@@ -112,7 +112,7 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## Dependencies
 
-* [Java Async HTTP Client](https://github.com/mb3364/java-async-http)
+* [Java Async HTTP Client](https://github.com/mb3364/java-async-http/releases/tag/v1.0.0) v1.0.0
 * [Jackson JSON Processor](http://wiki.fasterxml.com/JacksonHome) ver. 2.4.4
 
 ## Roadmap
