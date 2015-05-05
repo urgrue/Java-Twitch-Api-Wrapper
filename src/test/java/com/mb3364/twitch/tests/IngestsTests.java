@@ -1,17 +1,16 @@
-package com.mb3364.twitch;
+package com.mb3364.twitch.tests;
 
 import com.mb3364.twitch.api.Twitch;
-import com.mb3364.twitch.api.handlers.TokenResponseHandler;
-import com.mb3364.twitch.api.models.Token;
+import com.mb3364.twitch.api.handlers.IngestsResponseHandler;
+import com.mb3364.twitch.api.models.Ingest;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
-public class RootTests {
-
+public class IngestsTests {
     private final static String CLIENT_ID = "3ecse7kg5j1tmagtkmzzyxqmvtw1lze";
-    private final static String AUTH_TOKEN = "9z2ompq3y9zwx58emz6u9w86mn477s";
 
     private Twitch client;
 
@@ -19,16 +18,15 @@ public class RootTests {
     public void before() {
         client = new Twitch();
         client.setClientId(CLIENT_ID);
-        client.auth().setAccessToken(AUTH_TOKEN);
     }
 
     @Test
-    public void getTest() {
-        client.root().get(new TokenResponseHandler() {
+    public void getTest() throws IOException {
+        client.ingests().get(new IngestsResponseHandler() {
             @Override
-            public void onSuccess(Token token) {
+            public void onSuccess(List<Ingest> ingests) {
                 System.out.println("Success");
-                System.out.println(token);
+                System.out.println(ingests);
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.mb3364.twitch;
+package com.mb3364.twitch.tests;
 
 import com.mb3364.twitch.api.auth.grants.implicit.AuthenticationCallbackServer;
 import com.mb3364.twitch.api.auth.grants.implicit.AuthenticationError;

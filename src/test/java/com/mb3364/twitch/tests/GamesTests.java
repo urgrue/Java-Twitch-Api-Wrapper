@@ -1,4 +1,4 @@
-package com.mb3364.twitch;
+package com.mb3364.twitch.tests;
 
 import com.mb3364.twitch.api.Twitch;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;

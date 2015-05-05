@@ -1,9 +1,12 @@
-package com.mb3364.twitch;
+package com.mb3364.twitch.tests;
 
 import com.mb3364.twitch.api.Twitch;
-import com.mb3364.twitch.api.handlers.VideoResponseHandler;
-import com.mb3364.twitch.api.handlers.VideosResponseHandler;
-import com.mb3364.twitch.api.models.Video;
+import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
+import com.mb3364.twitch.api.handlers.GamesResponseHandler;
+import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
+import com.mb3364.twitch.api.models.Channel;
+import com.mb3364.twitch.api.models.Game;
+import com.mb3364.twitch.api.models.Stream;
 import com.mb3364.twitch.http.JsonParams;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +14,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class VideosTests {
+public class SearchTests {
 
     private final static String CLIENT_ID = "3ecse7kg5j1tmagtkmzzyxqmvtw1lze";
     private final static String AUTH_TOKEN = "9z2ompq3y9zwx58emz6u9w86mn477s";
@@ -26,12 +29,16 @@ public class VideosTests {
     }
 
     @Test
-    public void getTest() {
-        client.videos().get("c6055863", new VideoResponseHandler() {
+    public void channelsTest() {
+        JsonParams params = new JsonParams();
+        params.put("limit", 1);
+
+        client.search().channels("lirik", params, new ChannelsResponseHandler() {
             @Override
-            public void onSuccess(Video video) {
+            public void onSuccess(int total, List<Channel> channels) {
                 System.out.println("Success");
-                System.out.println(video);
+                System.out.println(total);
+                System.out.println(channels);
             }
 
             @Override
@@ -49,15 +56,16 @@ public class VideosTests {
     }
 
     @Test
-    public void getTopTest() {
+    public void streamsTest() {
         JsonParams params = new JsonParams();
-        params.put("limit", 2);
+        params.put("limit", 1);
 
-        client.videos().getTop(params, new VideosResponseHandler() {
+        client.search().streams("starcraft", params, new StreamsResponseHandler() {
             @Override
-            public void onSuccess(int total, List<Video> videos) {
+            public void onSuccess(int total, List<Stream> streams) {
                 System.out.println("Success");
-                System.out.println(videos);
+                System.out.println(total);
+                System.out.println(streams);
             }
 
             @Override
@@ -75,15 +83,16 @@ public class VideosTests {
     }
 
     @Test
-    public void getFollowedTest() {
+    public void gamesTest() {
         JsonParams params = new JsonParams();
-        params.put("limit", 2);
+        params.put("live", true);
 
-        client.videos().getFollowed(params, new VideosResponseHandler() {
+        client.search().games("starcraft", params, new GamesResponseHandler() {
             @Override
-            public void onSuccess(int total, List<Video> videos) {
+            public void onSuccess(int total, List<Game> games) {
                 System.out.println("Success");
-                System.out.println(videos);
+                System.out.println(total);
+                System.out.println(games);
             }
 
             @Override

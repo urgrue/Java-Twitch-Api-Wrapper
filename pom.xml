@@ -7,7 +7,7 @@
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>api-wrapper</name>
+    <name>twitch-api-wrapper</name>
     <url>https://github.com/mb3364/Java-Twitch-Api-Wrapper</url>
 
     <properties>
@@ -15,19 +15,28 @@
         <!-- Compilation -->
         <java.version>1.7</java.version>
         <!-- Dependencies -->
+        <async-http.version>1.0-SNAPSHOT</async-http.version>
         <jackson.version>2.4.4</jackson.version>
         <!-- Test Dependencies -->
         <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
-        <!-- databinding; ObjectMapper, JsonNode and related classes are here -->
+        <!-- data-binding; ObjectMapper, JsonNode and related classes are here -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- Http client -->
+        <dependency>
+            <groupId>com.mb3364.http</groupId>
+            <artifactId>async-http</artifactId>
+            <version>${async-http.version}</version>
+        </dependency>
+
+        <!-- testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
