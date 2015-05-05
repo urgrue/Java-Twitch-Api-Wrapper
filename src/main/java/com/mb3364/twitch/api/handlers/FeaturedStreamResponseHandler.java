@@ -6,10 +6,4 @@ import java.util.List;
 
 public interface FeaturedStreamResponseHandler extends BaseFailureHandler {
     void onSuccess(List<FeaturedStream> streams);
-
-    @Override
-    void onFailure(int statusCode, String statusMessage, String errorMessage);
-
-    @Override
-    void onFailure(Throwable throwable);
 }

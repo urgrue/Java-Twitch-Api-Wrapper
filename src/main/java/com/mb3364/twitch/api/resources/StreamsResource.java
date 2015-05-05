@@ -34,7 +34,6 @@ public class StreamsResource extends AbstractResource {
 
     /**
      * Returns a stream object.
-     * <p/>
      * <p>The stream object in the onSuccess() response will be <code>null</code> if the stream is offline.</p>
      *
      * @param channelName the name of the Channel

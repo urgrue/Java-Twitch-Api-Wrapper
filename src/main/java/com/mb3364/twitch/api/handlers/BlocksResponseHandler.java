@@ -6,10 +6,4 @@ import java.util.List;
 
 public interface BlocksResponseHandler extends BaseFailureHandler {
     void onSuccess(List<Block> blocks);
-
-    @Override
-    void onFailure(int statusCode, String statusMessage, String errorMessage);
-
-    @Override
-    void onFailure(Throwable throwable);
 }

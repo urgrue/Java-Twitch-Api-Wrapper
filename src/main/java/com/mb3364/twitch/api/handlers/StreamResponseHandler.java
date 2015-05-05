@@ -9,10 +9,4 @@ public interface StreamResponseHandler extends BaseFailureHandler {
      * @param stream the stream object. Will be <code>null</code> if the stream is offline!
      */
     void onSuccess(Stream stream);
-
-    @Override
-    void onFailure(int statusCode, String statusMessage, String errorMessage);
-
-    @Override
-    void onFailure(Throwable throwable);
 }

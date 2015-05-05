@@ -33,7 +33,7 @@ public class Authenticator {
      * @param clientId    the Twitch application client ID
      * @param redirectURI the redirect URI for your Twitch application
      * @param scopes      the scopes needed for your application
-     * @return
+     * @return String, the authentication URL
      */
     public String getAuthenticationUrl(String clientId, URI redirectURI, Scopes... scopes) {
         this.clientId = clientId;

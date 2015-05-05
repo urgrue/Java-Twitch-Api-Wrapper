@@ -69,22 +69,6 @@ public abstract class AbstractResource {
     }
 
     /**
-     * Handles an error response from the Twitch API by parsing it and sending a callback to the
-     * specified handler.
-     *
-     * @param response HttpResponse, the response from the Http request
-     * @param handler the handler for the callback
-     */
-    public static void handleTwitchErrorResponse(HttpResponse response, BaseFailureHandler handler) {
-        try {
-            com.mb3364.twitch.api.models.Error error = objectMapper.readValue(response.getContent(), com.mb3364.twitch.api.models.Error.class);
-            handler.onFailure(response.getStatusCode(), response.getStatusMessage(), error.getMessage());
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
-    }
-
-    /**
      * Get the base URL to the Twitch API. Intended to be called by subclasses when generating
      * their resource URL endpoint.
      *
