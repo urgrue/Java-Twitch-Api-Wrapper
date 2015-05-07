@@ -1,5 +1,7 @@
 package com.mb3364.twitch.api.auth.grants.implicit;
 
+import com.mb3364.twitch.api.auth.Scopes;
+
 import java.io.IOException;
 import java.net.*;
 
@@ -8,23 +10,24 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
     /**
      * Default HTML page that twitch.tv will send the access_token to
      */
-    public static final String DEFAULT_AUTH_PAGE = "/main/java/com/mb3364/twitch/api/auth/grants/implicit/views/authorize.html";
+    public static final String DEFAULT_AUTH_PAGE = "/authorize.html";
 
     /**
      * Default HTML page that shows auth error's to user
      */
-    public static final String DEFAULT_FAILURE_PAGE = "/main/java/com/mb3364/twitch/api/auth/grants/implicit/views/authorize-failure.html";
+    public static final String DEFAULT_FAILURE_PAGE = "/authorize-failure.html";
 
     /**
      * Default HTML page that shows auth success to
      */
-    public static final String DEFAULT_SUCCESS_PAGE = "/main/java/com/mb3364/twitch/api/auth/grants/implicit/views/authorize-success.html";
+    public static final String DEFAULT_SUCCESS_PAGE = "/authorize-success.html";
     private final URL authPage;
     private final URL failurePage;
     private final URL successPage;
     private int port;
     private ServerSocket serverSocket;
     private String accessToken; // twitch.tv auth access token
+    private Scopes[] accessScopes; // scopes retrieves for access token
     private AuthenticationError authenticationError;
 
     /**
@@ -50,9 +53,9 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
      */
     public AuthenticationCallbackServer(int port, URL authPage, URL failurePage, URL successPage) {
         this.port = port;
-        this.authPage = authPage;
-        this.failurePage = failurePage;
-        this.successPage = successPage;
+        this.authPage = authPage == null ? getClass().getResource(DEFAULT_AUTH_PAGE) : authPage;
+        this.failurePage = failurePage == null ? getClass().getResource(DEFAULT_FAILURE_PAGE) : failurePage;
+        this.successPage = successPage == null ? getClass().getResource(DEFAULT_SUCCESS_PAGE) : successPage;
     }
 
     /**
@@ -110,8 +113,9 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
     }
 
     @Override
-    public void onAccessTokenReceived(String token) {
+    public void onAccessTokenReceived(String token, Scopes... scopes) {
         accessToken = token;
+        accessScopes = scopes;
         stop(); // Stop the server, we no longer need to process requests
     }
 
@@ -128,6 +132,15 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
      */
     public String getAccessToken() {
         return accessToken;
+    }
+
+    /**
+     * Get the access scopes for the authenticated user.
+     *
+     * @return Array of {@link Scopes} that the authenticated user has
+     */
+    public Scopes[] getAccessScopes() {
+        return accessScopes;
     }
 
     /**

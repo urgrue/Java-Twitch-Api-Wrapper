@@ -1,5 +1,7 @@
 package com.mb3364.twitch.api.auth.grants.implicit;
 
+import com.mb3364.twitch.api.auth.Scopes;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -131,39 +133,43 @@ public class AuthenticationCallbackRequest implements Runnable {
 
         // If we have the token, send the success page
         String accessToken = queryParams.get("access_token");
-        if (accessToken != null) {
-            requestFilename = "/authorize-success.html"; // Send the success page
+        String[] scopes = new String[0];
+        if (queryParams.containsKey("scope")) {
+            scopes = queryParams.get("scope").split(" ");
         }
 
         // See if there is an error message, send the failure page
         String error = queryParams.get("error");
         String errorDescription = queryParams.get("error_description");
-        if (error != null) {
-            requestFilename = "/authorize-failure.html"; // Send the failure page
-        }
+
+        //System.out.println("file: " + requestFilename);
 
         // Open the requested file.
-        InputStream fis = null;
-        if (requestFilename.startsWith("/authorize.html")) {
-            fis = authPage.openStream();
-        } else if (requestFilename.startsWith("/authorize-failure.html")) {
-            fis = failurePage.openStream();
-        } else if (requestFilename.startsWith("/authorize-success.html")) {
-            fis = successPage.openStream();
+        InputStream fis;
+        String contentTypeLine;
+        if (requestFilename.startsWith("/auth.js") || requestFilename.startsWith("/auth-success.js")) {
+            fis = getClass().getResourceAsStream(requestFilename);
+            contentTypeLine = "Content-type: text/javascript" + EOL;
+        } else {
+            if (accessToken != null) {
+                fis = successPage.openStream();
+            } else if (error != null) {
+                fis = failurePage.openStream();
+            } else {
+                fis = authPage.openStream();
+            }
+            contentTypeLine = "Content-type: text/html" + EOL;
         }
 
         boolean fileExists = fis != null;
 
         // Construct the response message.
         String statusLine = null;
-        String contentTypeLine = null;
         String entityBody = null;
         if (fileExists) {
             statusLine = "HTTP/1.1 200 OK" + EOL;
-            contentTypeLine = "Content-type: text/html" + EOL;
         } else {
             statusLine = "HTTP/1.1 404 Not Found" + EOL;
-            contentTypeLine = "Content-type: text/html" + EOL;
             entityBody = "404 Not Found";
         }
 
@@ -193,7 +199,11 @@ public class AuthenticationCallbackRequest implements Runnable {
         if (authenticationListener != null) {
             // Send callback if access token received
             if (accessToken != null) {
-                authenticationListener.onAccessTokenReceived(accessToken);
+                Scopes[] accessScopes = new Scopes[scopes.length];
+                for (int i = 0; i < scopes.length; i++) {
+                    accessScopes[i] = Scopes.fromString(scopes[i]);
+                }
+                authenticationListener.onAccessTokenReceived(accessToken, accessScopes);
             }
             // Send callback if authorization error
             if (error != null) {

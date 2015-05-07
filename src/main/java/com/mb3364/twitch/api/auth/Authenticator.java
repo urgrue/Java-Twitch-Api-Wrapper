@@ -5,6 +5,7 @@ import com.mb3364.twitch.api.auth.grants.implicit.AuthenticationError;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 
 /**
  * The authenticator object allows a user to authenticate with the Twitch.tv servers.
@@ -51,15 +52,29 @@ public class Authenticator {
     }
 
     /**
-     * Listens for callback from twitch server with the access token.
+     * Listens for callback from Twitch server with the access token.
      * <code>getAuthenticationUrl()</code> must be called prior to this function!
      *
      * @return <code>true</code> if access token was received, <code>false</code> otherwise
      */
     public boolean awaitAccessToken() {
+        return awaitAccessToken(null, null, null); // Use default pages
+    }
+
+    /**
+     * Listens for callback from Twitch server with the access token.
+     * <code>getAuthenticationUrl()</code> must be called prior to this function!
+     * <p>Allows for custom authorize pages. <code>null</code> can be passed to use the default page.</p>
+     *
+     * @param authUrl the URL to a custom authorize page.
+     * @param successUrl the URL to a custom successful authentication page.
+     * @param failUrl the URL to a custom failed authentication page.
+     * @return
+     */
+    public boolean awaitAccessToken(URL authUrl, URL successUrl, URL failUrl) {
         if (clientId == null || redirectUri == null) return false;
 
-        AuthenticationCallbackServer server = new AuthenticationCallbackServer(listenPort);
+        AuthenticationCallbackServer server = new AuthenticationCallbackServer(listenPort, authUrl, successUrl, failUrl);
         try {
             server.start();
         } catch (IOException e) {

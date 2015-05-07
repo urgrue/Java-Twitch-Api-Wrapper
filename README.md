@@ -70,8 +70,8 @@ client.channels().put("my-user-name", params, new ChannelResponseHandler() {
 
 The wrapper provides the functionality for authenticating users of your application following the [Implicit Grant Flow](https://github.com/justintv/Twitch-API/blob/master/authentication.md#implicit-grant-flow). 
 
-To use authentication, your application must be registered with twitch.tv and the callback URI should be set like the following:
-`http://127.0.0.1:23522/authorize.html`. You may choose a different port other than `23522` if you wish, but the rest of the URI must remain exactly as specified above.
+To use authentication, your application must be registered with Twitch and the `Redirect URI` should be set like the following:
+`http://127.0.0.1:23522`. You may choose a different port other than `23522` if you wish, but the rest of the URI must remain exactly as specified above.
 
 The authentication process is explained in the following code example.
 
@@ -102,9 +102,11 @@ if (authSuccess) {
 }
 ```
 
+_How it works:_ A simple, secure, local only socket server will be opened. Since the `Redirect URI` for your application is set to `127.0.0.1`, it will redirect the user to their localhost after authorizing the application. As soon as a response is received, either an access token or error, the socket will be closed.
+
 ### Explicitly Setting Access Token
 
-If you are just creating an application for yourself and already have an access token for your account, you can explicitly set it. This _**should not**_ be done if the application is being distributed as the access token is directly linked to your Twitch account.
+If you already have an access token, you can explicitly set it. This _**should not**_ be done prior to an application being distributed as the access token is directly linked to a single Twitch account.
 
 ```java
 twitch.auth().setAccessToken("my-access-token-289489");
@@ -121,19 +123,5 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## Roadmap
 
-* Allow custom authorization callback views.
+* Allow custom authorization callback views. _Implemented but not yet documented_
 * Android and Gradle support.
-
-## Changelog
-
-##### v. 0.10
-
-* Full asynchronous support.
-
-##### v. 0.02
-
-* Twitch(baseUrl, apiVersion) constructor added for easier testing and future proofing by allowing user to override defaults.
-
-##### v. 0.01
-
-* Support for JDK 7 and non-diamond types.
