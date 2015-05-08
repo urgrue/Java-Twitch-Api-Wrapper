@@ -104,7 +104,7 @@ if (authSuccess) {
 
 _How it works:_ A simple, secure, local-only socket server will be opened. Since the `Redirect URI` for your application is set to `127.0.0.1`, it will redirect the user to their localhost after authorizing the application. As soon as a response is received, either an access token or error, the socket will be closed.
 
-#### Using Custom Authentication Views *(optional)*
+##### Using Custom Authentication Views *(optional)*
 
 Authentication views are HTML pages displayed to the user that will capture the application authorization callback and retrieve the access token, show an error message, or show the success message.
 
@@ -124,7 +124,7 @@ successView = getClass().getResource("/my_auth_success.html");
 boolean authSuccess = twitch.auth().awaitAccessToken(authView, failureView, successView);
 ```
 
-##### Creating the Views
+###### Creating the Views
 
 *Auth*
 
@@ -154,7 +154,7 @@ If you already have an access token, you can explicitly set it. This _**should n
 twitch.auth().setAccessToken("my-access-token-289489");
 ```
 
-### Documentation
+## Documentation
 * [Javadocs](https://mb3364.github.io/Java-Twitch-Api-Wrapper/)
 * The [Twitch API](https://github.com/justintv/Twitch-API) documentation will best explain the functionality of each endpoint. 
 
@@ -165,5 +165,4 @@ twitch.auth().setAccessToken("my-access-token-289489");
 
 ## Roadmap
 
-* Allow custom authorization callback views. _Implemented but not yet documented_
 * Android and Gradle support.
