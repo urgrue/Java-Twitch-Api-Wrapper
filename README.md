@@ -104,6 +104,44 @@ if (authSuccess) {
 
 _How it works:_ A simple, secure, local-only socket server will be opened. Since the `Redirect URI` for your application is set to `127.0.0.1`, it will redirect the user to their localhost after authorizing the application. As soon as a response is received, either an access token or error, the socket will be closed.
 
+#### Using Custom Authentication Views *(optional)*
+
+Authentication views are HTML pages displayed to the user that will capture the application authorization callback and retrieve the access token, show an error message, or show the success message.
+
+There are 3 views that can be overwritten: 
+* Auth: This view is what the Twitch API will callback on. It contains javascript that will extract the access token from the URL fragment identifier.
+* Failure: This view will display the error message to the user if authorization fails.
+* Success: This view will display a successful authentication message to the user.
+
+Using your own views is easy, simple pass URL objects (usually retrieved from [Class.getResource()](https://docs.oracle.com/javase/7/docs/api/java/lang/Class.html#getResource(java.lang.String)) to the `awaitAccessToken()` function.
+
+```java
+authView = getClass().getResource("/my_auth.html");
+failureView = getClass().getResource("/my_auth_failure.html");
+successView = getClass().getResource("/my_auth_success.html");
+
+/* Waits for the user to authorize or deny your application. Note: this function will block until a response is received! */
+boolean authSuccess = twitch.auth().awaitAccessToken(authView, failureView, successView);
+```
+
+##### Creating the Views
+
+**Auth**
+This page will only be displayed to the user for a brief second before automatically redirecting the user. If you wish to overwrite it you must include `auth.js` in the `<head>` tag:
+```HTML
+<script type="text/javascript" src="auth.js"></script>
+```
+
+**Success**
+This page's only purpose is to display a success message and perhaps inform the user they can go back to the application.
+
+**Failure**
+This page will display an error message to the user if authentication failed (such as they denied the request on Twitch). The error message and description is passed to this page view the URL query string.
+`error`: error message.
+`error_description`: description of the error.
+
+You can view the default pages in the [resources directory](https://github.com/mb3364/Java-Twitch-Api-Wrapper/tree/master/src/main/resources).
+
 ### Explicitly Setting Access Token
 
 If you already have an access token, you can explicitly set it. This _**should not**_ be done prior to an application being distributed as the access token is directly linked to a single Twitch account.
