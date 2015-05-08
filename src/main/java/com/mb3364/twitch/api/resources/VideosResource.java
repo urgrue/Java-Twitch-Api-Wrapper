@@ -7,6 +7,7 @@ import com.mb3364.twitch.api.handlers.VideoResponseHandler;
 import com.mb3364.twitch.api.handlers.VideosResponseHandler;
 import com.mb3364.twitch.api.models.Video;
 import com.mb3364.twitch.api.models.Videos;
+
 import java.io.IOException;
 
 /**

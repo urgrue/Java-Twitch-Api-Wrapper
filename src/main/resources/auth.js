@@ -36,7 +36,7 @@ function extractAccessToken() {
     for (var i = 0; i < params.length; i++) {
         var param = params[i].split('=');
         if (param[0] === "access_token") {
-            hashValues.access_token =  param[1]; // access token found
+            hashValues.access_token = param[1]; // access token found
         } else if (param[0] === "scope") {
             hashValues.scope = param[1];
         }

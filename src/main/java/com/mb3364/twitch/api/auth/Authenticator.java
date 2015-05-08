@@ -66,9 +66,9 @@ public class Authenticator {
      * <code>getAuthenticationUrl()</code> must be called prior to this function!
      * <p>Allows for custom authorize pages. <code>null</code> can be passed to use the default page.</p>
      *
-     * @param authUrl the URL to a custom authorize page.
+     * @param authUrl    the URL to a custom authorize page.
      * @param successUrl the URL to a custom successful authentication page.
-     * @param failUrl the URL to a custom failed authentication page.
+     * @param failUrl    the URL to a custom failed authentication page.
      * @return
      */
     public boolean awaitAccessToken(URL authUrl, URL successUrl, URL failUrl) {

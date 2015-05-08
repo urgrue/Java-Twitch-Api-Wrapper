@@ -38,7 +38,7 @@
                 if (param[0] === "error") {
                     GET.error = param[1];
                 } else if (param[0] === "error_description") {
-                    GET.description = param[1].replace(/\+/g,' ');
+                    GET.description = param[1].replace(/\+/g, ' ');
                 }
             }
         }
@@ -53,6 +53,7 @@
 
     <div class="error">
         <p id="error">Access Denied</p>
+
         <p id="errorDescription">Access token not found.</p>
     </div>
 </div>

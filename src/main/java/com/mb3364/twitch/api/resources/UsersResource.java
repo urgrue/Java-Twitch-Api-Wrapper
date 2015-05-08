@@ -5,7 +5,6 @@ import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
-import com.mb3364.twitch.api.models.Error;
 
 import java.io.IOException;
 

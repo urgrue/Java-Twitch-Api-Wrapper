@@ -4,7 +4,7 @@
 
     <groupId>com.mb3364.twitch</groupId>
     <artifactId>api-wrapper</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <packaging>jar</packaging>
 
     <name>twitch-api-wrapper</name>
