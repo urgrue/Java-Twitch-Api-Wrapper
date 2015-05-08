@@ -126,19 +126,23 @@ boolean authSuccess = twitch.auth().awaitAccessToken(authView, failureView, succ
 
 ##### Creating the Views
 
-**Auth**
+*Auth*
+
 This page will only be displayed to the user for a brief second before automatically redirecting the user. If you wish to overwrite it you must include `auth.js` in the `<head>` tag:
 ```HTML
 <script type="text/javascript" src="auth.js"></script>
 ```
 
-**Success**
+*Success*
+
 This page's only purpose is to display a success message and perhaps inform the user they can go back to the application.
 
-**Failure**
-This page will display an error message to the user if authentication failed (such as they denied the request on Twitch). The error message and description is passed to this page view the URL query string.
-`error`: error message.
-`error_description`: description of the error.
+*Failure*
+
+This page will display an error message to the user if authentication failed (such as they denied the request on Twitch). The error message and description is passed to this page view via the URL query string.
+
+* `error`: error message.
+* `error_description`: description of the error.
 
 You can view the default pages in the [resources directory](https://github.com/mb3364/Java-Twitch-Api-Wrapper/tree/master/src/main/resources).
 
