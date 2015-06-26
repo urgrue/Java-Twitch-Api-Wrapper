@@ -1,10 +1,11 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.twitch.api.handlers.IngestsResponseHandler;
 import com.mb3364.twitch.api.models.Ingests;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link IngestsResource} provides the functionality
@@ -34,9 +35,9 @@ public class IngestsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Ingests value = objectMapper.readValue(response.getContent(), Ingests.class);
+                    Ingests value = objectMapper.readValue(content, Ingests.class);
                     handler.onSuccess(value.getIngests());
                 } catch (IOException e) {
                     handler.onFailure(e);

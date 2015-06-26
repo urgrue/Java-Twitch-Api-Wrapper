@@ -1,6 +1,5 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.FeaturedStreamResponseHandler;
@@ -13,6 +12,8 @@ import com.mb3364.twitch.api.models.Streams;
 import com.mb3364.twitch.api.models.StreamsSummary;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link StreamsResource} provides the functionality
@@ -44,9 +45,9 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    StreamContainer value = objectMapper.readValue(response.getContent(), StreamContainer.class);
+                    StreamContainer value = objectMapper.readValue(content, StreamContainer.class);
                     handler.onSuccess(value.getStream());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -74,9 +75,9 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Streams value = objectMapper.readValue(response.getContent(), Streams.class);
+                    Streams value = objectMapper.readValue(content, Streams.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -110,9 +111,9 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    FeaturedStreamContainer value = objectMapper.readValue(response.getContent(), FeaturedStreamContainer.class);
+                    FeaturedStreamContainer value = objectMapper.readValue(content, FeaturedStreamContainer.class);
                     handler.onSuccess(value.getFeatured());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -143,9 +144,9 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    StreamsSummary value = objectMapper.readValue(response.getContent(), StreamsSummary.class);
+                    StreamsSummary value = objectMapper.readValue(content, StreamsSummary.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -164,9 +165,9 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    StreamsSummary value = objectMapper.readValue(response.getContent(), StreamsSummary.class);
+                    StreamsSummary value = objectMapper.readValue(content, StreamsSummary.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -191,9 +192,9 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Streams value = objectMapper.readValue(response.getContent(), Streams.class);
+                    Streams value = objectMapper.readValue(content, Streams.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());
                 } catch (IOException e) {
                     handler.onFailure(e);

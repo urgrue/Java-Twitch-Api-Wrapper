@@ -1,6 +1,5 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.TeamResponseHandler;
 import com.mb3364.twitch.api.handlers.TeamsResponseHandler;
@@ -8,6 +7,8 @@ import com.mb3364.twitch.api.models.Team;
 import com.mb3364.twitch.api.models.Teams;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link TeamsResource} provides the functionality
@@ -42,9 +43,9 @@ public class TeamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Teams value = objectMapper.readValue(response.getContent(), Teams.class);
+                    Teams value = objectMapper.readValue(content, Teams.class);
                     handler.onSuccess(value.getTeams());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -73,9 +74,9 @@ public class TeamsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Team value = objectMapper.readValue(response.getContent(), Team.class);
+                    Team value = objectMapper.readValue(content, Team.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);

@@ -1,6 +1,5 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
 import com.mb3364.twitch.api.handlers.GamesResponseHandler;
@@ -8,6 +7,8 @@ import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.models.SearchResultContainer;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link SearchResource} provides the functionality
@@ -44,9 +45,9 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    SearchResultContainer value = objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                    SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
                     handler.onSuccess(value.getTotal(), value.getChannels());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -84,9 +85,9 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    SearchResultContainer value = objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                    SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -122,9 +123,9 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    SearchResultContainer value = objectMapper.readValue(response.getContent(), SearchResultContainer.class);
+                    SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
                     handler.onSuccess(value.getGames().size(), value.getGames());
                 } catch (IOException e) {
                     handler.onFailure(e);
