@@ -1,6 +1,5 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.VideoResponseHandler;
@@ -9,6 +8,8 @@ import com.mb3364.twitch.api.models.Video;
 import com.mb3364.twitch.api.models.Videos;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link VideosResource} provides the functionality
@@ -39,9 +40,9 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Video value = objectMapper.readValue(response.getContent(), Video.class);
+                    Video value = objectMapper.readValue(content, Video.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -70,9 +71,9 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Videos value = objectMapper.readValue(response.getContent(), Videos.class);
+                    Videos value = objectMapper.readValue(content, Videos.class);
                     handler.onSuccess(value.getVideos().size(), value.getVideos());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -106,9 +107,9 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Videos value = objectMapper.readValue(response.getContent(), Videos.class);
+                    Videos value = objectMapper.readValue(content, Videos.class);
                     handler.onSuccess(value.getVideos().size(), value.getVideos());
                 } catch (IOException e) {
                     handler.onFailure(e);

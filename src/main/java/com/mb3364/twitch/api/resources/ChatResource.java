@@ -1,12 +1,13 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.twitch.api.handlers.BadgesResponseHandler;
 import com.mb3364.twitch.api.handlers.EmoticonsResponseHandler;
 import com.mb3364.twitch.api.models.ChannelBadges;
 import com.mb3364.twitch.api.models.Emoticons;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link ChatResource} provides the functionality
@@ -36,9 +37,9 @@ public class ChatResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Emoticons value = objectMapper.readValue(response.getContent(), Emoticons.class);
+                    Emoticons value = objectMapper.readValue(content, Emoticons.class);
                     handler.onSuccess(value.getEmoticons());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -58,9 +59,9 @@ public class ChatResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    ChannelBadges value = objectMapper.readValue(response.getContent(), ChannelBadges.class);
+                    ChannelBadges value = objectMapper.readValue(content, ChannelBadges.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);

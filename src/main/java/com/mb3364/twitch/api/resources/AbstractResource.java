@@ -3,12 +3,13 @@ package com.mb3364.twitch.api.resources;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.mb3364.http.AsyncHttpClient;
-import com.mb3364.http.HttpResponse;
-import com.mb3364.http.HttpResponseHandler;
+import com.mb3364.http.StringHttpResponseHandler;
 import com.mb3364.twitch.api.handlers.BaseFailureHandler;
 import com.mb3364.twitch.api.models.Error;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractResource is the abstract base class of a Twitch resource.
@@ -82,7 +83,7 @@ public abstract class AbstractResource {
      * Handles HTTP response's from the Twitch API.
      * <p>Since all Http failure logic is the same, we handle it all in one place: here.</p>
      */
-    protected static abstract class TwitchHttpResponseHandler extends HttpResponseHandler {
+    protected static abstract class TwitchHttpResponseHandler extends StringHttpResponseHandler {
 
         private BaseFailureHandler apiHandler;
 
@@ -91,13 +92,17 @@ public abstract class AbstractResource {
         }
 
         @Override
-        public abstract void onSuccess(HttpResponse response);
+        public abstract void onSuccess(int statusCode, Map<String, List<String>> headers, String content);
 
         @Override
-        public void onFailure(HttpResponse response) {
+        public void onFailure(int statusCode, Map<String, List<String>> headers, String content) {
             try {
-                Error error = objectMapper.readValue(response.getContent(), Error.class);
-                apiHandler.onFailure(response.getStatusCode(), response.getStatusMessage(), error.getMessage());
+                if (content.length() > 0) {
+                    Error error = objectMapper.readValue(content, Error.class);
+                    apiHandler.onFailure(statusCode, error.getStatusText(), error.getMessage());
+                } else {
+                    apiHandler.onFailure(statusCode, "", "");
+                }
             } catch (IOException e) {
                 apiHandler.onFailure(e);
             }

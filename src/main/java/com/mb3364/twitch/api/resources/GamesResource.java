@@ -1,11 +1,12 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.HttpResponse;
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.TopGamesResponseHandler;
 import com.mb3364.twitch.api.models.Games;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link GamesResource} provides the functionality
@@ -40,9 +41,9 @@ public class GamesResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(HttpResponse response) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Games value = objectMapper.readValue(response.getContent(), Games.class);
+                    Games value = objectMapper.readValue(content, Games.class);
                     handler.onSuccess(value.getTotal(), value.getTop());
                 } catch (IOException e) {
                     handler.onFailure(e);
