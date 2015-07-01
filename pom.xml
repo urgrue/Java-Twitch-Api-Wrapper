@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mb3364.twitch</groupId>
-    <artifactId>api-wrapper</artifactId>
+    <artifactId>twitch-api-wrapper</artifactId>
     <version>0.3</version>
     <packaging>jar</packaging>
 
