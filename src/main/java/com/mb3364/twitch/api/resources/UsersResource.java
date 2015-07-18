@@ -107,7 +107,7 @@ public class UsersResource extends AbstractResource {
      *                <li><code>direction</code>: Sorting direction. Default is <code>desc</code>.
      *                Valid values are <code>asc</code> and <code>desc</code>.</li>
      *                <li><code>sortby</code>: Sort key. Default is <code>created_at</code>.
-     *                Valid values are <code>created_at</code> and <code>last_broadcast</code>.</li>
+     *                Valid values are <code>created_at</code>, <code>last_broadcast</code>, and <code>login</code>.</li>
      *                </ul>
      * @param handler the response handler
      */
