@@ -31,8 +31,8 @@
 
         <!-- Http client -->
         <dependency>
-            <groupId>com.mb3364.http</groupId>
-            <artifactId>async-http-client</artifactId>
+            <groupId>com.github.urgrue</groupId>
+            <artifactId>java-async-http</artifactId>
             <version>${async-http-client.version}</version>
         </dependency>
 
