@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Handles HTTP response's from the Twitch API.
+ * Handles HTTP response's from the TwitchApiClient API.
  * <p>Since all Http failure logic is the same, we handle it all in one place: here.</p>
  */
 public abstract class HttpResponseHandler {

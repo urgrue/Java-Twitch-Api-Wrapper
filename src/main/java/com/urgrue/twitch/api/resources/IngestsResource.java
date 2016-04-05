@@ -9,17 +9,17 @@ import java.util.Map;
 
 /**
  * The {@link IngestsResource} provides the functionality
- * to access the <code>/ingests</code> endpoints of the Twitch API.
+ * to access the <code>/ingests</code> endpoints of the TwitchApiClient API.
  *
  * @author Matthew Bell
  */
 public class IngestsResource extends AbstractResource {
 
     /**
-     * Construct the resource using the Twitch API base URL and specified API version.
+     * Construct the resource using the TwitchApiClient API base URL and specified API version.
      *
-     * @param baseUrl    the base URL of the Twitch API
-     * @param apiVersion the requested version of the Twitch API
+     * @param baseUrl    the base URL of the TwitchApiClient API
+     * @param apiVersion the requested version of the TwitchApiClient API
      */
     public IngestsResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);

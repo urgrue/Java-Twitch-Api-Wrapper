@@ -4,7 +4,7 @@
 
     <groupId>com.urgrue.twitch</groupId>
     <artifactId>twitch-api-wrapper</artifactId>
-    <version>0.3.1</version>
+    <version>0.4.0</version>
     <packaging>jar</packaging>
 
     <name>twitch-api-wrapper</name>

@@ -1,8 +1,8 @@
 package com.urgrue.twitch.api.resources;
 
-import com.mb3364.http.RequestParams;
 import com.urgrue.twitch.api.auth.Scopes;
 import com.urgrue.twitch.api.handlers.*;
+import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.*;
 
 import java.io.IOException;
@@ -11,17 +11,17 @@ import java.util.Map;
 
 /**
  * The {@link UsersResource} provides the functionality
- * to access the <code>/users</code> endpoints of the Twitch API.
+ * to access the <code>/users</code> endpoints of the TwitchApiClient API.
  *
  * @author Matthew Bell
  */
 public class UsersResource extends AbstractResource {
 
     /**
-     * Construct the resource using the Twitch API base URL and specified API version.
+     * Construct the resource using the TwitchApiClient API base URL and specified API version.
      *
-     * @param baseUrl    the base URL of the Twitch API
-     * @param apiVersion the requested version of the Twitch API
+     * @param baseUrl    the base URL of the TwitchApiClient API
+     * @param apiVersion the requested version of the TwitchApiClient API
      */
     public UsersResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);

@@ -3,33 +3,33 @@ package com.urgrue.twitch.api.resources;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.urgrue.twitch.api.handlers.BaseFailureHandler;
+import com.urgrue.twitch.api.httpclient.HttpClient;
 import com.urgrue.twitch.api.httpclient.HttpResponseHandler;
+import com.urgrue.twitch.api.httpclient.NingAsyncHttpClient;
 import com.urgrue.twitch.api.models.Error;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import com.ning.http.client.*;
-
 /**
- * AbstractResource is the abstract base class of a Twitch resource.
- * A resource provides the functionality to access the REST endpoints of the Twitch API.
+ * AbstractResource is the abstract base class of a TwitchApiClient resource.
+ * A resource provides the functionality to access the REST endpoints of the TwitchApiClient API.
  *
  * @author Matthew Bell
  */
 public abstract class AbstractResource {
 
     protected static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse
-    protected static final AsyncHttpClient http = new AsyncHttpClient(); // can reuse
+    protected static final HttpClient http = new NingAsyncHttpClient(); // can reuse
 
     private final String baseUrl; // Base url for twitch rest api
 
     /**
-     * Construct a resource using the Twitch API base URL and specified API version.
+     * Construct a resource using the TwitchApiClient API base URL and specified API version.
      *
-     * @param baseUrl    the base URL of the Twitch API
-     * @param apiVersion the requested version of the Twitch API
+     * @param baseUrl    the base URL of the TwitchApiClient API
+     * @param apiVersion the requested version of the TwitchApiClient API
      */
     protected AbstractResource(String baseUrl, int apiVersion) {
         this.baseUrl = baseUrl;
@@ -73,17 +73,17 @@ public abstract class AbstractResource {
     }
 
     /**
-     * Get the base URL to the Twitch API. Intended to be called by subclasses when generating
+     * Get the base URL to the TwitchApiClient API. Intended to be called by subclasses when generating
      * their resource URL endpoint.
      *
-     * @return the base URL to the Twitch API
+     * @return the base URL to the TwitchApiClient API
      */
     protected String getBaseUrl() {
         return baseUrl;
     }
 
     /**
-     * Handles HTTP response's from the Twitch API.
+     * Handles HTTP response's from the TwitchApiClient API.
      * <p>Since all Http failure logic is the same, we handle it all in one place: here.</p>
      */
     protected static abstract class TwitchHttpResponseHandler extends HttpResponseHandler {

@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URL;
 
 /**
- * The authenticator object allows a user to authenticate with the Twitch.tv servers.
+ * The authenticator object allows a user to authenticate with the TwitchApiClient.tv servers.
  *
  * @author Matthew Bell
  */
@@ -31,8 +31,8 @@ public class Authenticator {
      * to authorize your application to access their account and retrieve an
      * access token.
      *
-     * @param clientId    the Twitch application client ID
-     * @param redirectURI the redirect URI for your Twitch application
+     * @param clientId    the TwitchApiClient application client ID
+     * @param redirectURI the redirect URI for your TwitchApiClient application
      * @param scopes      the scopes needed for your application
      * @return String, the authentication URL
      */
@@ -52,7 +52,7 @@ public class Authenticator {
     }
 
     /**
-     * Listens for callback from Twitch server with the access token.
+     * Listens for callback from TwitchApiClient server with the access token.
      * <code>getAuthenticationUrl()</code> must be called prior to this function!
      *
      * @return <code>true</code> if access token was received, <code>false</code> otherwise
@@ -62,7 +62,7 @@ public class Authenticator {
     }
 
     /**
-     * Listens for callback from Twitch server with the access token.
+     * Listens for callback from TwitchApiClient server with the access token.
      * <code>getAuthenticationUrl()</code> must be called prior to this function!
      * <p>Allows for custom authorize pages. <code>null</code> can be passed to use the default page.</p>
      *

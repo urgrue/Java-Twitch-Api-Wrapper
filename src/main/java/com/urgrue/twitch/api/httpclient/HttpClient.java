@@ -19,7 +19,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #delete(String, RequestParams, HttpResponseHandler)
      */
-    public abstract void delete(String url, HttpResponseHandler handler);
+    public abstract void delete(final String url, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP DELETE request with parameters.
@@ -29,7 +29,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #delete(String, HttpResponseHandler)
      */
-    public abstract void delete(String url, RequestParams params, HttpResponseHandler handler);
+    public abstract void delete(final String url, final RequestParams params, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP GET request.
@@ -38,7 +38,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #get(String, RequestParams, HttpResponseHandler)
      */
-    public abstract void get(String url, HttpResponseHandler handler);
+    public abstract void get(final String url, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP GET request with parameters.
@@ -48,7 +48,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #get(String, HttpResponseHandler)
      */
-    public abstract void get(String url, RequestParams params, HttpResponseHandler handler);
+    public abstract void get(final String url, final RequestParams params, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP HEAD request.
@@ -57,7 +57,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #head(String, RequestParams, HttpResponseHandler)
      */
-    public abstract void head(String url, HttpResponseHandler handler);
+    public abstract void head(final String url, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP HEAD request with parameters.
@@ -67,7 +67,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #head(String, HttpResponseHandler)
      */
-    public abstract void head(String url, RequestParams params, HttpResponseHandler handler);
+    public abstract void head(final String url, final RequestParams params, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP POST request.
@@ -76,7 +76,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #post(String, RequestParams, HttpResponseHandler)
      */
-    public abstract void post(String url, HttpResponseHandler handler);
+    public abstract void post(final String url, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP POST request with parameters.
@@ -86,7 +86,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #post(String, HttpResponseHandler)
      */
-    public abstract void post(String url, RequestParams params, HttpResponseHandler handler);
+    public abstract void post(final String url, final RequestParams params, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP PUT request.
@@ -95,7 +95,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #put(String, RequestParams, HttpResponseHandler)
      */
-    public abstract void put(String url, HttpResponseHandler handler);
+    public abstract void put(final String url, final HttpResponseHandler handler);
 
     /**
      * Make a HTTP PUT request with parameters.
@@ -105,7 +105,7 @@ public abstract class HttpClient {
      * @param handler the response handler
      * @see #put(String, HttpResponseHandler)
      */
-    public abstract void put(String url, RequestParams params, HttpResponseHandler handler);
+    public abstract void put(final String url, final RequestParams params, final HttpResponseHandler handler);
 
     /**
      * Set a global HTTP header that will be sent with all future requests.
@@ -114,7 +114,7 @@ public abstract class HttpClient {
      * @param value the header value
      * @see #removeHeader(String)
      */
-    public void setHeader(String name, String value) {
+    public void setHeader(final String name, final String value) {
         headers.put(name, value);
     }
 
@@ -124,7 +124,19 @@ public abstract class HttpClient {
      * @param name the name of the header to remove
      * @see #setHeader(String, String)
      */
-    public void removeHeader(String name) {
+    public void removeHeader(final String name) {
         headers.remove(name);
+    }
+
+    /**
+     * Gets the assigned global headers for this client.
+     *
+     * These headers will be sent with every request originating from this
+     * instance.
+     *
+     * @return a {@link Map} of the assigned global headers
+     */
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 }

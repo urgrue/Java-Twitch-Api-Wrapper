@@ -1,11 +1,11 @@
 package com.urgrue.twitch.api.resources;
 
-import com.mb3364.http.RequestParams;
 import com.urgrue.twitch.api.auth.Scopes;
 import com.urgrue.twitch.api.handlers.FeaturedStreamResponseHandler;
 import com.urgrue.twitch.api.handlers.StreamResponseHandler;
 import com.urgrue.twitch.api.handlers.StreamsResponseHandler;
 import com.urgrue.twitch.api.handlers.StreamsSummaryResponseHandler;
+import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.FeaturedStreamContainer;
 import com.urgrue.twitch.api.models.StreamContainer;
 import com.urgrue.twitch.api.models.Streams;
@@ -17,17 +17,17 @@ import java.util.Map;
 
 /**
  * The {@link StreamsResource} provides the functionality
- * to access the <code>/streams</code> endpoints of the Twitch API.
+ * to access the <code>/streams</code> endpoints of the TwitchApiClient API.
  *
  * @author Matthew Bell
  */
 public class StreamsResource extends AbstractResource {
 
     /**
-     * Construct the resource using the Twitch API base URL and specified API version.
+     * Construct the resource using the TwitchApiClient API base URL and specified API version.
      *
-     * @param baseUrl    the base URL of the Twitch API
-     * @param apiVersion the requested version of the Twitch API
+     * @param baseUrl    the base URL of the TwitchApiClient API
+     * @param apiVersion the requested version of the TwitchApiClient API
      */
     public StreamsResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
