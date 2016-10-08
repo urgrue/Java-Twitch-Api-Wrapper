@@ -20,6 +20,13 @@
         <!-- Test Dependencies -->
         <junit.version>4.12</junit.version>
     </properties>
+    
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!-- data-binding; ObjectMapper, JsonNode and related classes are here -->
@@ -31,8 +38,8 @@
 
         <!-- Http client -->
         <dependency>
-            <groupId>com.mb3364.http</groupId>
-            <artifactId>async-http-client</artifactId>
+            <groupId>com.github.urgrue</groupId>
+            <artifactId>java-async-http</artifactId>
             <version>${async-http-client.version}</version>
         </dependency>
 
