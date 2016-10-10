@@ -21,6 +21,13 @@
 # Gradle:
 # .idea/gradle.xml
 # .idea/libraries
+.gradle/
+
+# Eclipse:
+bin/
+.classpath
+.project
+.settings/
 
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
