@@ -144,7 +144,7 @@ This page will display an error message to the user if authentication failed (su
 * `error`: error message.
 * `error_description`: description of the error.
 
-You can view the default pages in the [resources directory](https://github.com/mb3364/Java-Twitch-Api-Wrapper/tree/master/src/main/resources).
+You can view the default pages in the [resources directory](https://github.com/urgrue/Java-Twitch-Api-Wrapper/tree/master/src/main/resources).
 
 ### Explicitly Setting Access Token
 
@@ -155,19 +155,19 @@ twitch.auth().setAccessToken("my-access-token-289489");
 ```
 
 ## Documentation
-* [Javadocs](https://mb3364.github.io/Java-Twitch-Api-Wrapper/)
+* [Javadocs](https://urgrue.github.io/Java-Twitch-Api-Wrapper/)
 * The [Twitch API](https://github.com/justintv/Twitch-API) documentation will best explain the functionality of each endpoint. 
 
 ## Dependencies
 
-* [Java Async HTTP Client](https://github.com/mb3364/java-async-http/releases/tag/2.1.2) ver. 2.1.2
+* [Java Async HTTP Client](https://github.com/urgrue/java-async-http/releases/tag/2.1.2) ver. 2.1.2
 * [Jackson JSON Processor - Databind](http://wiki.fasterxml.com/JacksonHome) // [Direct Download](http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.4.5/jackson-databind-2.4.5.jar) ver. 2.4.5
 
 ## Install
 
 This library and the 2 above mentioned dependencies are required. A JAR with all dependencies already included is also provided.
 
-* [Twitch API Wrapper Download](https://github.com/mb3364/Java-Twitch-Api-Wrapper/releases/tag/0.3)
+* [Twitch API Wrapper Download](https://github.com/urgrue/Java-Twitch-Api-Wrapper/releases/tag/0.3)
 
 ## Roadmap
 
