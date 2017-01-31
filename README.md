@@ -169,6 +169,18 @@ This library and the 2 above mentioned dependencies are required. A JAR with all
 
 * [Twitch API Wrapper Download](https://github.com/urgrue/Java-Twitch-Api-Wrapper/releases/tag/0.3)
 
+If you use Gradle, you can also add this project as a dependency via [jitpack.io](https://jitpack.io/#urgrue/Java-Twitch-Api-Wrapper):
+
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    compile "com.github.urgrue:Java-Twitch-Api-Wrapper:0.3.1"
+}
+```
+
+
 ## Roadmap
 
-* Android and Gradle support.
+* Android support.

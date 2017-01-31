@@ -1,0 +1,16 @@
+group 'com.mb3364.twitch'
+apply plugin: 'java'
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    compile "com.fasterxml.jackson.core:jackson-databind:${project.jackson_version}"
+    compile "com.github.urgrue:java-async-http:${project.async_http_client_version}"
+    testCompile "junit:junit:${project.junit_version}"
+}
